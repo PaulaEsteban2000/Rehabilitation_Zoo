@@ -7,7 +7,8 @@ import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.Worker;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
-		
+	
+	
 	//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
 
 	
