@@ -13,9 +13,11 @@ public class Menu {
 
 	public static void main(String[] args) throws Exception {
 		
+		
 		dbman.connect();
 		
 		do {
+			System.out.println("\nWelcome to our Rehabilitation Zoo\n");
 			System.out.println("Choose an option: ");
 			System.out.println("1. ");
 			System.out.println("2. ");
