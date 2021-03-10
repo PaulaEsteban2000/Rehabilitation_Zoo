@@ -49,14 +49,15 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastBath	DATE , "
 					   + " lastFed	DATE , "
 					   + " deathDate	DATE, "
-					   + " freedomDate	DATE, )";
+					   + " freedomDate	DATE, "
+					   + " FOREIGN KEY (habitat_id) REFERENCES habitat(id), )";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 			
 			Statement stmt2 = c.createStatement();
 			String sql2 = "CREATE TABLE habitat "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	name	NOT NULL," 
+					   + " name	TEXT	NOT NULL	UNQIUE," 
 					   + " lastCleaned	DATE , "
 					   + " waterLevel	FLOAT	NOT NULL, "
 					   + " ground	ENUM	NOT NULL, "//should be unique if it's an enum?
@@ -69,6 +70,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql3 = "CREATE TABLE workers "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " name	TEXT	NOT NULL, "
+					   + " lastName TEXT	NOT NULL, "
 					   + " hireDate	DATE	NOT NULL, "
 					   + " salary	FLOAT	NOT NULL, "
 					   + " workerType	ENUM	NOT NULL, )";
@@ -77,8 +79,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			
 			Statement stmt4 = c.createStatement();
-			String sql4 = "CREATE TABLE illness " //Name?
+			String sql4 = "CREATE TABLE illness "
 					   + "(id	INTEGER	PRIMARY	KEY,"
+					   + " name	ENUM	NOT NULL, "
 					   + " quarantine	INTEGER  , "
 					   + " prothesis	BOOLEAN )";
 					   
@@ -91,7 +94,8 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " name	TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType	ENUM	NOT NULL )";					   
+					   + " drugType	ENUM	NOT NULL,"
+					   + " FOREIGN KEY (illness_id) REFERENCES illness(id), )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
@@ -111,21 +115,13 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
 			
-			Statement stmt8 = c.createStatement();
-			String sql8 = "CREATE TABLE drug_illness "
-					   + "(drug_id	INTEGER REFERENCES drug(id), "
-					   + " illness_id	INTEGER REFERENCES illness(id), "
-					   + " PRIMARY KEY (drug_id, illness_id )";
-			stmt8.executeUpdate(sql8);
-			stmt8.close();
-			
-			Statement stmt9 = c.createStatement(); 
-			String sql9 = "CREATE TABLE animal_illness "
+			Statement stmt8 = c.createStatement(); 
+			String sql8 = "CREATE TABLE animal_illness "
 					   + "(drug_id	INTEGER REFERENCES animal_(id), "
 					   + " illness_id	INTEGER REFERENCES illness(id), "
 					   + " PRIMARY KEY (animal_id, illness_id )";
-			stmt9.executeUpdate(sql9);
-			stmt9.close();
+			stmt8.executeUpdate(sql8);
+			stmt8.close();
 			// Create table: end
 			
 			// - Set initial values for the Primary Keys

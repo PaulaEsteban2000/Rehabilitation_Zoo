@@ -14,6 +14,7 @@ public class Worker implements Serializable {
 
 	private Integer id; //No need to be in constructor
 	private String name;
+	private String lastName;
 	private Date hireDate;
 	private Integer salary;
 	private WorkerType type;
@@ -31,10 +32,13 @@ public class Worker implements Serializable {
 	}
 	
 	
-	public Worker(Integer id, String name, Date hireDate, Integer salary, WorkerType type, List<Animal> animals) { //constructor with added animal List
+	
+	public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
+			List<Animal> animals) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.lastName = lastName;
 		this.hireDate = hireDate;
 		this.salary = salary;
 		this.type = type;
@@ -106,6 +110,12 @@ public class Worker implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public Date getHireDate() {
 		return hireDate;
