@@ -9,13 +9,13 @@ import rehabilitationzoo.db.pojos.Worker;
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
 	
-	//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+	private Connection c;
 
 	
 	public void connect () {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			
 		} catch (Exception e) {
@@ -25,7 +25,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
 	public void disconnect(){
 		try {
-			//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +32,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 	
 	public void create () { //we shouldn't have a main here -> build an interface
-		private Connection c;
 		
 		try {
 			// Open database connection
@@ -58,10 +56,10 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt2 = c.createStatement();
 			String sql2 = "CREATE TABLE habitat "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + "name	TEXT	NOT NULL,"
+					   + " name	name	NOT NULL," 
 					   + " lastCleaned	DATE , "
 					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " ground	ENUM	NOT NULL, "
+					   + " ground	ENUM	NOT NULL, "//should be unique if it's an enum?
 					   + " temperature	ENUM	NOT NULL, "
 					   + " light	ENUM	NOT NULL, )";
 			stmt2.executeUpdate(sql2);
@@ -79,7 +77,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			
 			Statement stmt4 = c.createStatement();
-			String sql4 = "CREATE TABLE illness "
+			String sql4 = "CREATE TABLE illness " //Name?
 					   + "(id	INTEGER	PRIMARY	KEY,"
 					   + " quarantine	INTEGER  , "
 					   + " prothesis	BOOLEAN )";
@@ -90,7 +88,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drug "
 					   + "( id	INTEGER	PRIMARY KEY"
-					   + " name	TEXT	NOT NULL,"
+					   + " name	TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
 					   + " drugType	ENUM	NOT NULL )";					   
@@ -98,7 +96,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			stmt5.close();
 			
 			Statement stmt6 = c.createStatement();
-			String sql6 = "CREATE TABLE animal_drug "
+			String sql6 = "CREATE TABLE animal_drug " //is this necessary? bc there already is a connection between these through the other tables
 					   + "(drug_id	INTEGER	REFERENCES drug(id), "
 					   + " animal_id	INTEGER	REFERENCES animal(id), "
 					   + " PRIMARY KEY (drug_id, animal_id )";
@@ -121,7 +119,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 			
-			Statement stmt9 = c.createStatement();
+			Statement stmt9 = c.createStatement(); 
 			String sql9 = "CREATE TABLE animal_illness "
 					   + "(drug_id	INTEGER REFERENCES animal_(id), "
 					   + " illness_id	INTEGER REFERENCES illness(id), "
