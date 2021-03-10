@@ -22,6 +22,9 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private Date lastBath;
 	private FoodType feedingType;
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
+	private List<Illness> illnesses; 
+	private List<Drug> drugs; 
+	private List<Habitat> habitats; 
 	
 	
 	public Animal(Date enterDate, Integer foodPeriod, Date lastFed, Date deathDate, Date freedomDate, Date lastBath,
@@ -38,7 +41,7 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	
 	
 	public Animal(Integer id, Date enterDate, Integer foodPeriod, Date lastFed, Date deathDate, Date freedomDate,
-			Date lastBath, FoodType feedingType, List<Worker> workers) {
+			Date lastBath, FoodType feedingType, List<Worker> workers, List<Illness> illnesses, List<Drug> drugs, List<Habitat> habitats) {
 		super();
 		this.id = id;
 		this.enterDate = enterDate;
@@ -49,6 +52,9 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.lastBath = lastBath;
 		this.feedingType = feedingType;
 		this.workers = new ArrayList<Worker>();
+		this.illnesses = new ArrayList<Illness>();
+		this.drugs = new ArrayList<Drug>();
+		this.habitats = new ArrayList<Habitat>();
 	}
 
 
@@ -96,6 +102,17 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.workers = workers;
 	}
 
+
+	public List<Illness> getIllnesses() {
+		return illnesses;
+	}
+
+
+	public void setIllnesses(List<Illness> illnesses) {
+		this.illnesses = illnesses;
+	}
+	
+	
 
 	public Integer getId() {
 		return id;
@@ -145,7 +162,26 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	public void setFeedingType(FoodType feedingType) {
 		this.feedingType = feedingType;
 	}
-	
+
+
+	public List<Drug> getDrugs() {
+		return drugs;
+	}
+
+
+	public void setDrugs(List<Drug> drugs) {
+		this.drugs = drugs;
+	}
+
+
+	public List<Habitat> getHabitats() {
+		return habitats;
+	}
+
+
+	public void setHabitats(List<Habitat> habitats) {
+		this.habitats = habitats;
+	}
 	
 	
 }

@@ -1,6 +1,8 @@
 package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Illness implements Serializable{
 
@@ -10,8 +12,11 @@ public class Illness implements Serializable{
 	private static final long serialVersionUID = 3719735548395728811L;
 
 	private Integer id; //No need to be in constructor
+	private IllnessName name;
 	private Integer quarantineDays;
 	private Boolean prothesis;
+	private List<Drug> drugs; 
+	private List<Animal> animals; 
 	
 	
 	public Illness(Integer quarantineDays, Boolean prothesis) {
@@ -21,6 +26,17 @@ public class Illness implements Serializable{
 	}
 	
 	
+	public Illness(Integer id, IllnessName name, Integer quarantineDays, Boolean prothesis, List<Drug> drugs, List<Animal> animals) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.quarantineDays = quarantineDays;
+		this.prothesis = prothesis;
+		this.drugs = new ArrayList<Drug>();
+		this.animals = new ArrayList<Animal>();
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -54,6 +70,12 @@ public class Illness implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	public IllnessName getName() {
+		return name;
+	}
+	public void setName(IllnessName name) {
+		this.name = name;
+	}
 	public Integer getQuarantineDays() {
 		return quarantineDays;
 	}
@@ -65,6 +87,26 @@ public class Illness implements Serializable{
 	}
 	public void setProthesis(Boolean prothesis) {
 		this.prothesis = prothesis;
+	}
+
+
+	public List<Drug> getDrugs() {
+		return drugs;
+	}
+
+
+	public void setDrugs(List<Drug> drugs) {
+		this.drugs = drugs;
+	}
+
+
+	public List<Animal> getAnimals() {
+		return animals;
+	}
+
+
+	public void setAnimals(List<Animal> animals) {
+		this.animals = animals;
 	}
 	
 	

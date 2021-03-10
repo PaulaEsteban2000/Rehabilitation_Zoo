@@ -9,13 +9,13 @@ import rehabilitationzoo.db.pojos.Worker;
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
 	
-	//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+	private Connection c;
 
 	
 	public void connect () {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			
 		} catch (Exception e) {
@@ -25,7 +25,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
 	public void disconnect(){
 		try {
-			//Connection c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +32,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 	
 	public void create () { //we shouldn't have a main here -> build an interface
-		private Connection c;
 		
 		try {
 			// Open database connection
@@ -51,17 +49,18 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastBath	DATE , "
 					   + " lastFed	DATE , "
 					   + " deathDate	DATE, "
-					   + " freedomDate	DATE, )";
+					   + " freedomDate	DATE, "
+					   + " FOREIGN KEY (habitat_id) REFERENCES habitat(id), )";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 			
 			Statement stmt2 = c.createStatement();
 			String sql2 = "CREATE TABLE habitat "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + "name	TEXT	NOT NULL,"
+					   + " name	TEXT	NOT NULL	UNQIUE," 
 					   + " lastCleaned	DATE , "
 					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " ground	ENUM	NOT NULL, "
+					   + " ground	ENUM	NOT NULL, "//should be unique if it's an enum?
 					   + " temperature	ENUM	NOT NULL, "
 					   + " light	ENUM	NOT NULL, )";
 			stmt2.executeUpdate(sql2);
@@ -71,6 +70,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql3 = "CREATE TABLE workers "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " name	TEXT	NOT NULL, "
+					   + " lastName TEXT	NOT NULL, "
 					   + " hireDate	DATE	NOT NULL, "
 					   + " salary	FLOAT	NOT NULL, "
 					   + " workerType	ENUM	NOT NULL, )";
@@ -81,6 +81,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE illness "
 					   + "(id	INTEGER	PRIMARY	KEY,"
+					   + " name	ENUM	NOT NULL, "
 					   + " quarantine	INTEGER  , "
 					   + " prothesis	BOOLEAN )";
 					   
@@ -90,15 +91,16 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drug "
 					   + "( id	INTEGER	PRIMARY KEY"
-					   + " name	TEXT	NOT NULL,"
+					   + " name	TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType	ENUM	NOT NULL )";					   
+					   + " drugType	ENUM	NOT NULL,"
+					   + " FOREIGN KEY (illness_id) REFERENCES illness(id), )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
 			Statement stmt6 = c.createStatement();
-			String sql6 = "CREATE TABLE animal_drug "
+			String sql6 = "CREATE TABLE animal_drug " //is this necessary? bc there already is a connection between these through the other tables
 					   + "(drug_id	INTEGER	REFERENCES drug(id), "
 					   + " animal_id	INTEGER	REFERENCES animal(id), "
 					   + " PRIMARY KEY (drug_id, animal_id )";
@@ -113,21 +115,13 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
 			
-			Statement stmt8 = c.createStatement();
-			String sql8 = "CREATE TABLE drug_illness "
-					   + "(drug_id	INTEGER REFERENCES drug(id), "
-					   + " illness_id	INTEGER REFERENCES illness(id), "
-					   + " PRIMARY KEY (drug_id, illness_id )";
-			stmt8.executeUpdate(sql8);
-			stmt8.close();
-			
-			Statement stmt9 = c.createStatement();
-			String sql9 = "CREATE TABLE animal_illness "
+			Statement stmt8 = c.createStatement(); 
+			String sql8 = "CREATE TABLE animal_illness "
 					   + "(drug_id	INTEGER REFERENCES animal_(id), "
 					   + " illness_id	INTEGER REFERENCES illness(id), "
 					   + " PRIMARY KEY (animal_id, illness_id )";
-			stmt9.executeUpdate(sql9);
-			stmt9.close();
+			stmt8.executeUpdate(sql8);
+			stmt8.close();
 			// Create table: end
 			
 			// - Set initial values for the Primary Keys

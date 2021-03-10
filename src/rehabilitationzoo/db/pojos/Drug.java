@@ -1,6 +1,8 @@
 package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Drug implements Serializable{
 
@@ -14,14 +16,16 @@ public class Drug implements Serializable{
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
 	private DrugType type;
+	private List<Animal> animals; 
 	
 	
-	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, DrugType type) {
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, DrugType type,  List<Animal> animals) {
 		super();
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
 		this.periodBetweenDosis = periodBetweenDosis;
 		this.type = type;
+		this.animals = new ArrayList<Animal>();
 	}
 
 	
@@ -81,5 +85,15 @@ public class Drug implements Serializable{
 	}
 	public void setType(DrugType type) {
 		this.type = type;
+	}
+
+
+	public List<Animal> getAnimals() {
+		return animals;
+	}
+
+
+	public void setAnimals(List<Animal> animals) {
+		this.animals = animals;
 	}
 }
