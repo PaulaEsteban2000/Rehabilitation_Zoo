@@ -10,15 +10,14 @@ public class Menu {
 	
 	private static DBManager dbman = new JDBCManager();
 	private static BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
-
+		
 	public static void main(String[] args) throws Exception {
-		
 		dbman.connect();
-		
+
 		do {
 			System.out.println("Choose an option: ");
-			System.out.println("1. ");
-			System.out.println("2. ");
+			System.out.println("1. (Not avaiable yet) ");
+			System.out.println("2. (Not available yet) ");
 			System.out.println("3. Exit the program ");
 			int choice = Integer.parseInt(reader.readLine());
 			
@@ -37,6 +36,7 @@ public class Menu {
         }
         
 	}while (true);
+		
 	}
 	
 }

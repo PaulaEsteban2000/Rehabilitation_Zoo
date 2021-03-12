@@ -17,7 +17,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
-			
+			this.createTables();
+		} catch (SQLException sqlE) {
+			sqlE.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -31,17 +33,26 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		}
 	}
 	
-	public void create () { //we shouldn't have a main here -> build an interface
+	public void createTables () { //we shouldn't have a main here -> build an interface
 		
-		try {
-			// Open database connection
-			Class.forName("org.sqlite.JDBC"); 
-			c = DriverManager.getConnection("jdbc:sqlite:./db/management.db"); //creates a new file whose name is management, where the data bases going to be created
-			c.createStatement().execute("PRAGMA foreign_keys=ON");
+		try {			
+			//Open database connection
 			
-			// Create tables: begin
+			// Create tables: begin		
 			Statement stmt1 = c.createStatement();
-			String sql1 = "CREATE TABLE animal "
+			String sql1 = "CREATE TABLE habitat "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name	TEXT	NOT NULL	UNIQUE, " 
+					   + " lastCleaned	DATE, "
+					   + " waterLevel	FLOAT	NOT NULL, "
+					   + " ground	ENUM	NOT NULL, "//should be unique if it's an enum?
+					   + " temperature	ENUM	NOT NULL, "
+					   + " light	ENUM	NOT NULL )";
+			stmt1.executeUpdate(sql1);
+			stmt1.close();
+			
+			Statement stmt2 = c.createStatement();
+			String sql2 = "CREATE TABLE animal "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT,"
 					   + " enterDate	DATE	NOT NULL, "
 					   + " foodPeriod	INTEGER	NOT NULL, "
@@ -50,19 +61,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastFed	DATE , "
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
-					   + " FOREIGN KEY (habitat_id) REFERENCES habitat(id), )";
-			stmt1.executeUpdate(sql1);
-			stmt1.close();
-			
-			Statement stmt2 = c.createStatement();
-			String sql2 = "CREATE TABLE habitat "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	TEXT	NOT NULL	UNQIUE," 
-					   + " lastCleaned	DATE , "
-					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " ground	ENUM	NOT NULL, "//should be unique if it's an enum?
-					   + " temperature	ENUM	NOT NULL, "
-					   + " light	ENUM	NOT NULL, )";
+					   + " FOREIGN KEY (habitat_id) REFERENCES habitat(id) )";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 			
@@ -73,7 +72,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastName TEXT	NOT NULL, "
 					   + " hireDate	DATE	NOT NULL, "
 					   + " salary	FLOAT	NOT NULL, "
-					   + " workerType	ENUM	NOT NULL, )";
+					   + " workerType	ENUM	NOT NULL )";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
@@ -95,7 +94,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
 					   + " drugType	ENUM	NOT NULL,"
-					   + " FOREIGN KEY (illness_id) REFERENCES illness(id), )";					   
+					   + " FOREIGN KEY (illness_id) REFERENCES illness(id) )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
@@ -140,9 +139,10 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			//stmtSeq.close(); 
 			
 			// Close database connection
-			c.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		}  catch (SQLException e) {
+			if (!e.getMessage().contains("already exists")) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
