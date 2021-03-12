@@ -18,7 +18,7 @@ public class Menu {
 			System.out.println("Choose an option: ");
 			System.out.println("1. (Not avaiable yet) ");
 			System.out.println("2. (Not available yet) ");
-			System.out.println("3. Exit the program ");
+			System.out.println("0. Exit the program ");
 			int choice = Integer.parseInt(reader.readLine());
 			
         switch (choice) {
@@ -26,7 +26,7 @@ public class Menu {
                 break;
             case 2:
                 break;
-            case 3:
+            case 0:
             	dbman.disconnect();
             	System.exit(0);
             	break;

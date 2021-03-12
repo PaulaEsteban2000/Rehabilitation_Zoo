@@ -38,15 +38,23 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		try {			
 			//Open database connection
 			
-			// Create tables: begin		
+			// Create tables: begin	
+			
+			Statement stmt0 = c.createStatement();
+			String sql0 = "CREATE TABLE groundType "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name	TEXT	NOT NULL )";
+			stmt0.executeUpdate(sql0);
+			stmt0.close();
+			
 			Statement stmt1 = c.createStatement();
 			String sql1 = "CREATE TABLE habitat "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " name	TEXT	NOT NULL	UNIQUE, " 
 					   + " lastCleaned	DATE, "
 					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " ground	ENUM	NOT NULL, "//should be unique if it's an enum?
-					   + " temperature	ENUM	NOT NULL, "
+					   + " FOREIGN KEY (ground_id) REFERENCES groundType(id), "
+					   + " temperature	FLOAT	NOT NULL, "
 					   + " light	ENUM	NOT NULL )";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
@@ -76,16 +84,28 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
+			Statement stmt30 = c.createStatement();
+			String sql30 = "CREATE TABLE illnessName "
+					   + "(id	TEXT	PRIMARY KEY )";
+			stmt30.executeUpdate(sql30);
+			stmt30.close();
 			
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE illness "
 					   + "(id	INTEGER	PRIMARY	KEY,"
-					   + " name	ENUM	NOT NULL, "
+					   + " FOREIGN KEY (illness_name) REFERENCES illnessName(name), " //Should it be a FK to name?? Or to an id??
 					   + " quarantine	INTEGER  , "
 					   + " prothesis	BOOLEAN )";
 					   
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
+			
+			Statement stmt40 = c.createStatement();
+			String sql40 = "CREATE TABLE drugType "
+					   + "(id	TEXT	PRIMARY KEY,"
+					   + " name	TEXT NOT NULL )";
+			stmt40.executeUpdate(sql40);
+			stmt40.close();
 			
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drug "
@@ -93,13 +113,14 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " name	TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType	ENUM	NOT NULL,"
-					   + " FOREIGN KEY (illness_id) REFERENCES illness(id) )";					   
+					   + " FOREIGN KEY (drugType_id) REFERENCES drugType(id), "
+					   + " FOREIGN KEY (cures_illness) REFERENCES illness(id), "
+					   + " dosis INTEGER )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
 			Statement stmt6 = c.createStatement();
-			String sql6 = "CREATE TABLE animal_drug " //is this necessary? bc there already is a connection between these through the other tables
+			String sql6 = "CREATE TABLE animal_drug "
 					   + "(drug_id	INTEGER	REFERENCES drug(id), "
 					   + " animal_id	INTEGER	REFERENCES animal(id), "
 					   + " PRIMARY KEY (drug_id, animal_id )";

@@ -1,8 +1,26 @@
 package rehabilitationzoo.db.pojos;
 
-public enum IllnessName {
+public class IllnessName {
 	
-	//OINTMENT, ANALGESIC, ANTIBIOTIC, ANTI_INFLAMATORY, BANDAGE, ANTIBODIES_SERUM
-	RASH, FEVER, STYES, PARASITES, SCABIES, POX, CHLAMYDIA, FIV, RABIES, BLUETONGUE, SALMONELLA, DIHARREA, FOOTROT
+	//RASH, FEVER, STYES, PARASITES, SCABIES, POX, CHLAMYDIA, FIV, RABIES, BLUETONGUE, SALMONELLA, DIHARREA, FOOTROT
+	
+	private String name;
+	
+	public IllnessName(String name) {
+		super();
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	
+	
+	
 
 }

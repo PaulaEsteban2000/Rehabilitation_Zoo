@@ -18,6 +18,7 @@ public class Worker implements Serializable {
 	private Date hireDate;
 	private Integer salary;
 	private WorkerType type;
+	
 	private List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
 	
 	

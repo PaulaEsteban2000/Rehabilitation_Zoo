@@ -15,6 +15,7 @@ public class Illness implements Serializable{
 	private IllnessName name;
 	private Integer quarantineDays;
 	private Boolean prothesis;
+	
 	private List<Drug> drugs; 
 	private List<Animal> animals; 
 	

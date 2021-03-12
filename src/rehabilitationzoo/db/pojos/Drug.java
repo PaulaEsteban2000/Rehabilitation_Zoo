@@ -16,16 +16,19 @@ public class Drug implements Serializable{
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
 	private DrugType type;
+	private int dosis;
+	
 	private List<Animal> animals; 
 	
 	
-	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, DrugType type,  List<Animal> animals) {
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, DrugType type,  List<Animal> animals, int dosis, Illness illness) {
 		super();
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
 		this.periodBetweenDosis = periodBetweenDosis;
 		this.type = type;
 		this.animals = new ArrayList<Animal>();
+		this.setDosis(dosis);
 	}
 
 	
@@ -96,4 +99,13 @@ public class Drug implements Serializable{
 	public void setAnimals(List<Animal> animals) {
 		this.animals = animals;
 	}
+
+
+	public int getDosis() {
+		return dosis;
+	}
+	public void setDosis(int dosis) {
+		this.dosis = dosis;
+	}
+	
 }
