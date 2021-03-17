@@ -53,7 +53,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " name	TEXT	NOT NULL	UNIQUE, " 
 					   + " lastCleaned	DATE, "
 					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " FOREIGN KEY (ground_id) REFERENCES groundType(id), "
+					   + " ground_id REFERENCES groundType(id), "
 					   + " temperature	FLOAT	NOT NULL, "
 					   + " light	ENUM	NOT NULL )";
 			stmt1.executeUpdate(sql1);
@@ -61,7 +61,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt2 = c.createStatement();
 			String sql2 = "CREATE TABLE animal "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT,"
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " enterDate	DATE	NOT NULL, "
 					   + " foodPeriod	INTEGER	NOT NULL, "
 					   + " feedingType	ENUM	NOT NULL, "
@@ -69,7 +69,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastFed	DATE , "
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
-					   + " FOREIGN KEY (habitat_id) REFERENCES habitat(id) )";
+					   + " habitat_id REFERENCES habitat(id) )";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 			
@@ -92,9 +92,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE illness "
-					   + "(id	INTEGER	PRIMARY	KEY,"
-					   + " FOREIGN KEY (illness_name) REFERENCES illnessName(name), " //Should it be a FK to name?? Or to an id??
-					   + " quarantine	INTEGER  , "
+					   + "(id	INTEGER	PRIMARY	KEY, "
+					   + " illness_name REFERENCES illnessName(name), " //Should it be a FK to name?? Or to an id??
+					   + " quarantine	INTEGER, "
 					   + " prothesis	BOOLEAN )";
 					   
 			stmt4.executeUpdate(sql4);
@@ -109,12 +109,12 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drug "
-					   + "( id	INTEGER	PRIMARY KEY"
+					   + "( id	INTEGER	PRIMARY KEY, "
 					   + " name	TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " FOREIGN KEY (drugType_id) REFERENCES drugType(id), "
-					   + " FOREIGN KEY (cures_illness) REFERENCES illness(id), "
+					   + " drugType_id REFERENCES drugType(id), "
+					   + " cures_illness REFERENCES illness(id), "
 					   + " dosis INTEGER )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
@@ -123,7 +123,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql6 = "CREATE TABLE animal_drug "
 					   + "(drug_id	INTEGER	REFERENCES drug(id), "
 					   + " animal_id	INTEGER	REFERENCES animal(id), "
-					   + " PRIMARY KEY (drug_id, animal_id )";
+					   + " PRIMARY KEY (drug_id, animal_id) )";
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 			
@@ -131,15 +131,15 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql7 = "CREATE TABLE worker_animal "
 					   + "(worker_id	INTEGER REFERENCES worker(id), "
 					   + " animal_id	INTEGER REFERENCES animal(id), "
-					   + " PRIMARY KEY (worker_id, animal_id )";
+					   + " PRIMARY KEY (worker_id, animal_id) )";
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
 			
 			Statement stmt8 = c.createStatement(); 
 			String sql8 = "CREATE TABLE animal_illness "
-					   + "(drug_id	INTEGER REFERENCES animal_(id), "
+					   + "(animal_id	INTEGER REFERENCES animal(id), "
 					   + " illness_id	INTEGER REFERENCES illness(id), "
-					   + " PRIMARY KEY (animal_id, illness_id )";
+					   + " PRIMARY KEY (illness_id, animal_id) )";
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 			// Create table: end
@@ -161,9 +161,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			// Close database connection
 		}  catch (SQLException e) {
-			if (!e.getMessage().contains("already exists")) {
+	//	if (!e.getMessage().contains("already exists")) {
 				e.printStackTrace();
-			}
+	//		}
 		}
 		
 	}
