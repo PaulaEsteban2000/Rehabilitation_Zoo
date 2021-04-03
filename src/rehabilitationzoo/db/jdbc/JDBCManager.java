@@ -32,6 +32,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			e.printStackTrace();
 		}
 	}
+
 	
 	public void createTables () { //we shouldn't have a main here -> build an interface
 		
