@@ -29,7 +29,7 @@ public class Insert {
 			System.out.print("Last Name: ");
 			String lastname = reader.readLine();
 			
-			System.out.print("Hire Date:"+"\n"+" Day: ");
+			System.out.print("Hire Date"+"\n"+" Day: ");
 			String a1 = reader.readLine();
 			int day = Integer.parseInt(a1);
 			System.out.print("Month: ");

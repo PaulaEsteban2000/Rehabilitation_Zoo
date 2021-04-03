@@ -15,7 +15,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	public void connect () {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:./db/company.db");
+			c = DriverManager.getConnection("jdbc:sqlite:./db/management.db");
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			
 		} catch (Exception e) {

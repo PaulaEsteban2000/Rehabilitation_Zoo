@@ -11,7 +11,7 @@ import rehabilitationzoo.db.pojos.*;
 
 public class Select {
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) { //deeberia ser un main?
 		try {
 			// Open database connection
 			Class.forName("org.sqlite.JDBC");
@@ -27,9 +27,9 @@ public class Select {
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
 				String lastname = rs.getString("lastname");
-				Date hireDate = rs.getDate("hireDate"); //Deberia ser la fecha un String?
+				Date hireDate = rs.getDate("hireDate"); //Deberia ser la fecha un int?
 				Integer salary = rs.getInt("salary");
-			  //  WorkerType type = rs.getClass("type"); NO SE COMO HACERLO
+			    WorkerType workertype =rs.getType("workertype");  //WorkerType.valueOf(rs.getString("type")); COMO HARIAMOS ESTO?
 				String animals = rs.getString("animals");
 				
 				
@@ -40,9 +40,9 @@ public class Select {
 				Worker selectWorker = new Worker(id, name, lastname, hireDate, salary, type ,animals);
 				System.out.println(selectWorker);
 			}
-			rs.close();
-			stmt.close();
-			System.out.println("Search finished.");
+			//rs.close();
+			//stmt.close();
+			//System.out.println("Search finished.");
 			// Retrieve data: end
 			
 			// Close database connection
