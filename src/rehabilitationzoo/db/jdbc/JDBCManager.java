@@ -93,7 +93,8 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE illness "
 					   + "(id	INTEGER	PRIMARY	KEY, "
-					   + " illness_name REFERENCES illnessName(name), " //Should it be a FK to name?? Or to an id??
+					   //+ " illness_name REFERENCES illnessName(name), " //Should it be a FK to name?? Or to an id??
+					   + "illness_name STRING NOT NULL, "
 					   + " quarantine	INTEGER, "
 					   + " prothesis	BOOLEAN )";
 					   
