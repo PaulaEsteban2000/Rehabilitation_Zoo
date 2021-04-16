@@ -4,7 +4,8 @@ public class GroundType {
 	
 	//FOREST, OCEAN, FRESHWATER, GRASSLAND, WETLAND, POLAR, DESERT, MOUNTAIN
 
-	private String type;
+	private String type; //cambio prepresentacion
+	private Integer id;
 
 	public GroundType(String type) {
 		super();
