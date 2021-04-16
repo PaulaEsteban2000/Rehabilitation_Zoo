@@ -24,32 +24,34 @@ try {
 	String sql = "SELECT * FROM workers";
 	ResultSet rs = stmt.executeQuery(sql);
 	while (rs.next()) {
-	int id = rs.getInt("id");
-	String name = rs.getString("name");
-	String lastname = rs.getString("lastname");
-	Date hireDate = rs.getDate("hireDate"); //Deberia ser la fecha un int?
-	Integer salary = rs.getInt("salary");
-	  // WorkerType workertype =rs.getType("workertype");  //WorkerType.valueOf(rs.getString("type")); COMO HARIAMOS ESTO?
-	String animals = rs.getString("animals");
+		int id = rs.getInt("id");
+		String name = rs.getString("name");
+		String lastname = rs.getString("lastname");
+		Date hireDate = rs.getDate("hireDate"); //Deberia ser la fecha un int?
+		Integer salary = rs.getInt("salary");
+		  // WorkerType workertype =rs.getType("workertype");  //WorkerType.valueOf(rs.getString("type")); COMO HARIAMOS ESTO?
+		String animals = rs.getString("animals");
 
 
-// public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
-// List<Animal> animals) { 
+		// public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
+		// List<Animal> animals) { 
+			
+		// Worker selectWorker = new Worker(id, name, lastname, hireDate, salary, type ,animals);
+		// System.out.println(selectWorker);
+	}
+	
+	//rs.close();
+	//stmt.close();
+	//System.out.println("Search finished.");
+	// Retrieve data: end
+	
+	// Close database connection
+	c.close();
 
-// 
-// Worker selectWorker = new Worker(id, name, lastname, hireDate, salary, type ,animals);
-// System.out.println(selectWorker);
-}
-//rs.close();
-//stmt.close();
-//System.out.println("Search finished.");
-// Retrieve data: end
-
-// Close database connection
-c.close();
-System.out.println("Database connection closed.");
+	System.out.println("Database connection closed.");
 } catch (Exception e) {
 e.printStackTrace();
 }
-}}
+}
+}
 
