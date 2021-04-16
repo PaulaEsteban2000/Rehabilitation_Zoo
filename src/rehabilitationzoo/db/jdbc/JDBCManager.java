@@ -8,6 +8,7 @@ import rehabilitationzoo.db.pojos.Worker;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
+	//hello
 	
 	private Connection c;
 
