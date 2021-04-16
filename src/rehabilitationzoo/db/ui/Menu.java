@@ -10,18 +10,15 @@ public class Menu {
 	
 	private static DBManager dbman = new JDBCManager();
 	private static BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
-
+		
 	public static void main(String[] args) throws Exception {
-		
-		
 		dbman.connect();
-		
+
 		do {
-			System.out.println("\nWelcome to our Rehabilitation Zoo\n");
 			System.out.println("Choose an option: ");
-			System.out.println("1. ");
-			System.out.println("2. ");
-			System.out.println("3. Exit the program ");
+			System.out.println("1. (Not avaiable yet) ");
+			System.out.println("2. (Not available yet) ");
+			System.out.println("0. Exit the program ");
 			int choice = Integer.parseInt(reader.readLine());
 			
         switch (choice) {
@@ -29,7 +26,7 @@ public class Menu {
                 break;
             case 2:
                 break;
-            case 3:
+            case 0:
             	dbman.disconnect();
             	System.exit(0);
             	break;
@@ -39,6 +36,7 @@ public class Menu {
         }
         
 	}while (true);
+		
 	}
 	
 }

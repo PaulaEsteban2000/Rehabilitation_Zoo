@@ -12,9 +12,10 @@ public class Illness implements Serializable{
 	private static final long serialVersionUID = 3719735548395728811L;
 
 	private Integer id; //No need to be in constructor
-	private IllnessName name;
+	private IllnessName name; //cambiar por String: prepresentacion
 	private Integer quarantineDays;
 	private Boolean prothesis;
+	
 	private List<Drug> drugs; 
 	private List<Animal> animals; 
 	

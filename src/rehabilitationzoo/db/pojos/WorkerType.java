@@ -7,6 +7,7 @@ import java.util.List;
 
 public class WorkerType implements Serializable {
 
+	
 /**
 	 * 
 	 */

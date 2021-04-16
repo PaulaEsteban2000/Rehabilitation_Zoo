@@ -16,11 +16,13 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private Integer id; //No need to be in constructor
 	private Date enterDate;
 	private Integer foodPeriod;
+	private FoodType feedingType;
+	private Date lastBath;	
 	private Date lastFed;
 	private Date deathDate;
 	private Date freedomDate;
-	private Date lastBath;
-	private FoodType feedingType;
+	private Habitat habitat;
+		
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
 	private List<Drug> drugs; 
@@ -28,7 +30,7 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	
 	
 	public Animal(Date enterDate, Integer foodPeriod, Date lastFed, Date deathDate, Date freedomDate, Date lastBath,
-			FoodType feedingType) {
+			FoodType feedingType, Habitat habitat) {
 		super();
 		this.enterDate = enterDate;
 		this.foodPeriod = foodPeriod;
@@ -37,6 +39,7 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.freedomDate = freedomDate;
 		this.lastBath = lastBath;
 		this.feedingType = feedingType;
+		this.habitat = habitat; 
 	}
 	
 	
@@ -189,6 +192,16 @@ public class Animal implements Serializable { //Serializable is used to have thi
 
 	public void setHabitats(List<Habitat> habitats) {
 		this.habitats = habitats;
+	}
+
+
+	public Habitat getHabitat() {
+		return habitat;
+	}
+
+
+	public void setHabitat(Habitat habitat) {
+		this.habitat = habitat;
 	}
 	
 	
