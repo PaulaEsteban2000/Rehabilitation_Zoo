@@ -40,6 +40,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 	
 	
+	
+	public Animal(Integer id, Date lastFed,FoodType feedingType) {
+		super();
+		this.id = id;
+		this.feedingType = feedingType;
+	}
+	
+	
 	public Animal(Integer id, Date enterDate, Integer foodPeriod, Date lastFed, Date deathDate, Date freedomDate,
 			Date lastBath, FoodType feedingType, List<Worker> workers, List<Illness> illnesses, List<Drug> drugs, List<Habitat> habitats) {
 		super();

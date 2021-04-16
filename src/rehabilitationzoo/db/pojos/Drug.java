@@ -16,7 +16,7 @@ public class Drug implements Serializable{
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
 	private DrugType type;
-	private List<Animal> animals; 
+	private List<Animal> animals;
 	
 	
 	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, DrugType type,  List<Animal> animals) {

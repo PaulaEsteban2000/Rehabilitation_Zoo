@@ -32,6 +32,15 @@ public class Worker implements Serializable {
 	}
 	
 	
+	public Worker(Integer id, String name, Date hireDate) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.hireDate = hireDate;
+												//cannot have a List, but an ArrayList (or any other class that implements list)
+	}
+	
+	
 	
 	public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
 			List<Animal> animals) {

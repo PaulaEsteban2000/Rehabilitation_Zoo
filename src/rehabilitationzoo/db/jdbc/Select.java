@@ -29,16 +29,16 @@ public class Select {
 				String lastname = rs.getString("lastname");
 				Date hireDate = rs.getDate("hireDate"); //Deberia ser la fecha un int?
 				Integer salary = rs.getInt("salary");
-			    WorkerType workertype =rs.getType("workertype");  //WorkerType.valueOf(rs.getString("type")); COMO HARIAMOS ESTO?
+			   // WorkerType workertype =rs.getType("workertype");  //WorkerType.valueOf(rs.getString("type")); COMO HARIAMOS ESTO?
 				String animals = rs.getString("animals");
 				
 				
 			//	public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
 			//			List<Animal> animals) {		
 			
-				
-				Worker selectWorker = new Worker(id, name, lastname, hireDate, salary, type ,animals);
-				System.out.println(selectWorker);
+			//	
+			//	Worker selectWorker = new Worker(id, name, lastname, hireDate, salary, type ,animals);
+			//	System.out.println(selectWorker);
 			}
 			//rs.close();
 			//stmt.close();
