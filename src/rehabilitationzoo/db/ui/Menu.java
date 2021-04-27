@@ -1,8 +1,6 @@
 package rehabilitationzoo.db.ui;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
@@ -12,9 +10,7 @@ import utils.Utils;
 
 public class Menu {
 	
-	public static DBManager dbman = new JDBCManager();
-	private static BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
-		
+	public static DBManager dbman = new JDBCManager();		
 	
 	public static void main(String[] args) throws Exception, IOException{
 		dbman.connect();
@@ -84,27 +80,35 @@ public class Menu {
 
 	
  	public static void vetOption1() throws IOException {
-		System.out.println("Please choose the action you want to complete: "
-				+ "		1. Animal diagnosis (newly entered animal)"
-				+ "		2. Animal check (daily)"
-				+ "		3. Go back to users menu.");
+ 		int vetMainChoice;
+ 		
+		do {
+			System.out.println("Please choose the action you want to complete: " + "\n"
+				+ "	1. Animal diagnosis (newly entered animal)" + "\n"
+				+ "	2. Animal check (daily)" + "\n"
+				+ "	3. Go back to users menu."+ "\n") ;
 		
-		int vetMainChoice = Utils.readInt();
+			vetMainChoice = Utils.readInt();
 		
-		switch (vetMainChoice) {
-			case 1:
-				Animal animalToDiagnose = KeyboardInput.askForAnimal();
-				KeyboardInput.diagnosisSubMenu(animalToDiagnose);
-			case 2: 
-				Animal animalToCheck = KeyboardInput.askForAnimal();
-				KeyboardInput.animalCheck(animalToCheck);
-				break;
-			case 3:
-				break;
-			default: 
-				System.out.println("Error, nonvalid input.");
-				break;
-		}
+		
+			switch (vetMainChoice) {
+				case 1:
+					System.out.println("ANIMAL DIAGNOSIS");
+					Animal animalToDiagnose = KeyboardInput.askForAnimal();
+					KeyboardInput.diagnosisSubMenu(animalToDiagnose);
+					break;
+				case 2: 
+					System.out.println("ANIMAL CHECK");
+					Animal animalToCheck = KeyboardInput.askForAnimal();
+					KeyboardInput.animalCheckSubMenu(animalToCheck);
+					break;
+				case 3:
+					break;
+				default: 
+					System.out.println("Error, nonvalid input.");
+					break;
+			}
+		}while(vetMainChoice != 3);
 	}
  	
  	public static void adminOption2() {

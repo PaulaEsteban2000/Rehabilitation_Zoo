@@ -9,8 +9,6 @@ import java.sql.Statement;
 import java.time.LocalDate;
 
 import rehabilitationzoo.db.pojos.FeedingType;
-import rehabilitationzoo.db.pojos.FeedingType.*;
-
 public class Insert {
 
 	public static void main(String args[]) {

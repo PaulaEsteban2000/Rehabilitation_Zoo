@@ -12,7 +12,7 @@ public class KeyboardInput {
 
 	public static Animal askForAnimal() throws IOException {
 		
-		System.out.println("These are the types of animals existent in our recovery center. Please choose one:");
+		System.out.println("These are the types of animals existent in our recovery center. Please choose one or enter a new one:");
 		Menu.dbman.printAnimalTypes();
 		String animalType = Utils.readLine();
 		
@@ -25,46 +25,53 @@ public class KeyboardInput {
 	}
 
 	public static void diagnosisSubMenu(Animal animalToDiagnose) throws IOException {
+		int illnessChoice;
 		
-		System.out.println("Once your diagnosis is completed, please choose if the animal has one of these illnesses or more:"
-				+ "		1. Animal is in need of a prothesis"
-				+ "		2. Animal has some other illness");
-		int illnessChoice = Utils.readInt();
-	
-		switch(illnessChoice) {
-		case 1: 
-			System.out.println("Are you sure this animal needs a prothesis?: "
-					+ "a. Yes"
-					+ "b. No, go back to illnesses menu.");
-			String prothesisChoice = Utils.readLine();
-			
-			if (prothesisChoice == "a" ) {
-				Menu.dbman.prothesisInstallation(true); //here the release date should be changed if parameter true
-				System.out.println("Prothesis was installed. The animal will be set free in 30 days.");
-			} else if(prothesisChoice == "b" ) {
-				break;	
-			} else {
-				System.out.println("Error, nonvalid input");
+		do {
+			System.out.println("Once your diagnosis is completed, please choose if the animal has one of these illnesses or more:" + "\n"
+					+ "	1. Animal is in need of a prothesis" + "\n"
+					+ "	2. Animal has some other illness" + "\n"
+					+ "	3. Go back to main menu" + "\n"); 
+			illnessChoice = Utils.readInt();
+		
+			switch(illnessChoice) {
+			case 1: 
+				System.out.println("Are you sure this animal needs a prothesis?: " + "\n"
+						+ "a. Yes" + "\n"
+						+ "b. No, go back to illnesses menu." + "\n");
+				String prothesisChoice = Utils.readLine();
+				
+				if (prothesisChoice.equals("a") ) {
+					Menu.dbman.prothesisInstallation(true); //here the release date should be changed if parameter true
+					System.out.println("Prothesis was installed. The animal will be set free in 30 days.");
+					break;
+				} else if(prothesisChoice.equals("b")) {
+					break;	
+				} else {
+					System.out.println("Error, nonvalid input");
+				}
+		
+				break;
+				
+			case 2:
+				System.out.println("How many illnesses other than prothesis does your animal have?:");
+				int numberOfIllnesses = Utils.readInt();
+				
+				KeyboardInput.illnessesSubMenu(numberOfIllnesses);			
+				break;
+				
+			case 3:
+				break;
+				
+			default:
+		        System.out.println("Error, nonvalid input.");
+				break;
+				
 			}
-	
-			break;
-			
-		case 2:
-			System.out.println("How many illnesses other than prothesis does your animal have?:");
-			int numberOfIllnesses = Utils.readInt();
-			
-			KeyboardInput.illnessesSubMenu(numberOfIllnesses);			
-			break;
-			
-		default:
-	        System.out.println("Error, nonvalid input.");
-			break;
-			
-		}
+		}while(illnessChoice != 3);
 	}
 
-	
-	public static void illnessesSubMenu(int numberOfIllnesses) throws IOException{
+	private static void illnessesSubMenu(int numberOfIllnesses) throws IOException{
 		String nameOfIllness = "";
 		int quarantineDays = 0; //set to zero if no quarantine is needed
 		Boolean prothesis = false;
@@ -74,31 +81,31 @@ public class KeyboardInput {
 			System.out.println("These are some of the illnesses that other animals have: ");
 			Menu.dbman.printIllnesses();
 			//TODO check for correct spelling (in every other case as well)
-			System.out.println("What is the name of the illness your animal has?: " + "illness number " + a);
+			System.out.println("What is the name of the illness your animal has?: " + "illness number " + (a+1));
+			//TODO the counter of illnesses should be the actual number of illnesses successfully diagnosed on the animal
 			nameOfIllness = Utils.readLine();
 			
-			System.out.println("Will it need quarantine?"
-				+ "a. Yes"
-				+ "b. No.");
+			System.out.println("Will it need quarantine?" + "\n"
+				+ "a. Yes" + "\n"
+				+ "b. No." + "\n");
 				String quarantineChoice = Utils.readLine();
-					if (quarantineChoice == "a" ) {
+					if (quarantineChoice.equals("a")) {
 						Menu.dbman.illnessQuarantine(true);
 						System.out.println("How many days should the animal be ecxluded?");
 						quarantineDays = Utils.readInt();
 						System.out.println("The animal will be put int quarantine.");
-					} else if(quarantineChoice == "b" ) {
+					} else if(quarantineChoice.equals("b")) {
 						Menu.dbman.illnessQuarantine(false);
 						System.out.println("The animal will not be put int quarantine.");
-						break;	
 					} else {
 						System.out.println("Error, nonvalid input");
 					}
 				
-			System.out.println("Will the animal need any medicines to take for this illness?:"
-					+ "a. Yes"
-					+ "b. No");
+			System.out.println("Will the animal need any medicines to take for this illness?:" + "\n"
+					+ "a. Yes"+ "\n"
+					+ "b. No"+ "\n");
 				String drugsChoice = Utils.readLine();
-					if (drugsChoice == "a" ) {
+					if (drugsChoice.equals("a") ) {
 						System.out.println("These are the types of medicines we have in the center at the moment: ");
 						Menu.dbman.printDrugTypes();
 						System.out.println("What type of drug will the animal need to take?");
@@ -122,7 +129,7 @@ public class KeyboardInput {
 						
 						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, drugType.getId(), dosis);
 						//TODO animal.addDrug();
-					} else if(drugsChoice == "b" ) {
+					} else if(drugsChoice.equals("b") ) {
 						break;	
 					} else {
 						System.out.println("Error, nonvalid input");
@@ -135,49 +142,49 @@ public class KeyboardInput {
 		
 	}
 	
-	
-	public static void animalCheck(Animal animalToCheck) throws IOException {
+	public static void animalCheckSubMenu(Animal animalToCheck) throws IOException {
+		int stateOption = 0;
 		
-		System.out.println("Please select if there has been a change on the state of the animal: "
-				+ "		1. Declare animal as healed and release to wilderness."
-				+ "		2. Declare animal as deceased."
-				+ "		3. No state changes, animal stays in zoo.");
-			int stateOption = Utils.readInt();
+		do {
+			System.out.println("Please select if there has been a change on the state of the animal: "+ "\n"
+					+ "	1. Declare animal as healed and release to wilderness."+ "\n"
+					+ "	2. Declare animal as deceased."+ "\n"
+					+ "	3. No state changes, animal stays in zoo."+ "\n"
+					+ "	4. Go back to main Vet menu" + "\n");
+				stateOption = Utils.readInt();
+				
+			switch (stateOption) {
+			case 1:
+				//TODO animal.setReleaseDate();
+				break;
+			case 2:
+				//TODO animal.setDeathDate();
+				break;
+			case 3: 
+				System.out.println("This animal will still stay at the zoo."+ "\n"
+						+ " Has there been any diagnosis changes?"+ "\n"
+						+ "	a. Yes"+ "\n"
+						+ "	b. No"+ "\n");
+				String changeChoice = Utils.readLine();
+				
+				if (changeChoice.equals("a") ) {
+					diagnosisSubMenu(animalToCheck);
+				} else if(changeChoice.equals("b")) {
+					System.out.println("The animal will continue its treatment.");
+					break;	
+				} else {
+					System.out.println("Error, nonvalid input");
+				}
+				
+				
+				break;
+			case 4:
+				break;
+			default: 
+				break;
 			
-		switch (stateOption) {
-		case 1:
-			//TODO animal.setReleaseDate();
-			break;
-		case 2:
-			//TODO animal.setDeathDate();
-			break;
-		case 3: 
-			System.out.println("This animal will still stay at the zoo."
-					+ " Has there been any diagnosis changes?"
-					+ "		1. Yes"
-					+ "		2. No");
-			String changeChoice = Utils.readLine();
-			
-			if (changeChoice == "a" ) {
-				diagnosisSubMenu(animalToCheck);
-			} else if(changeChoice == "b" ) {
-				System.out.println("The animal will continue its treatment.");
-				break;	
-			} else {
-				System.out.println("Error, nonvalid input");
 			}
-			
-			
-			break;
-		case 4:
-			//TODO go back to other menu
-			break;
-		default: 
-			break;
-		
-		}
-	
-	
+		} while(stateOption != 4);
 		
 	}
 
