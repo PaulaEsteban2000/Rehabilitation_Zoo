@@ -4,12 +4,18 @@ public class GroundType {
 	
 	//FOREST, OCEAN, FRESHWATER, GRASSLAND, WETLAND, POLAR, DESERT, MOUNTAIN
 
-	private String type; //cambio prepresentacion
 	private Integer id;
+	private String type; 
+	private Integer habitat_id; //fk to habitat id where the groundType is //cambio tras presentacion
 
-	public GroundType(String type) {
+	public GroundType(String type, Integer habitat) {
 		super();
 		this.type = type;
+		this.habitat_id = habitat;
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 
 	public String getType() {
@@ -18,6 +24,14 @@ public class GroundType {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Integer getHabitat() {
+		return habitat_id;
+	}
+
+	public void setHabitat(Integer habitat) {
+		this.habitat_id = habitat;
 	}
 	
 	

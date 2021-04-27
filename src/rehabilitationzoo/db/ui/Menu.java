@@ -1,21 +1,24 @@
 package rehabilitationzoo.db.ui;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
+import rehabilitationzoo.db.pojos.Animal;
+import utils.KeyboardInput;
+import utils.Utils;
 
 public class Menu {
 	
-	private static DBManager dbman = new JDBCManager();
+	public static DBManager dbman = new JDBCManager();
 	private static BufferedReader reader = new BufferedReader (new InputStreamReader(System.in));
 		
-	public static void main(String[] args) throws Exception {
+	
+	public static void main(String[] args) throws Exception, IOException{
 		dbman.connect();
-		
-		//necesitamos 2 métodos nuevos en animal que sean: type, name
-
+	
 		do {
 			//LOGING IN
 			System.out.println("Choose an option: ");
@@ -23,76 +26,95 @@ public class Menu {
 			System.out.println("2. I am an administrator ");
 			System.out.println("3. I am a zoo-keeper ");
 			System.out.println("0. Exit the program ");
-			int choice = Integer.parseInt(reader.readLine());
+			int choice = Utils.readInt();
 			
-        switch (choice) {
-            case 1:
-            	//a. animal diagnosis
-            		//1. insert type of animal
-            		//2. insert name of animal
-            		//3. animal search by type and name
-            		//4. insert illness the animal has
-            			//1. if prothesis needed:
-            				//1. make prothesis true
-            				//2. change releaseDate to a month after diagnosis
-            				//3. go back
-            			//2. if other illness:
-	            			//1. insert name of illness
-	            			//2. insert dosis of drug
-	            			//3. insert period between dosis
-	            			//4. insert treatment duration
-            				//5. make quarantine true/false
-            				//6. go back
-            			//3. go back
-            		//5. go back
-            	//b. check
-	        		//1. insert  type of animal
-	        		//2. insert name of animal
-	        		//3. animal search by type and name
-            		//4. Diagnosis changes 
-            			// if yes (diagnosis method once more)
-				           	//4. insert illness the animal has
-					   			//1. if prothesis needed:
-					   				//1. make prothesis true
-					   				//2. change releaseDate to a month after diagnosis
-            						//3. go back
-				    			//2. if other illness:
-				        			//1. insert name of illness
-				        			//2. insert dosis of drug
-				        			//3. insert period between dosis
-				        			//4. insert treatment duration					    				
-            						//5. make quarantine true/false
-            						//6. go back
-            				//go back.
-            		//5. Report state from the animal
-            			//a. Stays in zoo (no changes, goes back to menu)
-            			//b. Release to freedom (changes releaseDate)
-            			//c. Deceased (changes deathDate)
-            		//6. go back
-            	//c. exit
-                break;
-            case 2:
-            	//drug administration
-            	//choose a habitat
-            	//exit
-                break;
-            case 3: 
-            	//manage drugs
-            	//manage workers
-            	//manage drugs 
-            	//exit
-            	break;
-            case 0:
-            	dbman.disconnect();
-            	System.exit(0);
-            	break;
-            default:
-                System.out.println("Error, opcion no disponible.");
-                ;
-        }
+	        switch (choice) {
+	            case 1:
+	            	vetOption1();
+	
+	                break;
+	            case 2:
+	            	adminOption2();
+	            	//drug administration
+	            	//choose a habitat
+	            	//exit
+	                break;
+	            case 3: 
+	            	zooKeeperOption3();
+	            	//a. manage animals
+	            		//a. add
+	            			//newAnimal
+	            		//b. return
+	            			//1. getAnimal
+	            			//2. changeReleaseDate
+	            		//c. dead
+	            			//1. getAnimal
+	            			//2. changeDeathDate
+	            	//b. manage workers
+	            		//a. hire
+	            			//new worker
+	            		//b. fire
+	            			//1. getWorker
+	            			//2. delete worker
+	            		//c. modify
+	            			//salary
+	            	//c. manage drugs 
+	            		//a. add
+	    					//new drug
+	            		//b. delete
+	    					//1. getDrug
+	    					//2. delete drug
+	            		//c. modify
+	            			//??
+	    			//salary
+	            	//exit
+	            	break;
+	            case 0:
+	            	dbman.disconnect();
+	            	System.exit(0);
+	            	break;
+	            default:
+	                System.out.println("Error, nonvalid input.");
+	                break;
+	        }
         
-	}while (true);
+		}while (true);
 		
 	}
+
 	
+ 	public static void vetOption1() throws IOException {
+		System.out.println("Please choose the action you want to complete: "
+				+ "		1. Animal diagnosis (newly entered animal)"
+				+ "		2. Animal check (daily)"
+				+ "		3. Go back to users menu.");
+		
+		int vetMainChoice = Utils.readInt();
+		
+		switch (vetMainChoice) {
+			case 1:
+				Animal animalToDiagnose = KeyboardInput.askForAnimal();
+				KeyboardInput.diagnosisSubMenu(animalToDiagnose);
+			case 2: 
+				Animal animalToCheck = KeyboardInput.askForAnimal();
+				KeyboardInput.animalCheck(animalToCheck);
+				break;
+			case 3:
+				break;
+			default: 
+				System.out.println("Error, nonvalid input.");
+				break;
+		}
+	}
+ 	
+ 	public static void adminOption2() {
+		
+	} 
+	
+	public static void zooKeeperOption3() {
+		
+		
+	}
+
+
 }

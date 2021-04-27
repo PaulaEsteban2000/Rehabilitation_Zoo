@@ -1,9 +1,14 @@
 package rehabilitationzoo.db.jdbc;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Drug;
+import rehabilitationzoo.db.pojos.Habitat;
+import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
@@ -13,7 +18,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	private Connection c;
 
 	
-	public void connect () {
+	public void connect() {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:./db/management.db");
@@ -35,116 +40,115 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 
 	
-	public void createTables () { //we shouldn't have a main here -> build an interface
+	private void createTables() { //we shouldn't have a main here -> build an interface
 		
 		try {			
 			//Open database connection
 			
 			// Create tables: begin	
 			
-			Statement stmt0 = c.createStatement();
-			String sql0 = "CREATE TABLE groundType "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	TEXT	NOT NULL )";
-			stmt0.executeUpdate(sql0);
-			stmt0.close();
-			
 			Statement stmt1 = c.createStatement();
-			String sql1 = "CREATE TABLE habitat "
+			String sql1 = "CREATE TABLE groundTypes "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	TEXT	NOT NULL	UNIQUE, " 
-					   + " lastCleaned	DATE, "
-					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " ground_id REFERENCES groundType(id), "
-					   + " temperature	FLOAT	NOT NULL, "
-					   + " light	ENUM	NOT NULL )";
+					   + " habitat_id REFERENCES habitat(id), "
+					   + " type	TEXT	NOT NULL )";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 			
 			Statement stmt2 = c.createStatement();
-			String sql2 = "CREATE TABLE animal "
+			String sql2 = "CREATE TABLE habitats "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name	TEXT	NOT NULL	UNIQUE, " 
+					   + " lastCleaned	DATE, "
+					   + " waterLevel	FLOAT	NOT NULL, "
+					   + " temperature	FLOAT	NOT NULL, "
+					   + " light	ENUM	NOT NULL )";
+			stmt2.executeUpdate(sql2);
+			stmt2.close();
+			
+			Statement stmt3 = c.createStatement();
+			String sql3 = "CREATE TABLE animals "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " enterDate	DATE	NOT NULL, "
+					   + " habitat_id REFERENCES habitat (id), "
 					   + " foodPeriod	INTEGER	NOT NULL, "
 					   + " feedingType	ENUM	NOT NULL, "
 					   + " lastBath	DATE , "
 					   + " lastFed	DATE , "
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
-					   + " habitat_id REFERENCES habitat(id) )";
-			stmt2.executeUpdate(sql2);
-			stmt2.close();
+					   + " type	STRING	NOT NULL, "
+					   + " name	STRING	NOT NULL )";
+			stmt3.executeUpdate(sql3);
+			stmt3.close();
 			
-			Statement stmt3 = c.createStatement();
-			String sql3 = "CREATE TABLE workers "
+			Statement stmt4 = c.createStatement();
+			String sql4 = "CREATE TABLE workers "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " name	TEXT	NOT NULL, "
 					   + " lastName TEXT	NOT NULL, "
 					   + " hireDate	DATE	NOT NULL, "
 					   + " salary	FLOAT	NOT NULL, "
 					   + " workerType	ENUM	NOT NULL )";
-			stmt3.executeUpdate(sql3);
-			stmt3.close();
-			
-			Statement stmt30 = c.createStatement();
-			String sql30 = "CREATE TABLE illnessName "
-					   + "(id	TEXT	PRIMARY KEY )";
-			stmt30.executeUpdate(sql30);
-			stmt30.close();
-			
-			Statement stmt4 = c.createStatement();
-			String sql4 = "CREATE TABLE illness "
-					   + "(id	INTEGER	PRIMARY	KEY, "
-					   //+ " illness_name REFERENCES illnessName(name), " //Should it be a FK to name?? Or to an id??
-					   + "illness_name STRING NOT NULL, "
-					   + " quarantine	INTEGER, "
-					   + " prothesis	BOOLEAN )";
-					   
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
 			
-			Statement stmt40 = c.createStatement();
-			String sql40 = "CREATE TABLE drugType "
-					   + "(id	TEXT	PRIMARY KEY,"
-					   + " name	TEXT NOT NULL )";
-			stmt40.executeUpdate(sql40);
-			stmt40.close();
-			
+			//PROBLEM: STMT 5 AND 6 MAKE REFERENCE TO EACH OTHER
+			//Which table should go first?
 			Statement stmt5 = c.createStatement();
-			String sql5 = "CREATE TABLE drug "
-					   + "( id	INTEGER	PRIMARY KEY, "
+			String sql5 = "CREATE TABLE drugs "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " name	TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType_id REFERENCES drugType(id), "
-					   + " cures_illness REFERENCES illness(id), "
+					   + " drugType_id REFERENCES drugType(id), " /////HERE
 					   + " dosis INTEGER )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
 			Statement stmt6 = c.createStatement();
-			String sql6 = "CREATE TABLE animal_drug "
-					   + "(drug_id	INTEGER	REFERENCES drug(id), "
-					   + " animal_id	INTEGER	REFERENCES animal(id), "
-					   + " PRIMARY KEY (drug_id, animal_id) )";
+			String sql6 = "CREATE TABLE drugTypes "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					  // + " drug_id REFERENCES Drug(id), " /////HERE
+					   + " type	TEXT NOT NULL )"; 
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 			
 			Statement stmt7 = c.createStatement();
-			String sql7 = "CREATE TABLE worker_animal "
-					   + "(worker_id	INTEGER REFERENCES worker(id), "
-					   + " animal_id	INTEGER REFERENCES animal(id), "
-					   + " PRIMARY KEY (worker_id, animal_id) )";
+			String sql7 = "CREATE TABLE illnesses "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name STRING NOT NULL, "
+					   + " quarantineDays	INTEGER, "
+					   + " prothesis	BOOLEAN	NOT NULL "
+					   + " drug_id REFERENCES Drug(id) )";
+					   
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
 			
-			Statement stmt8 = c.createStatement(); 
-			String sql8 = "CREATE TABLE animal_illness "
+			
+			Statement stmt8 = c.createStatement();
+			String sql8 = "CREATE TABLE animal_drug "
+					   + "(drug_id	INTEGER	REFERENCES drug(id), "
+					   + " animal_id	INTEGER	REFERENCES animal(id), "
+					   + " PRIMARY KEY (drug_id, animal_id) )";
+			stmt8.executeUpdate(sql8);
+			stmt8.close();
+			
+			Statement stmt9 = c.createStatement();
+			String sql9 = "CREATE TABLE worker_animal "
+					   + "(worker_id	INTEGER REFERENCES worker(id), "
+					   + " animal_id	INTEGER REFERENCES animal(id), "
+					   + " PRIMARY KEY (worker_id, animal_id) )";
+			stmt9.executeUpdate(sql9);
+			stmt9.close();
+			
+			Statement stmt10 = c.createStatement(); 
+			String sql10 = "CREATE TABLE animal_illness "
 					   + "(animal_id	INTEGER REFERENCES animal(id), "
 					   + " illness_id	INTEGER REFERENCES illness(id), "
 					   + " PRIMARY KEY (illness_id, animal_id) )";
-			stmt8.executeUpdate(sql8);
-			stmt8.close();
+			stmt10.executeUpdate(sql10);
+			stmt10.close();
 			// Create table: end
 			
 			// - Set initial values for the Primary Keys
@@ -171,6 +175,80 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		
 	}
 
+	
+	@Override
+	public void addAnimal(Animal animal) {
+		try {
+			//Id is chosen by the database
+			Statement stmt = c.createStatement();
+			String sql = "INSERT INTO animals (name) VALUES ('" + animal.getName() + "')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	@Override
+	public Integer getHabitatId(String habitatName) throws SQLException {
+		Statement stmt = c.createStatement();
+		String sql = "SELECT id FROM habitats WHERE name LIKE '%" + habitatName + "%'";
+		ResultSet rs = stmt.executeQuery(sql);
+		Integer id = null;
+		while (rs.next()) { //like hasNext
+			id = rs.getInt("id");
+		}
+		rs.close();
+		stmt.close();
+		
+		return id;
+	}
+	
+	
+	@Override
+	public void printAnimalsInHabitat(String habitatName) throws SQLException {
+		Statement stmt = c.createStatement();
+		String sql = "SELECT * FROM animals WHERE habitat_id LIKE '%" + getHabitatId(habitatName) + "%'";
+		ResultSet rs = stmt.executeQuery(sql);
+		Habitat habitat = null;
+		while (rs.next()) { //like hasNext
+			int id = rs.getInt("id");
+			String name = rs.getString("name");
+			Date lastCleaned = rs.getDate("lastCleaned");
+			Float waterLevel = rs.getFloat("waterLevel");
+			Integer temperature = rs.getInt("temperature");
+			LightType light = LightType.valueOf(rs.getString("light"));
+			habitat = new Habitat (id, name, lastCleaned,  waterLevel, temperature, light);
+			System.out.println(habitat.getAnimals());
+		}
+		rs.close();
+		stmt.close();
+	}
+
+	@Override
+	public List<Animal> searchAnimalByName(String name) {
+		List<Animal> animals = new ArrayList<Animal>();
+		
+		try {
+			Statement stmt = c.createStatement();
+			String sql = "SELECT * FROM animals WHERE name LIKE '%" + name + "%'";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) { //like hasNext
+				int animalId = rs.getInt("id");
+				String animalName = rs.getString("name");
+				Animal animal = new Animal (animalId, animalName);
+				animals.add(animal);
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	@Override
 	public void feedAnimal() {
 		// TODO Auto-generated method stub
@@ -196,34 +274,23 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 
 	@Override
-	public void drugAdministrationToAnimal() {
+	public void drugAdministrationToAnimal(Animal animal) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void drugsPrescription() {
+	public void drugPrescription(Drug drug) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void prothesisInstallation() {
+	public boolean prothesisInstallation(Boolean bol) {
 		// TODO Auto-generated method stub
-		
+		return bol;
 	}
 
-	@Override
-	public void checkAnimal() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addAnimal(Animal animal) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void returAnimalToTheWilderness(Animal animal) {
@@ -250,7 +317,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 
 	@Override
-	public void modifyWorker(Worker worker) {
+	public void modifyWorker(Worker worker, Integer salary) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -266,10 +333,92 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 	@Override
-	public void modifyDrug(Drug drug) {
+	public Animal getAnimal(String type, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Illness setIllness(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getTypeOfDrugId(String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void getDrug(String name, Integer typeOfDrug_id) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void illnessQuarantine(Boolean bol) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reportAnimalState(Integer option) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Worker> searchWorkerByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Drug> searchDrugByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Worker getWorker(String name, String lastName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void printAnimalTypes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printAnimalNamesGivenType(String animalType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printDrugTypes() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printIllnesses() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void quarantineDays() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
 }

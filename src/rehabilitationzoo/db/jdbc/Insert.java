@@ -8,7 +8,8 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.time.LocalDate;
 
-import rehabilitationzoo.db.pojos.FoodType.*;
+import rehabilitationzoo.db.pojos.FeedingType;
+import rehabilitationzoo.db.pojos.FeedingType.*;
 
 public class Insert {
 
@@ -29,7 +30,7 @@ public class Insert {
 			System.out.print("Name of the worker: ");
 			String name = reader.readLine();
 			/*System.out.print("Last Name: ");
-			String lastname = reader.readLine();*/
+			String lastName = reader.readLine();*/
 			
 			System.out.print("Hire Date"+"\n"+" Day: ");
 			String a1 = reader.readLine();

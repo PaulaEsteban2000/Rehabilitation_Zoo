@@ -15,57 +15,46 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	
 	private Integer id; //No need to be in constructor
 	private Date enterDate;
+	private Integer habitat_id; //fk to habitat the animal lives in
 	private Integer foodPeriod;
-	private FoodType feedingType;
+	private FeedingType feedingType;
 	private Date lastBath;	
 	private Date lastFed;
 	private Date deathDate;
 	private Date freedomDate;
-	private Habitat habitat;
+	private String type; //elephant, giraffe...
+	private String name; //for easy access when still do not have a "barcode reader"
 		
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
 	private List<Drug> drugs; 
-	private List<Habitat> habitats; 
 	
 	
-	public Animal(Date enterDate, Integer foodPeriod, Date lastFed, Date deathDate, Date freedomDate, Date lastBath,
-			FoodType feedingType, Habitat habitat) {
+	public Animal(Date enterDate, Integer habitat_id, Integer foodPeriod, FeedingType feedingType,  Date lastBath, Date lastFed, Date deathDate, Date freedomDate,
+			String type, String name, List<Worker> workers,  List<Illness> illnesses,  List<Drug> drugs) {
 		super();
 		this.enterDate = enterDate;
+		this.habitat_id = habitat_id;
 		this.foodPeriod = foodPeriod;
+		this.feedingType = feedingType;
+		this.lastBath = lastBath;
 		this.lastFed = lastFed;
 		this.deathDate = deathDate;
 		this.freedomDate = freedomDate;
-		this.lastBath = lastBath;
-		this.feedingType = feedingType;
-		this.habitat = habitat; 
-	}
-	
-	
-	
-	public Animal(Integer id, Date lastFed,FoodType feedingType) {
-		super();
-		this.id = id;
-		this.feedingType = feedingType;
-	}
-	
-	
-	public Animal(Integer id, Date enterDate, Integer foodPeriod, Date lastFed, Date deathDate, Date freedomDate,
-			Date lastBath, FoodType feedingType, List<Worker> workers, List<Illness> illnesses, List<Drug> drugs, List<Habitat> habitats) {
-		super();
-		this.id = id;
-		this.enterDate = enterDate;
-		this.foodPeriod = foodPeriod;
-		this.lastFed = lastFed;
-		this.deathDate = deathDate;
-		this.freedomDate = freedomDate;
-		this.lastBath = lastBath;
-		this.feedingType = feedingType;
+		this.setType(type);
+		this.setName(name);
+		
 		this.workers = new ArrayList<Worker>();
 		this.illnesses = new ArrayList<Illness>();
 		this.drugs = new ArrayList<Drug>();
-		this.habitats = new ArrayList<Habitat>();
+
+	}
+
+
+	public Animal(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
 	}
 
 
@@ -95,13 +84,91 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		return true;
 	}
 
+	
 
-	@Override
-	public String toString() {
-		return "Animal [id=" + id + ", enterDate=" + enterDate + ", foodPeriod=" + foodPeriod + ", lastFed=" + lastFed
-				+ ", deathDate=" + deathDate + ", freedomDate=" + freedomDate + ", lastBath=" + lastBath
-				+ ", feedingType=" + feedingType + "]"; //No workers print so as to avoid stackOverflow Error (loop)
-		}
+	public Integer getId() {
+		return id;
+	}
+	
+	
+	public Integer getHabitat() {
+		return habitat_id;
+	}
+
+
+	public void setHabitat(Integer habitat_id) {
+		this.habitat_id = habitat_id;
+	}
+
+
+	public Date getEnterDate() {
+		return enterDate;
+	}
+
+
+	public void setEnterDate(Date enterDate) {
+		this.enterDate = enterDate;
+	}
+
+
+	public Integer getFoodPeriod() {
+		return foodPeriod;
+	}
+
+
+	public void setFoodPeriod(Integer foodPeriod) {
+		this.foodPeriod = foodPeriod;
+	}
+
+
+	public FeedingType getFeedingType() {
+		return feedingType;
+	}
+
+
+	public void setFeedingType(FeedingType feedingType) {
+		this.feedingType = feedingType;
+	}
+
+
+	public Date getLastBath() {
+		return lastBath;
+	}
+
+
+	public void setLastBath(Date lastBath) {
+		this.lastBath = lastBath;
+	}
+
+
+	public Date getLastFed() {
+		return lastFed;
+	}
+
+
+	public void setLastFed(Date lastFed) {
+		this.lastFed = lastFed;
+	}
+
+
+	public Date getDeathDate() {
+		return deathDate;
+	}
+
+
+	public void setDeathDate(Date deathDate) {
+		this.deathDate = deathDate;
+	}
+
+
+	public Date getFreedomDate() {
+		return freedomDate;
+	}
+
+
+	public void setFreedomDate(Date freedomDate) {
+		this.freedomDate = freedomDate;
+	}
 
 
 	public List<Worker> getWorkers() {
@@ -122,57 +189,6 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	public void setIllnesses(List<Illness> illnesses) {
 		this.illnesses = illnesses;
 	}
-	
-	
-
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public Date getEnterDate() {
-		return enterDate;
-	}
-	public void setEnterDate(Date enterDate) {
-		this.enterDate = enterDate;
-	}
-	public Integer getFoodPeriod() {
-		return foodPeriod;
-	}
-	public void setFoodPeriod(Integer foodPeriod) {
-		this.foodPeriod = foodPeriod;
-	}
-	public Date getLastFed() {
-		return lastFed;
-	}
-	public void setLastFed(Date lastFed) {
-		this.lastFed = lastFed;
-	}
-	public Date getDeathDate() {
-		return deathDate;
-	}
-	public void setDeathDate(Date deathDate) {
-		this.deathDate = deathDate;
-	}
-	public Date getFreedomDate() {
-		return freedomDate;
-	}
-	public void setFreedomDate(Date freedomDate) {
-		this.freedomDate = freedomDate;
-	}
-	public Date getLastBath() {
-		return lastBath;
-	}
-	public void setLastBath(Date lastBath) {
-		this.lastBath = lastBath;
-	}
-	public FoodType getFeedingType() {
-		return feedingType;
-	}
-	public void setFeedingType(FoodType feedingType) {
-		this.feedingType = feedingType;
-	}
 
 
 	public List<Drug> getDrugs() {
@@ -185,24 +201,32 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 
 
-	public List<Habitat> getHabitats() {
-		return habitats;
+
+	@Override
+	public String toString() {
+		return "Animal [id=" + id + ", enterDate=" + enterDate + ", foodPeriod=" + foodPeriod + ", lastFed=" + lastFed
+				+ ", deathDate=" + deathDate + ", freedomDate=" + freedomDate + ", lastBath=" + lastBath
+				+ ", feedingType=" + feedingType + "]"; //No workers print so as to avoid stackOverflow Error (loop)
+		}
+
+
+	public String getType() {
+		return type;
 	}
 
 
-	public void setHabitats(List<Habitat> habitats) {
-		this.habitats = habitats;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 
-	public Habitat getHabitat() {
-		return habitat;
+	public String getName() {
+		return name;
 	}
 
 
-	public void setHabitat(Habitat habitat) {
-		this.habitat = habitat;
+	public void setName(String name) {
+		this.name = name;
 	}
-	
 	
 }

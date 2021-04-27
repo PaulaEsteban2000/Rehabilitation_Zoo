@@ -12,29 +12,36 @@ public class Illness implements Serializable{
 	private static final long serialVersionUID = 3719735548395728811L;
 
 	private Integer id; //No need to be in constructor
-	private IllnessName name; //cambiar por String: prepresentacion
+	private String name; //cambiado por String: post prepresentacion
 	private Integer quarantineDays;
 	private Boolean prothesis;
+	private Integer drug_id; //fk to the drug it cures
 	
-	private List<Drug> drugs; 
 	private List<Animal> animals; 
 	
 	
-	public Illness(Integer quarantineDays, Boolean prothesis) {
+	/**public Illness(Integer quarantineDays, Boolean prothesis) {
 		super();
 		this.quarantineDays = quarantineDays;
 		this.prothesis = prothesis;
-	}
+	}*/
 	
 	
-	public Illness(Integer id, IllnessName name, Integer quarantineDays, Boolean prothesis, List<Drug> drugs, List<Animal> animals) {
+	public Illness(String name, Integer quarantineDays, Boolean prothesis, Integer drug_id, List<Animal> animals) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.quarantineDays = quarantineDays;
 		this.prothesis = prothesis;
-		this.drugs = new ArrayList<Drug>();
+		this.drug_id = drug_id;
 		this.animals = new ArrayList<Animal>();
+	}
+	
+	public Illness (String name, Integer quarantineDays, Boolean prothesis, Integer drug_id) {
+		super();
+		this.name = name;
+		this.quarantineDays = quarantineDays;
+		this.prothesis = prothesis;
+		this.drug_id = drug_id;
 	}
 
 
@@ -68,36 +75,44 @@ public class Illness implements Serializable{
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public IllnessName getName() {
+
+	public String getName() {
 		return name;
 	}
-	public void setName(IllnessName name) {
+
+
+	public void setName(String name) {
 		this.name = name;
 	}
+
+
 	public Integer getQuarantineDays() {
 		return quarantineDays;
 	}
+
+
 	public void setQuarantineDays(Integer quarantineDays) {
 		this.quarantineDays = quarantineDays;
 	}
+
+
 	public Boolean getProthesis() {
 		return prothesis;
 	}
+
+
 	public void setProthesis(Boolean prothesis) {
 		this.prothesis = prothesis;
 	}
 
 
-	public List<Drug> getDrugs() {
-		return drugs;
+	public Integer getDrug() {
+		return drug_id;
 	}
 
 
-	public void setDrugs(List<Drug> drugs) {
-		this.drugs = drugs;
+	public void setDrug(Integer drug_id) {
+		this.drug_id = drug_id;
 	}
 
 
@@ -109,6 +124,6 @@ public class Illness implements Serializable{
 	public void setAnimals(List<Animal> animals) {
 		this.animals = animals;
 	}
-	
+
 	
 }

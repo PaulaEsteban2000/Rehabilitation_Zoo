@@ -15,20 +15,34 @@ public class Drug implements Serializable{
 	private String name;
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
-	private DrugType type;
+	private Integer drugType_id;
 	private int dosis;
 	
 	private List<Animal> animals; 
+	private List<Illness> illnesses; 
 	
-	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, DrugType type,  List<Animal> animals, int dosis, Illness illness) {
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,  List<Animal> animals, int dosis,  List<Illness> illness) {
 		super();
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
 		this.periodBetweenDosis = periodBetweenDosis;
-		this.type = type;
+		this.drugType_id = drugType_id;
+		this.dosis = dosis;
+		
 		this.animals = new ArrayList<Animal>();
-		this.setDosis(dosis);
+		this.illnesses = new ArrayList<Illness>();
+		
 	}
+	
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id, int dosis) {
+		super();
+		this.name = name;
+		this.treatmentDuration = treatmentDuration;
+		this.periodBetweenDosis = periodBetweenDosis;
+		this.drugType_id = drugType_id;
+		this.dosis = dosis;
+	}
+	
 
 	
 	@Override
@@ -57,36 +71,57 @@ public class Drug implements Serializable{
 		return true;
 	}
 
-	
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+
 	public String getName() {
 		return name;
 	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
 	public Integer getTreatmentDuration() {
 		return treatmentDuration;
 	}
+
+
 	public void setTreatmentDuration(Integer treatmentDuration) {
 		this.treatmentDuration = treatmentDuration;
 	}
+
+
 	public Integer getPeriodBetweenDosis() {
 		return periodBetweenDosis;
 	}
+
+
 	public void setPeriodBetweenDosis(Integer periodBetweenDosis) {
 		this.periodBetweenDosis = periodBetweenDosis;
 	}
-	public DrugType getType() {
-		return type;
+
+
+	public Integer getType() {
+		return drugType_id;
 	}
-	public void setType(DrugType type) {
-		this.type = type;
+
+
+	public void setType(Integer drugType_id) {
+		this.drugType_id = drugType_id;
+	}
+
+
+	public int getDosis() {
+		return dosis;
+	}
+
+
+	public void setDosis(int dosis) {
+		this.dosis = dosis;
 	}
 
 
@@ -100,11 +135,15 @@ public class Drug implements Serializable{
 	}
 
 
-	public int getDosis() {
-		return dosis;
+	public List<Illness> getIllnesses() {
+		return illnesses;
 	}
-	public void setDosis(int dosis) {
-		this.dosis = dosis;
+
+
+	public void setIllnesses(List<Illness> illnesses) {
+		this.illnesses = illnesses;
 	}
+
+	
 	
 }

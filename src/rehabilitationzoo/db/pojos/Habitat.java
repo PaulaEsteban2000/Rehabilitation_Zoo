@@ -2,6 +2,8 @@ package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Habitat implements Serializable {
 
@@ -14,18 +16,31 @@ public class Habitat implements Serializable {
 	private String name;
 	private Date lastCleaned;
 	private Float waterLevel;
-	private GroundType ground;
 	private Integer temperature;
 	private LightType light;
 	
+	private List<Animal> animals; 
+	private List<GroundType> grounds; 
 	
-	public Habitat(String name, Date lastCleaned, Float waterLevel, GroundType ground, Integer temperature,
-			LightType light) {
+	public Habitat(String name, Date lastCleaned, Float waterLevel, Integer temperature,
+			LightType light, List<Animal> animals, List<GroundType> grounds) {
 		super();
 		this.name = name;
 		this.lastCleaned = lastCleaned;
 		this.waterLevel = waterLevel;
-		this.ground = ground;
+		this.temperature = temperature;
+		this.light = light;
+		
+		this.animals = new ArrayList<Animal>();
+		this.grounds = new ArrayList<GroundType>();
+	}
+	
+	public Habitat(Integer id, String name, Date lastCleaned, Float waterLevel, Integer temperature, LightType light) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.lastCleaned = lastCleaned;
+		this.waterLevel = waterLevel;
 		this.temperature = temperature;
 		this.light = light;
 	}
@@ -57,48 +72,80 @@ public class Habitat implements Serializable {
 		return true;
 	}
 
-
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	
 	public String getName() {
 		return name;
 	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
 	public Date getLastCleaned() {
 		return lastCleaned;
 	}
+
+
 	public void setLastCleaned(Date lastCleaned) {
 		this.lastCleaned = lastCleaned;
 	}
+
+
 	public Float getWaterLevel() {
 		return waterLevel;
 	}
+
+
 	public void setWaterLevel(Float waterLevel) {
 		this.waterLevel = waterLevel;
 	}
-	public GroundType getGround() {
-		return ground;
-	}
-	public void setGround(GroundType ground) {
-		this.ground = ground;
-	}
+
+
 	public Integer getTemperature() {
 		return temperature;
 	}
+
+
 	public void setTemperature(Integer temperature) {
 		this.temperature = temperature;
 	}
+
+
 	public LightType getLight() {
 		return light;
 	}
+
+
 	public void setLight(LightType light) {
 		this.light = light;
 	}
-	
+
+
+	public List<Animal> getAnimals() {
+		return animals;
+	}
+
+
+	public void setAnimals(List<Animal> animals) {
+		this.animals = animals;
+	}
+
+
+	public List<GroundType> getGrounds() {
+		return grounds;
+	}
+
+
+	public void setGrounds(List<GroundType> grounds) {
+		this.grounds = grounds;
+	}
+
+
+
+
 }

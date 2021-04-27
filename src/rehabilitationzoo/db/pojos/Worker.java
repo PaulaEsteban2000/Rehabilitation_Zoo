@@ -22,7 +22,7 @@ public class Worker implements Serializable {
 	private List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
 	
 	
-	public Worker(String name, Date hireDate, Integer salary, WorkerType type) {
+	public Worker(String name, Date hireDate, Integer salary, WorkerType type, List<Animal> animals) {
 		super();
 		this.name = name;
 		this.hireDate = hireDate;
@@ -33,17 +33,17 @@ public class Worker implements Serializable {
 	}
 	
 	
-	public Worker(Integer id, String name, Date hireDate) {
+	/**public Worker(Integer id, String name, Date hireDate) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.hireDate = hireDate;
-												//cannot have a List, but an ArrayList (or any other class that implements list)
-	}
+		//cannot have a List, but an ArrayList (or any other class that implements list)
+	}*/
 	
 	
 	
-	public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
+	/**public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
 			List<Animal> animals) {
 		super();
 		this.id = id;
@@ -53,7 +53,7 @@ public class Worker implements Serializable {
 		this.salary = salary;
 		this.type = type;
 		this.animals = animals;
-	}
+	}*/
 
 
 	@Override
@@ -82,14 +82,6 @@ public class Worker implements Serializable {
 		return true;
 	}
 	
-
-	@Override
-	public String toString() {
-		return "Worker [id=" + id + ", name=" + name + ", hireDate=" + hireDate + ", salary=" + salary + ", type="
-				+ type + ", animals=" + animals + "]";
-	}
-
-
 	public void addAnimal (Animal animal) {
 		if (!animals.contains(animal)) {
 			animals.add(animal);
@@ -103,48 +95,75 @@ public class Worker implements Serializable {
 		}
 	}
 	
-	public List<Animal> getAnimals() {
-		return animals;
-	}
-	public void setAnimals(List<Animal> animals) {
-		this.animals = animals;
-	}
 	public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	
+	
 	public String getName() {
 		return name;
 	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
 	public String getLastName() {
 		return lastName;
 	}
+
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+
 	public Date getHireDate() {
 		return hireDate;
 	}
+
+
 	public void setHireDate(Date hireDate) {
 		this.hireDate = hireDate;
 	}
+
+
 	public Integer getSalary() {
 		return salary;
 	}
+
+
 	public void setSalary(Integer salary) {
 		this.salary = salary;
 	}
+
+
 	public WorkerType getType() {
 		return type;
 	}
+
+
 	public void setType(WorkerType type) {
 		this.type = type;
 	}
-	
+
+
+	public List<Animal> getAnimals() {
+		return animals;
+	}
+
+
+	public void setAnimals(List<Animal> animals) {
+		this.animals = animals;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Worker [id=" + id + ", name=" + name + ", hireDate=" + hireDate + ", salary=" + salary + ", type="
+				+ type + ", animals=" + animals + "]";
+	}
 	
 }
