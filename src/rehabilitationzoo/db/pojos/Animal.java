@@ -2,6 +2,7 @@ package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +14,13 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private static final long serialVersionUID = 723080679524606900L; //"signature" for this class, all objects in the class will have the same one
 																		// automatically turning "Animal" into a file (when calling a specific method)
 	
+	public enum typesOfAnimalsInTheZoo {
+		ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
+	}
+	
+	
 	private Integer id; //No need to be in constructor
-	private Date enterDate;
+	private LocalDate enterDate;
 	private Integer habitat_id; //fk to habitat the animal lives in
 	private Integer foodPeriod;
 	private FeedingType feedingType;
@@ -22,16 +28,64 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private Date lastFed;
 	private Date deathDate;
 	private Date freedomDate;
-	private String type; //elephant, giraffe...
+	//private String type; //elephant, giraffe...
 	private String name; //for easy access when still do not have a "barcode reader"
 		
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
 	private List<Drug> drugs; 
 	
+	//public List<Animal> storeAnimals;
+	public typesOfAnimalsInTheZoo animalType;
 	
-	public Animal(Date enterDate, Integer habitat_id, Integer foodPeriod, FeedingType feedingType,  Date lastBath, Date lastFed, Date deathDate, Date freedomDate,
-			String type, String name, List<Worker> workers,  List<Illness> illnesses,  List<Drug> drugs) {
+	
+	
+	public void Animal(typesOfAnimalsInTheZoo unAnimal ) {
+		
+		//this.storeAnimals = null;
+		this.setAnimalType(animalType);
+	}
+	
+	
+	
+	/*public Animal(Integer id, typesOfAnimalsInTheZoo name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}*/
+		
+	
+	public Animal(typesOfAnimalsInTheZoo animalType,String name, LocalDate enterDate, Integer habitat_id, 
+			Integer foodPeriod, FeedingType feedingType,  Date lastBath, Date lastFed, Date deathDate, 
+			Date freedomDate) {
+		
+		this.animalType= animalType;
+		this.name= name;
+		this.enterDate = enterDate;
+		this.habitat_id = habitat_id;
+		this.foodPeriod = foodPeriod;
+		this.feedingType = feedingType;
+		this.lastBath = lastBath;
+		this.lastFed = lastFed;
+		this.deathDate = deathDate;
+		this.freedomDate = freedomDate;
+		
+	}
+	
+	
+	public void Animal(typesOfAnimalsInTheZoo animalType,String name, LocalDate enterDate) {
+		
+		this.animalType= animalType;
+		this.name= name;
+		this.enterDate = enterDate;
+		
+	}
+	
+	
+	
+	
+	public Animal(LocalDate enterDate, Integer habitat_id, Integer foodPeriod, FeedingType feedingType,  Date lastBath, Date lastFed, Date deathDate, Date freedomDate,
+			/*String type,*/ String name, List<Worker> workers,  List<Illness> illnesses,  List<Drug> drugs) {
 		super();
 		this.enterDate = enterDate;
 		this.habitat_id = habitat_id;
@@ -41,7 +95,7 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.lastFed = lastFed;
 		this.deathDate = deathDate;
 		this.freedomDate = freedomDate;
-		this.setType(type);
+		//this.setType(type);
 		this.setName(name);
 		
 		this.workers = new ArrayList<Worker>();
@@ -51,11 +105,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 
 
-	public Animal(Integer id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
+	
+
+	public Animal(typesOfAnimalsInTheZoo unAnimal, String name2, LocalDate enterDate2, Object habitat_id2,
+			Object foodPeriod2, Object feedingType2, Object lastBath2, Object lastFed2, Object deathDate2,
+			Object freedomDate2) {
+		// TODO Auto-generated constructor stub
 	}
+
 
 
 	@Override //To compare ids
@@ -101,12 +158,12 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 
 
-	public Date getEnterDate() {
+	public LocalDate getEnterDate() {
 		return enterDate;
 	}
 
 
-	public void setEnterDate(Date enterDate) {
+	public void setEnterDate(LocalDate enterDate) {
 		this.enterDate = enterDate;
 	}
 
@@ -210,14 +267,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		}
 
 
-	public String getType() {
+	/*public String getType() {
 		return type;
 	}
 
 
 	public void setType(String type) {
 		this.type = type;
-	}
+	}*/
 
 
 	public String getName() {
@@ -228,5 +285,20 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+
+	public typesOfAnimalsInTheZoo getAnimalType() {
+		return animalType;
+	}
+
+
+
+	public void setAnimalType(typesOfAnimalsInTheZoo animalType) {
+		this.animalType = animalType;
+	}
+
+
+
 	
 }
