@@ -13,9 +13,12 @@ import rehabilitationzoo.db.pojos.Worker;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
-	//hello
+	//private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	//sysout("Date of Birth: yyyy-MM-dd");
+	//String dob = Utils.readLine();
+	//LocalDate dobDate = LocalDate.parse(dob, formatter);
 	
-	private Connection c;
+	private static Connection c;
 
 	
 	public void connect() {
@@ -95,6 +98,14 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			//PROBLEM: STMT 5 AND 6 MAKE REFERENCE TO EACH OTHER
 			//Which table should go first?
+			Statement stmt6 = c.createStatement();
+			String sql6 = "CREATE TABLE drugTypes "
+					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					  // + " drug_id REFERENCES Drug(id), " /////HERE
+					   + " type	TEXT NOT NULL )"; 
+			stmt6.executeUpdate(sql6);
+			stmt6.close();
+			
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drugs "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
@@ -105,14 +116,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " dosis INTEGER )";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
-			
-			Statement stmt6 = c.createStatement();
-			String sql6 = "CREATE TABLE drugTypes "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					  // + " drug_id REFERENCES Drug(id), " /////HERE
-					   + " type	TEXT NOT NULL )"; 
-			stmt6.executeUpdate(sql6);
-			stmt6.close();
 			
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE illnesses "
@@ -177,7 +180,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 
 	
 	@Override
-	public void addAnimal(Animal animal) {
+	public void addAnimal(Animal animal) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
 			//Id is chosen by the database
 			Statement stmt = c.createStatement();
@@ -188,6 +191,16 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			e.printStackTrace();
 		}
 	}
+	
+	/**@Override
+	public void addAnimal(Animal animal) throws SQLException { //do we need a prepared Statement better to avoid injection? I think so bc it is an insert
+		//Id is chosen by the database
+		String sql = "INSERT INTO animals (name) VALUES (?)"; //the ? filters any SQL language
+		PreparedStatement prep = c.prepareStatement(sql);
+		prep.setObject(0, animal); //Es asi??
+		prep.executeUpdate();
+		prep.close();
+	}*/
 	
 
 	@Override
@@ -220,7 +233,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Integer temperature = rs.getInt("temperature");
 			LightType light = LightType.valueOf(rs.getString("light"));
 			habitat = new Habitat (id, name, lastCleaned,  waterLevel, temperature, light);
-			System.out.println(habitat.getAnimals());
+			//this is wrong //System.out.println(habitat.getAnimals());
 		}
 		rs.close();
 		stmt.close();

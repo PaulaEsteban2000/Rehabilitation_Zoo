@@ -16,7 +16,7 @@ public class Menu {
 		dbman.connect();
 	
 		do {
-			//LOGING IN
+			//LOGGING IN
 			System.out.println("Choose an option: ");
 			System.out.println("1. I am a vet ");
 			System.out.println("2. I am an administrator ");
@@ -81,7 +81,7 @@ public class Menu {
 	
  	public static void vetOption1() throws IOException {
  		int vetMainChoice;
- 		
+
 		do {
 			System.out.println("Please choose the action you want to complete: " + "\n"
 				+ "	1. Animal diagnosis (newly entered animal)" + "\n"

@@ -51,7 +51,7 @@ public interface DBManager {
 	public List<Worker> searchWorkerByName (String name);
 	public List<Drug> searchDrugByName (String name);
 	//1. MANAGE ANIMALS
-		public void addAnimal(Animal animal);
+		public void addAnimal(Animal animal) throws SQLException;
 		public void returAnimalToTheWilderness(Animal animal);
 		//changes releaseDate
 		public void markAnimalAsDeceased(Animal animal);
