@@ -1,15 +1,17 @@
 package utils;
 
 import java.io.IOException;
+import java.util.*;
 
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.Animal.typesOfAnimalsInTheZoo;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.ui.Menu;
 
 public class KeyboardInput {
-
+	
 	public static Animal askForAnimal() throws IOException {
 		
 		System.out.println("These are the types of animals existent in our recovery center. Please choose one or enter a new one:");
@@ -24,6 +26,9 @@ public class KeyboardInput {
 		return animalToDiagnose;
 	}
 
+	
+	
+	
 	public static void diagnosisSubMenu(Animal animalToDiagnose) throws IOException {
 		int illnessChoice;
 		
@@ -71,6 +76,10 @@ public class KeyboardInput {
 		}while(illnessChoice != 3);
 	}
 
+	
+	
+	
+	
 	private static void illnessesSubMenu(int numberOfIllnesses) throws IOException{
 		String nameOfIllness = "";
 		int quarantineDays = 0; //set to zero if no quarantine is needed
@@ -142,6 +151,10 @@ public class KeyboardInput {
 		
 	}
 	
+	
+	
+	
+	
 	public static void animalCheckSubMenu(Animal animalToCheck) throws IOException {
 		int stateOption = 0;
 		
@@ -187,5 +200,66 @@ public class KeyboardInput {
 		} while(stateOption != 4);
 		
 	}
+	
+	
+	
+	public static List<Animal> storeAnimals=new LinkedList<Animal>();
+	
+	//No deberia hacer un constructor vacio primero??
+	
+	//public KeyboardInput() {
+	//	KeyboardInput.storeAnimals=new LinkedList<Animal>();
+	//}
+	
+	
+	
+	
+	public static boolean isThisAnAnimal (String unAnimal) {
+		boolean realAnimal= false;
+		
+		// .values() devuelve un array con los valores del enum
+		
+		 for( typesOfAnimalsInTheZoo oneType: typesOfAnimalsInTheZoo.values()) {
+			 
+			 if (oneType.equals(unAnimal)){
+				 realAnimal= true;
+				 break;
+			 } 
+		 }
+		
+		
+		return realAnimal;
+		
+	}
+	
+	public static typesOfAnimalsInTheZoo whichType(String unAnimal) {
+		Animal.typesOfAnimalsInTheZoo returnType = null;
+		
+		for( typesOfAnimalsInTheZoo oneType: typesOfAnimalsInTheZoo.values()) {
+			 
+			 if (oneType.equals(unAnimal)){
+				 returnType= oneType;
+				 break;
+			 } 
+		 }
+		
+		return returnType;
+		
+	}
+	
+	
+	
+	public static void addAnimal(Animal unAnimal) {
+		KeyboardInput.storeAnimals.add(unAnimal);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
