@@ -28,16 +28,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private Date lastFed;
 	private Date deathDate;
 	private Date freedomDate;
-	//private String type; //elephant, giraffe...
+	private String type; //elephant, giraffe...
 	private String name; //for easy access when still do not have a "barcode reader"
 		
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
 	private List<Drug> drugs; 
 	
-	//public List<Animal> storeAnimals;
 	public typesOfAnimalsInTheZoo animalType;
-	
 	
 	
 	public void Animal(typesOfAnimalsInTheZoo unAnimal ) {
@@ -48,11 +46,11 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	
 	
 	
-	/*public Animal(Integer id, typesOfAnimalsInTheZoo name) {
+	public Animal(Integer id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
-	}*/
+	}
 		
 	
 	public Animal(typesOfAnimalsInTheZoo animalType,String name, LocalDate enterDate, Integer habitat_id, 
@@ -267,14 +265,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		}
 
 
-	/*public String getType() {
+	public String getType() {
 		return type;
 	}
 
 
 	public void setType(String type) {
 		this.type = type;
-	}*/
+	}
 
 
 	public String getName() {

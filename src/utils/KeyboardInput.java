@@ -62,7 +62,7 @@ public class KeyboardInput {
 				System.out.println("How many illnesses other than prothesis does your animal have?:");
 				int numberOfIllnesses = Utils.readInt();
 				
-				KeyboardInput.illnessesSubMenu(numberOfIllnesses);			
+				KeyboardInput.illnessesSubMenu(numberOfIllnesses, animalToDiagnose);			
 				break;
 				
 			case 3:
@@ -80,31 +80,33 @@ public class KeyboardInput {
 	
 	
 	
-	private static void illnessesSubMenu(int numberOfIllnesses) throws IOException{
+	private static void illnessesSubMenu(int numberOfIllnesses, Animal animalToDiagnose) throws IOException{
 		String nameOfIllness = "";
-		int quarantineDays = 0; //set to zero if no quarantine is needed
+		int quarantineDays = 0; //set to zero in case no quarantine is needed
 		Boolean prothesis = false;
 		Drug drug = null ;
 		
 		for (int a = 0; a < numberOfIllnesses; a++) {
-			System.out.println("These are some of the illnesses that other animals have: ");
-			Menu.dbman.printIllnesses();
+			System.out.println("These the illnesses other animals have: ");
+			List<Illness> illnesses = Menu.dbman.getIllnesses();
+			System.out.println(illnesses);
 			//TODO check for correct spelling (in every other case as well)
 			System.out.println("What is the name of the illness your animal has?: " + "illness number " + (a+1));
 			//TODO the counter of illnesses should be the actual number of illnesses successfully diagnosed on the animal
 			nameOfIllness = Utils.readLine();
+			//TODO getIllness();
 			
 			System.out.println("Will it need quarantine?" + "\n"
 				+ "a. Yes" + "\n"
 				+ "b. No." + "\n");
 				String quarantineChoice = Utils.readLine();
 					if (quarantineChoice.equals("a")) {
-						Menu.dbman.illnessQuarantine(true);
+						Menu.dbman.illnessQuarantine(true, );
 						System.out.println("How many days should the animal be ecxluded?");
 						quarantineDays = Utils.readInt();
 						System.out.println("The animal will be put int quarantine.");
 					} else if(quarantineChoice.equals("b")) {
-						Menu.dbman.illnessQuarantine(false);
+						Menu.dbman.illnessQuarantine(false, );
 						System.out.println("The animal will not be put int quarantine.");
 					} else {
 						System.out.println("Error, nonvalid input");

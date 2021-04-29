@@ -29,7 +29,6 @@ public class Menu {
 	        switch (choice) {
 	            case 1:
 	            	vetOption1();
-	
 	                break;
 	            case 2:
 	            	adminOption2();
@@ -118,8 +117,7 @@ public class Menu {
  	
  	
  	public static void adminOption2() throws NumberFormatException, IOException {
-
-		BufferedReader consola = new BufferedReader(new InputStreamReader(System.in));    
+ 
  		int adminChoice;
  		boolean exito=false;
  		
@@ -132,81 +130,72 @@ public class Menu {
 		
 			adminChoice = Utils.readInt();
 		
-		while(true) {
-			switch (adminChoice) {
+			while(true) {
+				switch (adminChoice) {
 			 
+				case 1:
+					int manageOfAnimals;
+					System.out.println("\n"+"1. MANAGE OF ANIMALS"+"\n");
+					System.out.println("Select the option that fits you the best"+"\n"
+							+	"1.Add animals"+"\n"
+				        	+	"2.Return animals to wilderness"+"\n"
+				        	+	"3.Mark animals as dead"+"\n"
+				        	+ 	"4.Go back"+ "\n");
+											manageOfAnimals= Utils.readInt();
+					
+					switch(manageOfAnimals) {
 					case 1:
-						int manageOfAnimals;
-						System.out.println("\n"+"1. MANAGE OF ANIMALS"+"\n");
-						System.out.println("Select the option that fits you the best"+"\n"
-								+	"1.Add animals"+"\n"
-					        	+	"2.Return animals to wilderness"+"\n"
-					        	+	"3.Mark animals as dead"+"\n"
-					        	+ 	"4.Go back"+ "\n");
-						
-						manageOfAnimals= Utils.readInt();
-						
-						switch(manageOfAnimals) {
-						
-						case 1:
-							//ADD ANIMAL (INSERT)
-			                //ARRAYLIST DONDE VAMOS A IR ALMACENANDO LOS ANIMALES
-			                //ADEMÁS LOS ID DE LOS ANIMALES SERÁ IGUAL A LA POSICION EN EL ARRAYLIST
+						//ADD ANIMAL (INSERT)
+						//ARRAYLIST DONDE VAMOS A IR ALMACENANDO LOS ANIMALES
+						//ADEMAS LOS ID DE LOS ANIMALES SERA IGUAL A LA POSICION EN EL ARRAYLIST
 			                
-							
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = consola.readLine();
 							Animal.typesOfAnimalsInTheZoo unAnimal= null;
 							
-							
 							exito=KeyboardInput.isThisAnAnimal(readAnimal);//metodo donde compare si lo que hemos puesto es un animal o no
 							if(exito==true) {
 		
-								
 							    unAnimal= KeyboardInput.whichType(readAnimal);
 							    
 							    System.out.print("\n"+"Put a name to the animal");
-							    String name = consola.readLine();
+							    String name = Utils.readLine();
 							    
 							    System.out.print("\n"+"Introduce the enter date of the "+ unAnimal +" "+ name +"\n");
 							    
 							    System.out.print("\n"+"Introduce the day");
-							    String undia = consola.readLine();
+							    String undia = Utils.readLine();
 							    int day= Integer.parseInt(undia);
 
 							    System.out.print("\n"+"Introduce the month");
-							    String unmes = consola.readLine();
+							    String unmes = Utils.readLine();
 							    int month= Integer.parseInt(unmes);
 
 							    System.out.print("\n"+"Introduce the year");
-							    String unanio = consola.readLine();
+							    String unanio = Utils.readLine();
 							    int year= Integer.parseInt(unanio);
 							    
 							    LocalDate enterDate= LocalDate.of(year,  month, day ) ;
 							    
-							    
-							    
 							    /*this.animalType= animalType;
-		this.name= name;
-		
-		this.enterDate = enterDate;
-		this.habitat_id = habitat_id;
-		this.foodPeriod = foodPeriod;
-		this.feedingType = feedingType;
-		this.lastBath = lastBath;
-		this.lastFed = lastFed;
-		this.deathDate = deathDate;
-		this.freedomDate = freedomDate;*/
-							    
-							    
+								this.name= name;
+								
+								this.enterDate = enterDate;
+								this.habitat_id = habitat_id;
+								this.foodPeriod = foodPeriod;
+								this.feedingType = feedingType;
+								this.lastBath = lastBath;
+								this.lastFed = lastFed;
+								this.deathDate = deathDate;
+								this.freedomDate = freedomDate;*/
+						
 							    Animal infoAnimal= new Animal(unAnimal, name, enterDate);
 								KeyboardInput.addAnimal(infoAnimal); 
-								
 								
 								System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							}
 							else {
-								System.out.print("\n"+" That´s not a type of animal present on the zoo"+"\n");
+								System.out.print("\n"+" That is not a type of animal present on the zoo"+"\n");
 							}
 							
 							
@@ -226,7 +215,7 @@ public class Menu {
 	                break;
 	                
 	                case 2:
-	                	System.out.println("\n"+"MANAGE OF THE WORKERS"+"\n");
+	                	System.out.println("\n"+"MANAGEMENT OF THE WORKERS"+"\n");
 						
 	                	//HIRE WORKER (INSERT, UPDATE)
 	                	//Add worker to the database
@@ -238,7 +227,7 @@ public class Menu {
 	                    break;
 	                    
 	                case 3:
-	                	System.out.println("\n"+"MANAGE OF DRUGS"+"\n");
+	                	System.out.println("\n"+"MANAGEMENT OF DRUGS"+"\n");
 						
 	                	//ADD DRUG
 	                	//DELETE DRUG
@@ -249,7 +238,7 @@ public class Menu {
 	                	//exit(0); //EXIT FOR THE WHILE(TRUE) METHOD
 	                
 	                default:
-	                    System.out.print("\nThat´s not an option\n");
+	                    System.out.print("\nThat is not an option\n");
 	        }
 			
 		}//while

@@ -47,83 +47,79 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		
 		try {			
 			//Open database connection
-			
 			// Create tables: begin	
 			
 			Statement stmt1 = c.createStatement();
-			String sql1 = "CREATE TABLE groundTypes "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " habitat_id REFERENCES habitat(id), "
-					   + " type	TEXT	NOT NULL )";
+			String sql1 = "CREATE TABLE habitats "
+					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name			TEXT	NOT NULL	UNIQUE, " 
+					   + " lastCleaned	DATE	NOT NULL, "
+					   + " waterLevel	FLOAT	NOT NULL, "
+					   + " temperature	FLOAT	NOT NULL, "
+					   + " light		ENUM	NOT NULL )";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 			
 			Statement stmt2 = c.createStatement();
-			String sql2 = "CREATE TABLE habitats "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	TEXT	NOT NULL	UNIQUE, " 
-					   + " lastCleaned	DATE, "
-					   + " waterLevel	FLOAT	NOT NULL, "
-					   + " temperature	FLOAT	NOT NULL, "
-					   + " light	ENUM	NOT NULL )";
+			String sql2 = "CREATE TABLE groundTypes "
+					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " habitat_id 	INTEGER	NOT NULL	REFERENCES habitats(id), "
+					   + " type			TEXT	NOT NULL )";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 			
 			Statement stmt3 = c.createStatement();
 			String sql3 = "CREATE TABLE animals "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " enterDate	DATE	NOT NULL, "
-					   + " habitat_id REFERENCES habitat (id), "
+					   + " habitat_id 	INTEGER NOT NULL 	REFERENCES habitats(id), "
 					   + " foodPeriod	INTEGER	NOT NULL, "
 					   + " feedingType	ENUM	NOT NULL, "
-					   + " lastBath	DATE , "
-					   + " lastFed	DATE , "
+					   + " lastBath		DATE	NOT NULL, "
+					   + " lastFed		DATE	NOT NULL, "
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
-					   + " type	STRING	NOT NULL, "
-					   + " name	STRING	NOT NULL )";
+					   + " type			STRING	NOT NULL, "
+					   + " name			STRING	NOT NULL	UNIQUE)";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE workers "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	TEXT	NOT NULL, "
-					   + " lastName TEXT	NOT NULL, "
-					   + " hireDate	DATE	NOT NULL, "
-					   + " salary	FLOAT	NOT NULL, "
+					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name			TEXT	NOT NULL	UNIQUE, "
+					   + " lastName 	TEXT	NOT NULL, "
+					   + " hireDate		DATE	NOT NULL, "
+					   + " salary		FLOAT	NOT NULL, "
 					   + " workerType	ENUM	NOT NULL )";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
 			
-			//PROBLEM: STMT 5 AND 6 MAKE REFERENCE TO EACH OTHER
-			//Which table should go first?
 			Statement stmt6 = c.createStatement();
 			String sql6 = "CREATE TABLE drugTypes "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					  // + " drug_id REFERENCES Drug(id), " /////HERE
-					   + " type	TEXT NOT NULL )"; 
+					   + " type	TEXT	NOT NULL )"; 
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 			
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drugs "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name	TEXT	NOT NULL	UNIQUE,"
+					   + "(id					INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name					TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType_id REFERENCES drugType(id), " /////HERE
-					   + " dosis INTEGER )";					   
+					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id), "
+					   + " dosis 				INTEGER	NOT NULL)";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE illnesses "
-					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name STRING NOT NULL, "
-					   + " quarantineDays	INTEGER, "
-					   + " prothesis	BOOLEAN	NOT NULL "
-					   + " drug_id REFERENCES Drug(id) )";
+					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
+					   + " name			STRING	NOT NULL	UNIQUE, "
+					   + " quarantine	BOOLEAN	NOT NULL, "
+					   + " prothesis	BOOLEAN	NOT NULL, "
+					   + " drug_id 		INTEGER	NOT NULL	REFERENCES Drug(id) )";
 					   
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
@@ -184,7 +180,11 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		try {
 			//Id is chosen by the database
 			Statement stmt = c.createStatement();
-			String sql = "INSERT INTO animals (name) VALUES ('" + animal.getName() + "')";
+			String sql = "INSERT INTO animals (enterDate,habitat_id,foodPeriod,feedingType,lastBath,lastFed,deathDate,freedomDate,type,name)";
+			sql+= "VALUES ('" + animal.getEnterDate() + "','" + animal.getHabitat() + "','" + animal.getFoodPeriod() + "','" 
+			+ animal.getFeedingType() + "','" + animal.getLastBath() + "','" + animal.getLastFed() + "','" + animal.getFreedomDate() + "','"
+			+ animal.getType() +  "','" + animal.getName() + ")";
+			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			stmt.close();
 		} catch(Exception e) {
@@ -204,9 +204,10 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
 
 	@Override
-	public Integer getHabitatId(String habitatName) throws SQLException {
+	public Integer getHabitatIdByName(String habitatName) throws SQLException {
 		Statement stmt = c.createStatement();
 		String sql = "SELECT id FROM habitats WHERE name LIKE '%" + habitatName + "%'";
+		//System.out.println(sql);
 		ResultSet rs = stmt.executeQuery(sql);
 		Integer id = null;
 		while (rs.next()) { //like hasNext
@@ -222,46 +223,53 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	@Override
 	public void printAnimalsInHabitat(String habitatName) throws SQLException {
 		Statement stmt = c.createStatement();
-		String sql = "SELECT * FROM animals WHERE habitat_id LIKE '%" + getHabitatId(habitatName) + "%'";
+		String sql = "SELECT * FROM animals WHERE habitat_id = '%" + getHabitatId(habitatName) + "%'";
 		ResultSet rs = stmt.executeQuery(sql);
-		Habitat habitat = null;
+		
 		while (rs.next()) { //like hasNext
 			int id = rs.getInt("id");
 			String name = rs.getString("name");
+			
+			System.out.println(name);//esto por favor me lo quitas despues ;)
 			Date lastCleaned = rs.getDate("lastCleaned");
 			Float waterLevel = rs.getFloat("waterLevel");
 			Integer temperature = rs.getInt("temperature");
 			LightType light = LightType.valueOf(rs.getString("light"));
-			habitat = new Habitat (id, name, lastCleaned,  waterLevel, temperature, light);
+			new Animal()
+			//habitat = new Habitat (id, name, lastCleaned,  waterLevel, temperature, light);
 			//this is wrong //System.out.println(habitat.getAnimals());
 		}
 		rs.close();
 		stmt.close();
 	}
+	
 
 	@Override
 	public List<Animal> searchAnimalByName(String name) {
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {
-			Statement stmt = c.createStatement();
-			String sql = "SELECT * FROM animals WHERE name LIKE '%" + name + "%'";
-			ResultSet rs = stmt.executeQuery(sql);
-			while (rs.next()) { //like hasNext
+			String sql = "SELECT * FROM animals WHERE name LIKE ?";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1,"%"+name+"%");
+			ResultSet rs = prep.executeQuery();
+			while(rs.next()) {
 				int animalId = rs.getInt("id");
 				String animalName = rs.getString("name");
-				Animal animal = new Animal (animalId, animalName);
+				
+				Animal animal = new Animal(animalId, animalName);
 				animals.add(animal);
 			}
+			prep.close();
 			rs.close();
-			stmt.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
-		return null;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	return animals;
 	}
-	
+		
+		
 	@Override
 	public void feedAnimal() {
 		// TODO Auto-generated method stub
@@ -300,7 +308,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 
 	@Override
 	public boolean prothesisInstallation(Boolean bol) {
-		// TODO Auto-generated method stub
+		// TODO change prhothesis to true and releaseDate to 30 days from today
 		return bol;
 	}
 
@@ -373,8 +381,20 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 
 	@Override
-	public void illnessQuarantine(Boolean bol) {
-		// TODO Auto-generated method stub
+	public void illnessQuarantine(Boolean bol, Illness illness) {
+		// TODO how to know if quarantine is becoming the same value of bol
+		// TODO how will the sql know which id it needs
+		
+		try {
+			String sql = "UPDATE quarantine SET quarantine=?, WHERE id=?";
+			PreparedStatement s = c.prepareStatement(sql);
+			s.setBoolean(1, illness.getQuarantine());
+			s.executeUpdate();
+			s.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -421,8 +441,30 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 
 	@Override
-	public void printIllnesses() {
-		// TODO Auto-generated method stub
+	public List<Illness> getIllnesses() {
+		List<Illness> illnesses = new ArrayList<Illness>();
+		
+		try { //TODO no se hacer para coger todas las enfermedades de un animal: Java directamente?
+			String sql = "SELECT * FROM illnesses";
+			PreparedStatement prep = c.prepareStatement(sql);
+			ResultSet rs = prep.executeQuery();
+			while(rs.next()) {
+				int drugId = rs.getInt("id");
+				String name = rs.getString("name");
+				Boolean quarantine = rs.getBoolean("quaratine");
+				Boolean prothesis = rs.getBoolean("prothesis");
+				
+				Illness illness = new Illness(drugId, name, quarantine, prothesis);
+				illnesses.add(illness);
+			}
+			prep.close();
+			rs.close();
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	return illnesses;
 		
 	}
 

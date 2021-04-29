@@ -20,7 +20,7 @@ public class Habitat implements Serializable {
 	private LightType light;
 	
 	private List<Animal> animals; 
-	private List<GroundType> grounds; 
+	private List<GroundType> grounds; //cambio post presentacion dado por rodrigo
 	
 	public Habitat(String name, Date lastCleaned, Float waterLevel, Integer temperature,
 			LightType light, List<Animal> animals, List<GroundType> grounds) {

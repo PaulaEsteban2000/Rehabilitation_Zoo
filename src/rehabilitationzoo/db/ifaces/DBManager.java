@@ -28,7 +28,7 @@ public interface DBManager {
 	public void printAnimalTypes ();
 	public void printAnimalNamesGivenType(String animalType);
 	public void printDrugTypes();
-	public void printIllnesses();
+	public List<Illness> getIllnesses();
 	//1. ANIMAL DIAGNOSIS
 		public Animal getAnimal(String type, String name); //in the future this will only need an id read by a barcorde reader
 		public boolean prothesisInstallation(Boolean bol); 
@@ -40,7 +40,7 @@ public interface DBManager {
 				//and now setting the rest of the parameters for the drug (that will be empty until now)...
 				//set treatmentDuration, periodBetweenDosis, dosis 
 			public void drugPrescription(Drug drug); //links drug to animal //animal can be taking many
-			public void illnessQuarantine (Boolean bol); //makes it true or not
+			public void illnessQuarantine (Boolean bol, Illness illness); //makes it true or not
 			public void quarantineDays(); //days to be excluded
 	//2. CHECK ANIMAL
 		public void reportAnimalState(Integer option); //stays, dies, released
@@ -65,5 +65,13 @@ public interface DBManager {
 		public void addNewDrug(Drug drug);
 		public void deleteDrug(Drug drug);
 		// public void modifyDrug(Drug drug); //needed?
-
+		/**@Override
+		public void addAnimal(Animal animal) throws SQLException { //do we need a prepared Statement better to avoid injection? I think so bc it is an insert
+			//Id is chosen by the database
+			String sql = "INSERT INTO animals (name) VALUES (?)"; //the ? filters any SQL language
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setObject(0, animal); //Es asi??
+			prep.executeUpdate();
+			prep.close();
+		}*/
 }

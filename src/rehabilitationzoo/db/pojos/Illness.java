@@ -13,7 +13,7 @@ public class Illness implements Serializable{
 
 	private Integer id; //No need to be in constructor
 	private String name; //cambiado por String: post prepresentacion
-	private Integer quarantineDays;
+	private Boolean quarantine;
 	private Boolean prothesis;
 	private Integer drug_id; //fk to the drug it cures
 	
@@ -27,21 +27,21 @@ public class Illness implements Serializable{
 	}*/
 	
 	
-	public Illness(String name, Integer quarantineDays, Boolean prothesis, Integer drug_id, List<Animal> animals) {
+	public Illness(String name, Boolean quarantine, Boolean prothesis, Integer drug_id, List<Animal> animals) {
 		super();
 		this.name = name;
-		this.quarantineDays = quarantineDays;
+		this.quarantine = quarantine;
 		this.prothesis = prothesis;
 		this.drug_id = drug_id;
 		this.animals = new ArrayList<Animal>();
 	}
 	
-	public Illness (String name, Integer quarantineDays, Boolean prothesis, Integer drug_id) {
+	public Illness (Integer id, String name, Boolean quarantine, Boolean prothesis) {
 		super();
+		this.id = id;
 		this.name = name;
-		this.quarantineDays = quarantineDays;
+		this.quarantine = quarantine;
 		this.prothesis = prothesis;
-		this.drug_id = drug_id;
 	}
 
 
@@ -86,13 +86,13 @@ public class Illness implements Serializable{
 	}
 
 
-	public Integer getQuarantineDays() {
-		return quarantineDays;
+	public boolean getQuarantine() {
+		return quarantine;
 	}
 
 
-	public void setQuarantineDays(Integer quarantineDays) {
-		this.quarantineDays = quarantineDays;
+	public void setQuarantine(boolean quarantine) {
+		this.quarantine = quarantine;
 	}
 
 
