@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.Habitat;
 import utils.KeyboardInput;
 import utils.Utils;
 
@@ -263,11 +264,46 @@ public class Menu {
  	
  	
  	
- 	
- 	
- 	
- 	
-	public static void zooKeeperOption3() {
+	public static void zooKeeperOption3()  throws IOException{
+		int zooKeeperChoice;
+		Integer habitatId;
+ 		
+		do {
+			System.out.println("Please choose the habitat you are in: " + "\n");
+					Habitat habitatToSearch = KeyboardInput.askForHabitat();
+			
+			System.out.println("Please choose the action you want to complete: " + "\n"
+				+ "	1. Feed animals" + "\n"
+				+ "	2. Bathe animals" + "\n"
+				+ "	3. Drugs administration" + "\n"
+				+ "	4. Clean habitats" + "\n"
+				+ "	5. Fill up water tanks" + "\n"
+				+ "	6. Go back to users menu."+ "\n") ;
+		
+				zooKeeperChoice = Utils.readInt();
+		
+		
+			switch (zooKeeperChoice) {
+				case 1:
+				case 2: 
+				case 3:
+					KeyboardInput.drugAdminSubMenu(habitatToSearch, zooKeeperChoice);
+					break;
+					
+					
+				case 4:
+				case 5:
+					KeyboardInput.habitatSubMenu(habitatToSearch, zooKeeperChoice);
+					break;
+					
+					
+				case 6:
+					break;
+				default:  
+					System.out.println("Error, nonvalid input.");
+					break;
+			}
+		}while(zooKeeperChoice != 6); //No deberia haber un case 0???
 		
 		
 	}

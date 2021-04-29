@@ -1,12 +1,14 @@
 package utils;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Animal.typesOfAnimalsInTheZoo;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
+import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.ui.Menu;
 
@@ -203,7 +205,7 @@ public class KeyboardInput {
 	
 	
 	
-	public static List<Animal> storeAnimals=new LinkedList<Animal>();
+	public static List<Animal> storeAnimals = new LinkedList<Animal>();
 	
 	//No deberia hacer un constructor vacio primero??
 	
@@ -256,10 +258,64 @@ public class KeyboardInput {
 	
 	
 	
+public static Habitat askForHabitat() throws IOException {
+		
+		System.out.println("These are the habitats existent in our recovery center. Please choose the Id of one:");
+		Menu.dbman.printHabitatsNamesAndId();
+		Integer habitatId = Utils.readInt();
+		try {
+			Menu.dbman.getHabitatId(habitatId);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		Habitat habitat = Menu.dbman.getHabitat(habitatId);
+		return habitat;
+	}
 	
+
+
+public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) throws IOException {
+
+		
+		if(stateOption == 4) {
+			//TODO habitatToChange.setLastCleaned();
+		}
+		else {
+			//TODO habitatToChange.setWaterLevel();
+		}
+		
+	}
+
+
+public static void drugAdminSubMenu(Habitat habitat, Integer stateOption) throws IOException {
+
+	
+	switch (stateOption) {
+	case 1:
+		habitat.getAnimals();
+		//TODO bucle que le vaya dando de comer a cada animal de la lista .feedAnimal(); //boolean?
+		break;
+	case 2:
+		//TODO bucle que le vaya bañando a cada animal de la lista .batheAnimal(); //boolean?
+		break;
+	case 3: 
+		// TODO bucle que le vaya dando las drugs a cada animal de la lista .drugAdministrationToAnimal(Animal animal); //boolean?
+		break;
+		
+	default: 
+		break;
+	
+	}
+	
+}
+
+
+}
 	
 	
 	
 	
 
-}
+

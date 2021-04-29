@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import rehabilitationzoo.db.pojos.*;
+import rehabilitationzoo.db.ui.Menu;
 
 public interface DBManager {
 	
@@ -12,10 +13,13 @@ public interface DBManager {
 
 	
 	//ZOO-KEEPER
+	public void printHabitatsNamesAndId();
+	
 	//1. DRUG ADMINISTRATION
 		public void drugAdministrationToAnimal(Animal animal);
 	//2. CHOOSE HABITAT
-		public Integer getHabitatId(String habitatName) throws SQLException;
+		public Integer getHabitatId(Integer habitatId) throws SQLException;
+		public Habitat getHabitat(Integer id);
 		public void feedAnimal(); //boolean?
 		public void batheAnimal(); //boolean?
 		public void cleanHabitat(); //boolean?
