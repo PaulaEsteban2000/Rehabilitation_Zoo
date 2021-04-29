@@ -1,10 +1,10 @@
 package utils;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 import rehabilitationzoo.db.pojos.Animal;
-import rehabilitationzoo.db.pojos.Animal.typesOfAnimalsInTheZoo;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.Illness;
@@ -205,6 +205,10 @@ public class KeyboardInput {
 	
 	public static List<Animal> storeAnimals=new LinkedList<Animal>();
 	
+	 public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
+	//	ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
+	
+	
 	//No deberia hacer un constructor vacio primero??
 	
 	//public KeyboardInput() {
@@ -217,35 +221,18 @@ public class KeyboardInput {
 	public static boolean isThisAnAnimal (String unAnimal) {
 		boolean realAnimal= false;
 		
-		// .values() devuelve un array con los valores del enum
 		
-		 for( typesOfAnimalsInTheZoo oneType: typesOfAnimalsInTheZoo.values()) {
+		 for( int i=0; i<typesOfAnimalsInTheZoo.size(); i++) {
 			 
-			 if (oneType.equals(unAnimal)){
-				 realAnimal= true;
-				 break;
-			 } 
+			 if(unAnimal.compareTo(typesOfAnimalsInTheZoo.get(i))==0) {
+				 realAnimal=true;
+				 Animal.type=typesOfAnimalsInTheZoo.get(i);
+			 }
 		 }
 		
-		
-		return realAnimal;
-		
-	}
-	
-	public static typesOfAnimalsInTheZoo whichType(String unAnimal) {
-		Animal.typesOfAnimalsInTheZoo returnType = null;
-		
-		for( typesOfAnimalsInTheZoo oneType: typesOfAnimalsInTheZoo.values()) {
-			 
-			 if (oneType.equals(unAnimal)){
-				 returnType= oneType;
-				 break;
-			 } 
-		 }
-		
-		return returnType;
-		
-	}
+		return realAnimal;	
+	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
+	// ya que estamos, marcamos el tipo de animal que es
 	
 	
 	
@@ -254,12 +241,76 @@ public class KeyboardInput {
 		
 	}
 	
+
+	
+	public static void puttingIdsAnimals(Animal unAnimal) {
+		int unId;
+		
+		unId= storeAnimals.indexOf(unAnimal);
+		Animal.id=unId;
+		System.out.print("\n"+"id del animal:"+Animal.id+"\n");
+		
+		
+	}
 	
 	
 	
+
+
+public static void main(String[] args) {
+	
+ typesOfAnimalsInTheZoo.add("giraffe");
+ typesOfAnimalsInTheZoo.add("elephant");
+ 
+		boolean exito = false;
+		exito= isThisAnAnimal("giraffe");
+		
+		if(exito==true) {
+			System.out.print("The animal exits in the database"+"\n");
+			 
+			
+			LocalDate enterDate= LocalDate.of(2020,05,05 ) ;
+			
+			    Animal infoAnimal= new Animal("giraffe", "Julia", enterDate);
+			    KeyboardInput.addAnimal(infoAnimal);
+			    System.out.print(Animal.id +"\n");
+			    System.out.print("Antes de meter el id"+Animal.id+"\n");
+			    KeyboardInput.puttingIdsAnimals(infoAnimal);
+			    System.out.print("Despues de meter el id"+Animal.id+"\n\n");
+			    
+			    
+			    Animal infoAnimal1= new Animal("elephant", "dumbo", enterDate);
+			    KeyboardInput.addAnimal(infoAnimal1);
+			    System.out.print(Animal.type +"\n"+Animal.name+"\n"+Animal.enterDate+"\n");
+			    System.out.print("Antes de meter el id "+Animal.id+"\n");
+			    KeyboardInput.puttingIdsAnimals(infoAnimal1);
+			    System.out.print("Despues de meter el id "+Animal.id+"\n\n");
+			    
+
+			    Animal infoAnimal3= new Animal("giraffe", "Paula", enterDate);
+			    KeyboardInput.addAnimal(infoAnimal3);
+			    System.out.print(Animal.id +"\n");
+			    System.out.print("Antes de meter el id"+Animal.id+"\n");
+			    KeyboardInput.puttingIdsAnimals(infoAnimal3);
+			    System.out.print("Despues de meter el id"+Animal.id+"\n\n");
+			    
+			    
+			    System.out.print("\nListamos los tipos de animales:\n");
+	            for (int i = 0; i <typesOfAnimalsInTheZoo.size() ; i++) {
+	                System.out.print(typesOfAnimalsInTheZoo.get(i)+"\n");
+	            }
+	            
+	            
+	            System.out.print("\nListamos la info de los animales que tenemos:\n");
+	            for (int i = 0; i <storeAnimals.size() ; i++) {
+	                System.out.print(storeAnimals.get(i)+"\n");
+	            }
+	            
+		}
+
 	
 	
-	
-	
+}
+
 
 }

@@ -156,19 +156,16 @@ public class Menu {
 							
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = consola.readLine();
-							Animal.typesOfAnimalsInTheZoo unAnimal= null;
 							
 							
 							exito=KeyboardInput.isThisAnAnimal(readAnimal);//metodo donde compare si lo que hemos puesto es un animal o no
 							if(exito==true) {
 		
-								
-							    unAnimal= KeyboardInput.whichType(readAnimal);
 							    
 							    System.out.print("\n"+"Put a name to the animal");
 							    String name = consola.readLine();
 							    
-							    System.out.print("\n"+"Introduce the enter date of the "+ unAnimal +" "+ name +"\n");
+							    System.out.print("\n"+"Introduce the enter date of the "+ readAnimal +" "+ name +"\n");
 							    
 							    System.out.print("\n"+"Introduce the day");
 							    String undia = consola.readLine();
@@ -184,24 +181,12 @@ public class Menu {
 							    
 							    LocalDate enterDate= LocalDate.of(year,  month, day ) ;
 							    
+							    Animal infoAnimal= new Animal(readAnimal, name, enterDate);
+							    KeyboardInput.addAnimal(infoAnimal);
+							    KeyboardInput.puttingIdsAnimals(infoAnimal);
 							    
 							    
-							    /*this.animalType= animalType;
-		this.name= name;
-		
-		this.enterDate = enterDate;
-		this.habitat_id = habitat_id;
-		this.foodPeriod = foodPeriod;
-		this.feedingType = feedingType;
-		this.lastBath = lastBath;
-		this.lastFed = lastFed;
-		this.deathDate = deathDate;
-		this.freedomDate = freedomDate;*/
-							    
-							    
-							    Animal infoAnimal= new Animal(unAnimal, name, enterDate);
-								KeyboardInput.addAnimal(infoAnimal); 
-								
+							  
 								
 								System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							}
@@ -215,6 +200,8 @@ public class Menu {
 						
 						}
 						
+						
+						//THIS IS FOR THE VET
 		                	
 		                //RETURN ANIMAL TO WILDERNESS (UPDATE) 
 		               	//When an animal enter we don´t insert any freedomDate
@@ -222,6 +209,14 @@ public class Menu {
 		             
 		                //MARK ANIMAL AS DEAD (UPDATE)
 		                //BOOLEAN
+						
+						
+						
+						
+						//  ¡¡  PAULA  !!
+						
+						
+						//Put the method for the diagnosis of the new animal
 	                	
 	                break;
 	                
