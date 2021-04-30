@@ -44,33 +44,6 @@ public class Menu {
 	                
 	            case 3: 
 	            	zooKeeperOption3();
-	            	//a. manage animals
-	            		//a. add
-	            			//newAnimal
-	            		//b. return
-	            			//1. getAnimal
-	            			//2. changeReleaseDate
-	            		//c. dead
-	            			//1. getAnimal
-	            			//2. changeDeathDate
-	            	//b. manage workers
-	            		//a. hire
-	            			//new worker
-	            		//b. fire
-	            			//1. getWorker
-	            			//2. delete worker
-	            		//c. modify
-	            			//salary
-	            	//c. manage drugs 
-	            		//a. add
-	    					//new drug
-	            		//b. delete
-	    					//1. getDrug
-	    					//2. delete drug
-	            		//c. modify
-	            			//??
-	    			//salary
-	            	//exit
 	            	break;
 	            case 0:
 	            	dbman.disconnect();
@@ -102,8 +75,7 @@ public class Menu {
 					Animal animalToDiagnose = KeyboardInput.askForAnimal();
 					KeyboardInput.firstDiagnosisSubMenu(animalToDiagnose);
 					break;
-				case 2: 
-					//ME HE QUEDADO ARREGLANDO EL CHECK PARA ACCEDER A LOS ANIMALES Y TIPOS POR HABITAT
+				case 2:
 					System.out.println("ANIMAL CHECK");
 					Habitat habitatToCheck = KeyboardInput.askForHabitatToCheckItsAnimals();
 					KeyboardInput.animalCheckSubMenu(habitatToCheck);
@@ -115,7 +87,7 @@ public class Menu {
 					break;
 			}
 			
-		}while(vetMainChoice != 3); //No deberia haber un case 0???
+		}while(vetMainChoice != 3);
 	}
  	
  	

@@ -148,28 +148,11 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " PRIMARY KEY (illness_id, animal_id) )";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
-			// Create table: end
-			
-			// - Set initial values for the Primary Keys
-			// - Don't try to understand this until JPA is explained
-			// This is usually not needed, since the initial values
-			// are set when the first row is inserted, but since we
-			// are using JPA and JDBC in the same project, and JPA
-			// needs an initial value, we do this.
-			//Statement stmtSeq = c.createStatement();
-			//String sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('departments', 1)";
-			//stmtSeq.executeUpdate(sqlSeq);
-			//sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('employees', 1)";
-			//stmtSeq.executeUpdate(sqlSeq);
-			//sqlSeq = "INSERT INTO sqlite_sequence (name, seq) VALUES ('reports', 1)";
-			//stmtSeq.executeUpdate(sqlSeq);
-			//stmtSeq.close(); 
-			
-			// Close database connection
+
 		}  catch (SQLException e) {
-	//	if (!e.getMessage().contains("already exists")) {
+		if (!e.getMessage().contains("already exists")) {
 				e.printStackTrace();
-	//		}
+			}
 		}
 		
 	}

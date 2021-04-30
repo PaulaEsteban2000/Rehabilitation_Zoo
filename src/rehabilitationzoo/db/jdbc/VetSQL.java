@@ -13,10 +13,14 @@ import rehabilitationzoo.db.ifaces.VetManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.FeedingType;
+import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.LightType;
 
 public class VetSQL implements VetManager{
 	
+	
+////////////DIAGNOSIS
 	
 	@Override
 	public List<String> getAnimalTypesInZoo() {
@@ -253,8 +257,62 @@ public class VetSQL implements VetManager{
 		
 	}
 	
+	@Override
+	public Integer getTypeOfDrugId(String type) {
+		Integer id = null;
+			
+			try {
+				String sql = "SELECT id FROM drugTypes WHERE type LIKE ?"; 	//TODO esta bien??
+				PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+				prep.setString(1, "%" + type + "%");						//TODO esta bien??
+				ResultSet rs = prep.executeQuery();
+				
+				while (rs.next()) { //like hasNext
+					id = rs.getInt("id");
+				}
+				
+			prep.close();
+			rs.close();
+			
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			
+		return id;
+	}
 	
-
+	
+	
+	
+////////////CHECK
+	
+	@Override
+	public List<String> getAllHabitatsNames(){
+		List<String> habitatNames = new ArrayList<String>();
+		
+		try {
+		String sql = "SELECT * DISTINCT FROM habitats"; 			    //TODO DISTINCT esta bien??
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	//TODO esta bien??
+		ResultSet rs = prep.executeQuery();
+		
+		while (rs.next()) { //like hasNext
+			String name = rs.getString("name");
+			habitatNames.add(name);
+		}
+		
+			prep.close();
+			rs.close();
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	return habitatNames;
+	
+	}
+	
+	
+	
 	@Override
 	public void reportAnimalState(Integer option, Animal animal) {
 		LocalDate localToday = LocalDate.now(); //only way to add dates
@@ -300,11 +358,82 @@ public class VetSQL implements VetManager{
 		
 	}
 
+	@Override
+	public List<String> getAnimalTypesInAHabitat(Habitat habitat){
+		List<String> types = new ArrayList<String>();
+		
+		try {
+		String sql = "SELECT type FROM animals WHERE habitat_id = ?"; 			
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+		prep.setString(1, "%" + habitat.getId() + "%");
+		ResultSet rs = prep.executeQuery();
+		
+		while (rs.next()) { //like hasNext
+			String type = rs.getString("type");
+			
+			types.add(type);
+		}
+		
+			prep.close();
+			rs.close();
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	return types;
+	
+		
+	}
+	
+	@Override
+	public List<Animal> getAnimalsGivenHabitatAndType(String habitatName, String animalType) {
+		List<Animal> animals = new ArrayList<Animal>();
+			
+			try {
+			String sql = "SELECT * FROM animals WHERE type = ? AND habitat_id = ?"; 			
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			prep.setString(1, "%" + animalType + "%");	
+			prep.setString(2, "%" + getHabitatIdByName(habitatName) + "%");
+			ResultSet rs = prep.executeQuery();
+			
+			while (rs.next()) { //like hasNext
+				int id = rs.getInt("id");
+				Date enterDate = rs.getDate("enterDate");
+				Integer habitat_id = rs.getInt("habitat_id");
+				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				Date lastBath = rs.getDate("lastBath");
+				Date lastFed = rs.getDate("lastFed");
+				Date deathDate = rs.getDate("deathDate");
+				Date freedomDate = rs.getDate("freedomDate");
+				String type = rs.getString("type");
+				String name = rs.getString("name");
+				
+				System.out.println(name);//esto por favor me lo quitas despues ;)
+				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				
+				animals.add(animal);
+			}
+			
+				prep.close();
+				rs.close();
+				
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			
+		return animals;
+		
+	}
 	
 	
-	/////////////////////////////////////////////////
+	
+	
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
-	//Metodos que incluir en el codiogo que aun no estan:
+	//Metodos que incluir en el codigo que aun no estan:
+
 	
 	@Override
 	public Integer getHabitatIdByName(String habitatName) throws SQLException{
@@ -396,30 +525,6 @@ public class VetSQL implements VetManager{
 	}
 
 	@Override
-	public Integer getTypeOfDrugId(String type) {
-		Integer id = null;
-			
-			try {
-				String sql = "SELECT id FROM drugTypes WHERE type LIKE ?"; 	//TODO esta bien??
-				PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-				prep.setString(1, "%" + type + "%");						//TODO esta bien??
-				ResultSet rs = prep.executeQuery();
-				
-				while (rs.next()) { //like hasNext
-					id = rs.getInt("id");
-				}
-				
-			prep.close();
-			rs.close();
-			
-			}catch(Exception ex) {
-				ex.printStackTrace();
-			}
-			
-		return id;
-	}
-	
-	@Override
 	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug) {
 		List<Drug> drugs = new ArrayList<Drug>();
 			
@@ -455,16 +560,6 @@ public class VetSQL implements VetManager{
 	}
 
 
-
-	//Metodos que aprender a hacer
-	
-	//TODO NATALIA, MERI: ver juntas si es necesario al final
-	@Override
-	public void setQuarantineDays(Integer numberOfDays) {
-		// TODO needed or not? and how?
-		//porque necesitariamos habitats distintos (uno por animal excluido) y cambios de sitio
-		
-	}
 	
 	//TODO al ser una n-n no se muy bien como hacer estos metodos:
 	@Override 

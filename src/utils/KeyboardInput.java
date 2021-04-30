@@ -28,8 +28,11 @@ public class KeyboardInput {
 	//
 	//
 	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
+		System.out.println("These are our actual habitats.");
+		List<String> habitatNames= vetMan.getAllHabitatsNames();
+		System.out.println(habitatNames);
 		System.out.println("Please input the name of the habitat to check its animals: ");
-		String habitatName = Utils.readLine();
+		String name = Utils.readLine();
 		Habitat habitatToCheck = null;
 		
 		return habitatToCheck;
@@ -59,19 +62,32 @@ public class KeyboardInput {
 	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {
 		//TODO solo poder acceder a animales con freedom y death date NULL
 		
-		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
 		System.out.println("These are the types of animals existent in the habitat. Please choose one or enter a new one:");
-		List<String> types = vetMan.getAnimalTypesInZoo();
-		System.out.println(types);
+		List<String> animalsTypesInHabitat = vetMan.getAnimalTypesInAHabitat(habitat);
+		printAnimalTypesInHabitat(animalsTypesInHabitat);
 		String animalType = Utils.readLine();
 		
 		System.out.println("These are the names of the animals under the given type in the habitat. Please choose the one:");
-		List<Animal> animalsGivenType = vetMan.getAnimalsInHabitat(animalType);
-		System.out.println(animalsGivenType);
+		List<Animal> animalsGivenType = vetMan.getAnimalsGivenHabitatAndType(habitat.getName(), animalType);
+		printAnimalNamesInHabitat(animalsGivenType);
 		String animalName = Utils.readLine();
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
 		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	}
+	//
+	//
+	public static void printAnimalTypesInHabitat(List<String> animalsInHabitat) {
+		for (int a = 0; a < animalsInHabitat.size(); a++) {
+			System.out.println(animalsInHabitat.get(a));
+		}
+	}
+	//
+	//
+	public static void printAnimalNamesInHabitat(List<Animal> animalsInHabitat) {
+		for (int a = 0; a < animalsInHabitat.size(); a++) {
+			System.out.println(animalsInHabitat.get(a).getName());
+		}
 	}
 	//
 	//
@@ -212,12 +228,8 @@ public class KeyboardInput {
 	public static void animalCheckSubMenu(Habitat habitatToCheck) throws IOException, SQLException {
 		int stateOption = 0;
 		
-		System.out.println("These are the animals living in your habitat.");
-		List<Animal> animalsInHabitat = vetMan.getAnimalsInHabitat(habitatToCheck.getName());
-		System.out.println(animalsInHabitat);
-		
 		Animal animalToCheck = KeyboardInput.askForAnimalFromHabitat(habitatToCheck);
-		//should be something to not leave the habitat until all animals are checked
+		//TODO should do something to not leave the habitat until all animals are checked
 		//attribute for habitat for lastChecked when done?
 		
 		do {
