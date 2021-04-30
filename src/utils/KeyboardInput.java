@@ -1,35 +1,81 @@
 package utils;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.sql.SQLException;
+//>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
 
+import rehabilitationzoo.db.ifaces.DBManager;
+import rehabilitationzoo.db.ifaces.VetManager;
+import rehabilitationzoo.db.jdbc.JDBCManager;
+import rehabilitationzoo.db.jdbc.VetSQL;
 import rehabilitationzoo.db.pojos.Animal;
-import rehabilitationzoo.db.pojos.Animal.typesOfAnimalsInTheZoo;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
+import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
-import rehabilitationzoo.db.ui.Menu;
 
 public class KeyboardInput {
 	
-	public static Animal askForAnimal() throws IOException {
+	
+	/////////////////////////METODOS DE PAULA: INICIO////////////////////////////////////////////////////////////////////////////
+	//Los meto aqui entre comentarios por separado porque si no se descoloca todo y me agobia tener que ordenarlo cada vez
+	//Ademas asi podeis ver lo que he hecho por si alguno os sirve (pero no los toqueis sin preguntarme u os corto las manos:) )
+	//
+	//
+	public static VetManager vetMan = new VetSQL();	
+	//
+	//
+	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
+		System.out.println("Please input the name of the habitat to check its animals: ");
+		String habitatName = Utils.readLine();
+		Habitat habitatToCheck = null;
 		
+		return habitatToCheck;
+	}
+	
+	//
+	//
+	public static Animal askForAnimal() throws IOException {
+		//TODO solo poder acceder a animales con freedom y death date NULL
+		
+		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
 		System.out.println("These are the types of animals existent in our recovery center. Please choose one or enter a new one:");
-		Menu.dbman.printAnimalTypes();
+		List<String> types = vetMan.getAnimalTypesInZoo();
+		System.out.println(types);
 		String animalType = Utils.readLine();
 		
 		System.out.println("These are the names of the animals under the given type. Please choose the one:");
-		Menu.dbman.printAnimalNamesGivenType(animalType);
+		List<Animal> animalsGivenType = vetMan.getAnimalsGivenType(animalType);
+		System.out.println(animalsGivenType);
 		String animalName = Utils.readLine();
 		
-		Animal animalToDiagnose = Menu.dbman.getAnimal(animalType, animalName);
-		return animalToDiagnose;
+		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
+		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
 	}
-
-	
-	
-	
-	public static void diagnosisSubMenu(Animal animalToDiagnose) throws IOException {
+	//
+	//
+	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {
+		//TODO solo poder acceder a animales con freedom y death date NULL
+		
+		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
+		System.out.println("These are the types of animals existent in the habitat. Please choose one or enter a new one:");
+		List<String> types = vetMan.getAnimalTypesInZoo();
+		System.out.println(types);
+		String animalType = Utils.readLine();
+		
+		System.out.println("These are the names of the animals under the given type in the habitat. Please choose the one:");
+		List<Animal> animalsGivenType = vetMan.getAnimalsInHabitat(animalType);
+		System.out.println(animalsGivenType);
+		String animalName = Utils.readLine();
+		
+		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
+		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	}
+	//
+	//
+	public static void firstDiagnosisSubMenu(Animal animalToDiagnose) throws IOException {
 		int illnessChoice;
 		
 		do {
@@ -47,8 +93,16 @@ public class KeyboardInput {
 				String prothesisChoice = Utils.readLine();
 				
 				if (prothesisChoice.equals("a") ) {
-					Menu.dbman.prothesisInstallation(true); //here the release date should be changed if parameter true
-					System.out.println("Prothesis was installed. The animal will be set free in 30 days.");
+					
+					System.out.println("Where does the animal need a prothesis? "); 
+					String bodyPart = Utils.readLine();
+					String name = bodyPart + "_prothesis";
+					Illness illness = new Illness(name, false, true, null);
+					//Add illness and/or link to patient
+					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception?
+					
+					vetMan.prothesisInstallation(true, illness, animalToDiagnose); //here the release date should be changed if parameter true
+					System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days.");
 					break;
 				} else if(prothesisChoice.equals("b")) {
 					break;	
@@ -59,10 +113,10 @@ public class KeyboardInput {
 				break;
 				
 			case 2:
-				System.out.println("How many illnesses other than prothesis does your animal have?:");
+				System.out.println("How many illnesses (other than prothesis) does your animal have?:");
 				int numberOfIllnesses = Utils.readInt();
 				
-				KeyboardInput.illnessesSubMenu(numberOfIllnesses, animalToDiagnose);			
+				KeyboardInput.illnessesInputSubMenu(numberOfIllnesses, animalToDiagnose);			
 				break;
 				
 			case 3:
@@ -75,38 +129,41 @@ public class KeyboardInput {
 			}
 		}while(illnessChoice != 3);
 	}
-
-	
-	
-	
-	
-	private static void illnessesSubMenu(int numberOfIllnesses, Animal animalToDiagnose) throws IOException{
+	//
+	//
+	private static void illnessesInputSubMenu(int numberOfIllnesses, Animal animalToDiagnose) throws IOException{
 		String nameOfIllness = "";
 		int quarantineDays = 0; //set to zero in case no quarantine is needed
 		Boolean prothesis = false;
 		Drug drug = null ;
 		
 		for (int a = 0; a < numberOfIllnesses; a++) {
-			System.out.println("These the illnesses other animals have: ");
-			List<Illness> illnesses = Menu.dbman.getIllnesses();
-			System.out.println(illnesses);
+			System.out.println("These are the illnesses we can take care of. Please choose one: ");
+			//TODO metodo que imprima las enfermedades que podemos curar de la lista
+			//System.out.println(illnessesWeCanCure);
 			//TODO check for correct spelling (in every other case as well)
-			System.out.println("What is the name of the illness your animal has?: " + "illness number " + (a+1));
-			//TODO the counter of illnesses should be the actual number of illnesses successfully diagnosed on the animal
-			nameOfIllness = Utils.readLine();
-			//TODO getIllness();
+			
+			System.out.println("This is the illness number " + vetMan.getNumberOfIllnessesAnAnimalHas() + " your animal has.");
+			System.out.println("What is the name of the new illness you just diagnosed?: new illness input number" + (a+1));
+			nameOfIllness = Utils.readLine(); //TODO check spelling
+			
+			Illness newIllness = new Illness(nameOfIllness, null, false, null);
+			vetMan.addIllness(newIllness);
+			//TODO setIllnessOnAnimal(String name)
 			
 			System.out.println("Will it need quarantine?" + "\n"
 				+ "a. Yes" + "\n"
 				+ "b. No." + "\n");
 				String quarantineChoice = Utils.readLine();
 					if (quarantineChoice.equals("a")) {
-						Menu.dbman.illnessQuarantine(true, );
+						vetMan.illnessQuarantine(true, newIllness);
+						//NOT KNOW IF NEEDED ----...
 						System.out.println("How many days should the animal be ecxluded?");
 						quarantineDays = Utils.readInt();
+						//...----
 						System.out.println("The animal will be put int quarantine.");
 					} else if(quarantineChoice.equals("b")) {
-						Menu.dbman.illnessQuarantine(false, );
+						vetMan.illnessQuarantine(false, newIllness);
 						System.out.println("The animal will not be put int quarantine.");
 					} else {
 						System.out.println("Error, nonvalid input");
@@ -118,12 +175,11 @@ public class KeyboardInput {
 				String drugsChoice = Utils.readLine();
 					if (drugsChoice.equals("a") ) {
 						System.out.println("These are the types of medicines we have in the center at the moment: ");
-						Menu.dbman.printDrugTypes();
-						System.out.println("What type of drug will the animal need to take?");
-						String drugTypeName = Utils.readLine();
-						//TODO check for correct spelling (in every other case as well)
+						//TODO imprimir tipos de medicamentos disponibles de lista o como?
 						
-						DrugType drugType = new DrugType (drugTypeName);
+						System.out.println("What type of drug will the animal need to take?");
+						String drugType = Utils.readLine();
+						//TODO check for correct spelling (in every other case as well)
 						
 						System.out.println("Please type in the name of the drug to administrate: ");
 						String nameOfDrug = Utils.readLine();
@@ -133,32 +189,36 @@ public class KeyboardInput {
 						
 						System.out.println("What will the period between the dosis be? Please type the number of days between each dosis");
 						//TODO check if this date supports adding and subtracting days/hours
+						//this should probably be fixed on each drug?
 						Integer periodBetweenDosis = Utils.readInt();
 						
 						System.out.println("How many grams of the medicine will it need to take everyday?");
 						Integer dosis = Utils.readInt();
 						
-						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, drugType.getId(), dosis);
-						//TODO animal.addDrug();
+						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, vetMan.getTypeOfDrugId(drugType), dosis);
+						//TODO animal.addDrug(); 
+						//TODO drug to illness??
 					} else if(drugsChoice.equals("b") ) {
 						break;	
 					} else {
 						System.out.println("Error, nonvalid input");
 					}
 			
-			Illness illness = new Illness (nameOfIllness,  quarantineDays,  prothesis,  drug.getId());
-			//TODO animal.addIllness();
-			
 		}
 		
 	}
-	
-	
-	
-	
-	
-	public static void animalCheckSubMenu(Animal animalToCheck) throws IOException {
+	//
+	//
+	public static void animalCheckSubMenu(Habitat habitatToCheck) throws IOException, SQLException {
 		int stateOption = 0;
+		
+		System.out.println("These are the animals living in your habitat.");
+		List<Animal> animalsInHabitat = vetMan.getAnimalsInHabitat(habitatToCheck.getName());
+		System.out.println(animalsInHabitat);
+		
+		Animal animalToCheck = KeyboardInput.askForAnimalFromHabitat(habitatToCheck);
+		//should be something to not leave the habitat until all animals are checked
+		//attribute for habitat for lastChecked when done?
 		
 		do {
 			System.out.println("Please select if there has been a change on the state of the animal: "+ "\n"
@@ -170,10 +230,10 @@ public class KeyboardInput {
 				
 			switch (stateOption) {
 			case 1:
-				//TODO animal.setReleaseDate();
+				 vetMan.reportAnimalState(stateOption, animalToCheck);
 				break;
 			case 2:
-				//TODO animal.setDeathDate();
+				vetMan.reportAnimalState(stateOption, animalToCheck);
 				break;
 			case 3: 
 				System.out.println("This animal will still stay at the zoo."+ "\n"
@@ -183,29 +243,37 @@ public class KeyboardInput {
 				String changeChoice = Utils.readLine();
 				
 				if (changeChoice.equals("a") ) {
-					diagnosisSubMenu(animalToCheck);
+					KeyboardInput.firstDiagnosisSubMenu(animalToCheck);
 				} else if(changeChoice.equals("b")) {
 					System.out.println("The animal will continue its treatment.");
 					break;	
 				} else {
 					System.out.println("Error, nonvalid input");
 				}
-				
-				
+		
 				break;
 			case 4:
 				break;
 			default: 
 				break;
-			
 			}
+			
 		} while(stateOption != 4);
 		
 	}
+	//
+	//
+	////////////////////////METODOS DE PAULA: FIN///////////////////////////////////////////////////////////////////////////////
+
+	
+	public static List<Animal> storeAnimals = new LinkedList<Animal>();
 	
 	
+	//esto ^ ya no hace falta, no? Si estais de acuerdo borradlo - Paula
 	
-	public static List<Animal> storeAnimals=new LinkedList<Animal>();
+	public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
+	//	ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
+	
 	
 	//No deberia hacer un constructor vacio primero??
 	
@@ -215,39 +283,21 @@ public class KeyboardInput {
 	
 	
 	
-	
-	public static boolean isThisAnAnimal (String unAnimal) {
+	public static boolean isThisAnAnimal (String unAnimal) { //Esto no seria una excpecion mejor? - Paula <3
 		boolean realAnimal= false;
 		
-		// .values() devuelve un array con los valores del enum
 		
-		 for( typesOfAnimalsInTheZoo oneType: typesOfAnimalsInTheZoo.values()) {
+		 for( int i=0; i<typesOfAnimalsInTheZoo.size(); i++) {
 			 
-			 if (oneType.equals(unAnimal)){
-				 realAnimal= true;
-				 break;
-			 } 
+			 if(unAnimal.compareTo(typesOfAnimalsInTheZoo.get(i))==0) {
+				 realAnimal=true;
+				 Animal.type=typesOfAnimalsInTheZoo.get(i);
+			 }
 		 }
 		
-		
-		return realAnimal;
-		
-	}
-	
-	public static typesOfAnimalsInTheZoo whichType(String unAnimal) {
-		Animal.typesOfAnimalsInTheZoo returnType = null;
-		
-		for( typesOfAnimalsInTheZoo oneType: typesOfAnimalsInTheZoo.values()) {
-			 
-			 if (oneType.equals(unAnimal)){
-				 returnType= oneType;
-				 break;
-			 } 
-		 }
-		
-		return returnType;
-		
-	}
+		return realAnimal;	
+	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
+	// ya que estamos, marcamos el tipo de animal que es
 	
 	
 	
@@ -256,12 +306,125 @@ public class KeyboardInput {
 		
 	}
 	
+
+	
+	public static void puttingIdsAnimals(Animal unAnimal) {
+		int unId;
+		
+		unId= storeAnimals.indexOf(unAnimal);
+		Animal.id=unId;
+		System.out.print("\n"+"id del animal:"+Animal.id+"\n");
+		
+		
+	}
 	
 	
-	
-	
-	
-	
+public static Habitat askForHabitat() throws IOException {
+		
+		System.out.println("These are the habitats existent in our recovery center. Please choose the Id of one:");
+		Menu.dbman.printHabitatsNamesAndId();
+		Integer habitatId = Utils.readInt();
+		try {
+			Menu.dbman.getHabitatId(habitatId);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		Habitat habitat = Menu.dbman.getHabitat(habitatId);
+		return habitat;
+	}
 	
 
+public static void main(String[] args) {
+	
+ typesOfAnimalsInTheZoo.add("giraffe");
+ typesOfAnimalsInTheZoo.add("elephant");
+ 
+		boolean exito = false;
+		exito= isThisAnAnimal("giraffe");
+		
+		if(exito==true) {
+			System.out.print("The animal exits in the database"+"\n");
+			 
+			
+			Date enterDate= LocalDate.of(2020,05,05 ) ; //Ahora esto da errores porque no usamos LocalDate, voy a averiguar si esto es verdad! yo me ocupo - Paula
+			
+			    Animal infoAnimal= new Animal("giraffe", "Julia", enterDate);
+			    KeyboardInput.addAnimal(infoAnimal);
+			    System.out.print(Animal.id +"\n");
+			    System.out.print("Antes de meter el id"+Animal.id+"\n");
+			    KeyboardInput.puttingIdsAnimals(infoAnimal);
+			    System.out.print("Despues de meter el id"+Animal.id+"\n\n");
+			    
+			    
+			    Animal infoAnimal1= new Animal("elephant", "dumbo", enterDate);
+			    KeyboardInput.addAnimal(infoAnimal1);
+			    System.out.print(Animal.type +"\n"+Animal.name+"\n"+Animal.enterDate+"\n");
+			    System.out.print("Antes de meter el id "+Animal.id+"\n");
+			    KeyboardInput.puttingIdsAnimals(infoAnimal1);
+			    System.out.print("Despues de meter el id "+Animal.id+"\n\n");
+			    
+
+			    Animal infoAnimal3= new Animal("giraffe", "Paula", enterDate);
+			    KeyboardInput.addAnimal(infoAnimal3);
+			    System.out.print(Animal.id +"\n");
+			    System.out.print("Antes de meter el id"+Animal.id+"\n");
+			    KeyboardInput.puttingIdsAnimals(infoAnimal3);
+			    System.out.print("Despues de meter el id"+Animal.id+"\n\n");
+			    
+			    
+			    System.out.print("\nListamos los tipos de animales:\n");
+	            for (int i = 0; i <typesOfAnimalsInTheZoo.size() ; i++) {
+	                System.out.print(typesOfAnimalsInTheZoo.get(i)+"\n");
+	            }
+	            
+	            
+	            System.out.print("\nListamos la info de los animales que tenemos:\n");
+	            for (int i = 0; i <storeAnimals.size() ; i++) {
+	                System.out.print(storeAnimals.get(i)+"\n");
+	            }
+			} 
+		}
+
+
+public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) throws IOException {
+
+		
+		if(stateOption == 4) {
+			//TODO habitatToChange.setLastCleaned();
+		}
+		else {
+			//TODO habitatToChange.setWaterLevel();
+		}
+		
+	}
+
+
+public static void drugAdminSubMenu(Habitat habitat, Integer stateOption) throws IOException {
+
+	
+	switch (stateOption) {
+	case 1:
+		habitat.getAnimals();
+		//TODO bucle que le vaya dando de comer a cada animal de la lista .feedAnimal(); //boolean?
+		break;
+	case 2:
+		//TODO bucle que le vaya bañando a cada animal de la lista .batheAnimal(); //boolean?
+		break;
+	case 3: 
+		// TODO bucle que le vaya dando las drugs a cada animal de la lista .drugAdministrationToAnimal(Animal animal); //boolean?
+		break;
+		
+	default: 
+		break;
+	
+		}
+	}
 }
+
+
+
+
+
+

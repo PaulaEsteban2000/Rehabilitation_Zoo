@@ -27,13 +27,12 @@ public class Illness implements Serializable{
 	}*/
 	
 	
-	public Illness(String name, Boolean quarantine, Boolean prothesis, Integer drug_id, List<Animal> animals) {
+	public Illness(String name, Boolean quarantine, Boolean prothesis, Integer drug_id) {
 		super();
 		this.name = name;
 		this.quarantine = quarantine;
 		this.prothesis = prothesis;
 		this.drug_id = drug_id;
-		this.animals = new ArrayList<Animal>();
 	}
 	
 	public Illness (Integer id, String name, Boolean quarantine, Boolean prothesis) {
