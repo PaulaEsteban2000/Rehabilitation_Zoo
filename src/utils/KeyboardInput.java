@@ -15,6 +15,7 @@ import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.ui.Menu;
 
 public class KeyboardInput {
 	
@@ -53,6 +54,7 @@ public class KeyboardInput {
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
 		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	
 	}
 	//
 	//
@@ -266,20 +268,8 @@ public class KeyboardInput {
 	////////////////////////METODOS DE PAULA: FIN///////////////////////////////////////////////////////////////////////////////
 
 	
-	public static List<Animal> storeAnimals = new LinkedList<Animal>();
-	
-	
-	//esto ^ ya no hace falta, no? Si estais de acuerdo borradlo - Paula
-	
 	public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
 	//	ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
-	
-	
-	//No deberia hacer un constructor vacio primero??
-	
-	//public KeyboardInput() {
-	//	KeyboardInput.storeAnimals=new LinkedList<Animal>();
-	//}
 	
 	
 	
@@ -299,24 +289,7 @@ public class KeyboardInput {
 	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
 	// ya que estamos, marcamos el tipo de animal que es
 	
-	
-	
-	public static void addAnimal(Animal unAnimal) {
-		KeyboardInput.storeAnimals.add(unAnimal);
-		
-	}
-	
 
-	
-	public static void puttingIdsAnimals(Animal unAnimal) {
-		int unId;
-		
-		unId= storeAnimals.indexOf(unAnimal);
-		Animal.id=unId;
-		System.out.print("\n"+"id del animal:"+Animal.id+"\n");
-		
-		
-	}
 	
 	
 public static Habitat askForHabitat() throws IOException {
@@ -336,7 +309,7 @@ public static Habitat askForHabitat() throws IOException {
 	}
 	
 
-public static void main(String[] args) {
+/*public static void main(String[] args) {
 	
  typesOfAnimalsInTheZoo.add("giraffe");
  typesOfAnimalsInTheZoo.add("elephant");
@@ -385,7 +358,7 @@ public static void main(String[] args) {
 	                System.out.print(storeAnimals.get(i)+"\n");
 	            }
 			} 
-		}
+		}*/
 
 
 public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) throws IOException {

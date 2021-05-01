@@ -26,15 +26,16 @@ public class AdministratorSQL implements AdministratorManager{
 	@Override
 	public void addAnimal(Animal animal) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
-			//Id is chosen by the database
+			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); //JDBCManager.c porque asi tenemos una sola conexion abierta en la clase que se encarga de la DB - Paula
-			String sql = "INSERT INTO animals (enterDate,habitat_id,foodPeriod,feedingType,lastBath,lastFed,deathDate,freedomDate,type,name)";
-			sql+= "VALUES ('" + animal.getEnterDate() + "','" + animal.getHabitat_id() + "','" + animal.getFoodPeriod() + "','" 
-			+ animal.getFeedingType() + "','" + animal.getLastBath() + "','" + animal.getLastFed() + "','" + animal.getFreedomDate() + "','"
-			+ animal.getType() +  "','" + animal.getName() + ")";
+			String sql = "INSERT INTO animals (enterDate,feedingType,lastBath,lastFed,deathDate,freedomDate,type,name)";
+			sql+= "VALUES ('" + animal.getEnterDate() + "','" + animal.getHabitat_id() + "','" + animal.getFeedingType() + "','" +
+			animal.getLastBath() + "','" + animal.getLastFed() + "','" + animal.getFreedomDate() + "','"+ animal.getType() +  "','" + animal.getName() + ")";
+			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			stmt.close();
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

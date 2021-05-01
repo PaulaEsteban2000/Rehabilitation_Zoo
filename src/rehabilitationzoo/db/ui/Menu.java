@@ -11,6 +11,7 @@ import java.util.List;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.FeedingType;
 import rehabilitationzoo.db.pojos.Habitat;
 import utils.KeyboardInput;
 import utils.Utils;
@@ -148,9 +149,7 @@ public class Menu {
 					switch(manageOfAnimals) {
 					case 1:
 						//ADD ANIMAL (INSERT)
-						//ARRAYLIST DONDE VAMOS A IR ALMACENANDO LOS ANIMALES
-						//ADEMAS LOS ID DE LOS ANIMALES SERA IGUAL A LA POSICION EN EL ARRAYLIST
-			                
+						   
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = Utils.readLine();
 							
@@ -158,7 +157,7 @@ public class Menu {
 							//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
 							if(exito==true) {
 		
-							    String unAnimal= KeyboardInput.whichType(readAnimal);
+							  //  String unAnimal= KeyboardInput.whichType(readAnimal);
 							    
 							    System.out.print("\n"+"Put a name to the animal");
 							    String name = Utils.readLine();
@@ -176,26 +175,14 @@ public class Menu {
 							    
 							    Date enterDate= new Date (year,  month, day) ;
 							    
+							    
+							    Animal anAnimal = new Animal(enterDate, Animal.feedingType, Animal.lastBath, Animal.lastFed,
+							    		Animal.deathDate, Animal.freedomDate, Animal.type, name);
+							    
+							    KeyboardInput.addAnimal(anAnimal); //DIRECTLY WE HAVE TO ADD IT TO THE TABLES IN SQL
+							    KeyboardInput.puttingIdsAnimals(anAnimal);
 
-							    /*this.animalType= animalType;
-								this.name= name;
-								
-								this.enterDate = enterDate;
-								this.habitat_id = habitat_id;
-								this.foodPeriod = foodPeriod;
-								this.feedingType = feedingType;
-								this.lastBath = lastBath;
-								this.lastFed = lastFed;
-								this.deathDate = deathDate;
-								this.freedomDate = freedomDate;*/
-						
-							    Animal infoAnimal= new Animal(unAnimal, name, enterDate);
-								KeyboardInput.addAnimal(infoAnimal); 
-
-							    Animal infoAnimal= new Animal(readAnimal, name, enterDate);
-							    KeyboardInput.addAnimal(infoAnimal);
-							    KeyboardInput.puttingIdsAnimals(infoAnimal);
-								
+							    
 								System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							}
 							else {

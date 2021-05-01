@@ -12,15 +12,15 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private static final long serialVersionUID = 723080679524606900L; //"signature" for this class, all objects in the class will have the same one
 																		// automatically turning "Animal" into a file (when calling a specific method)
 	
-	public  Integer id; //No need to be in constructor
+	public static  Integer id; //No need to be in constructor
 	public  Date enterDate;
 	private Integer habitat_id; //fk to habitat the animal lives in
-	private FeedingType feedingType;
-	private Date lastBath;	
-	private Date lastFed;
-	private Date deathDate;
-	private Date freedomDate;
-	private String type; //elephant, giraffe...
+	public static FeedingType feedingType;
+	public static Date lastBath;	
+	public static Date lastFed;
+	public static Date deathDate;
+	public static Date freedomDate;
+	public static String type; //elephant, giraffe...
 	public  String name; //for easy access when still do not have a "barcode reader"
 	
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
@@ -50,6 +50,19 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.name = name;
 	}
 
+	
+	public Animal(Date enterDate, FeedingType feedingType, Date lastBath, Date lastFed,
+			Date deathDate, Date freedomDate, String type, String name) {
+		super();
+		this.enterDate = enterDate;
+		this.feedingType = feedingType;
+		this.lastBath = lastBath;
+		this.lastFed = lastFed;
+		this.deathDate = deathDate;
+		this.freedomDate = freedomDate;
+		this.type = type;
+		this.name = name;
+	}
 	
 	@Override //To compare ids
 	public int hashCode() { //if two objects have the same id, they'll have the same hashCode
