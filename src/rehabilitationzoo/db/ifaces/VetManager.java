@@ -5,6 +5,7 @@ import java.util.List;
 
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Drug;
+import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 
 public interface VetManager {
@@ -34,34 +35,34 @@ public interface VetManager {
 	
 	//2. ANIMAL CHECK - daily
 			
-		//a. animalCheckSubMenu
+		//a. askForHabitatToCheckItsAnimals	
+			public List<String> getAllHabitatsNames();
+			
+		//b. animalCheckSubMenu
 			public void reportAnimalState(Integer option, Animal animal); //stays, dies, released
-	
+				public List<String> getAnimalTypesInAHabitat(Habitat habitat);
+				public List<Animal> getAnimalsGivenHabitatAndType(String habitatName, String animalType);
+				//public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch); is used here as well
+				//in the future this will only need an id read by a barcorde reader
 
 	
+				
 	///////////////////////////////////////////////////////////////////////////////////
 			
 	public List<String> getDrugTypes();
 	public List<Illness> getAnimalIllnesses();
-	
-	
 		
-		public Illness setIllnessOnAnimal(String name); //remember each can have more than one
+	public Illness setIllnessOnAnimal(String name); //remember each can have more than one
+	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
+		//and now setting the rest of the parameters for the drug (that will be empty until now)...
+		//set treatmentDuration, periodBetweenDosis, dosis 
+	public void drugPrescription(Drug drug); //links drug to animal //animal can be taking many
 			
-			public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
-				//and now setting the rest of the parameters for the drug (that will be empty until now)...
-				//set treatmentDuration, periodBetweenDosis, dosis 
-			public void drugPrescription(Drug drug); //links drug to animal //animal can be taking many
-			
-			public void setQuarantineDays(Integer numberOfDays); //days to be excluded
-			
+	Integer getHabitatIdByName(String habitatName) throws SQLException;
+	List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException;
 	
 		
-		///METODOS CREADOS DESPUES A LA FUERZA PARA ORDENAR
-		
-		Integer getHabitatIdByName(String habitatName) throws SQLException;
-		
-		List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException;
+
 		
 	
 		
