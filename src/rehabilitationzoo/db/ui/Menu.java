@@ -1,6 +1,8 @@
 package rehabilitationzoo.db.ui;
 
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -9,21 +11,104 @@ import java.util.Calendar;
 import java.util.List;
 
 import rehabilitationzoo.db.ifaces.DBManager;
+import rehabilitationzoo.db.ifaces.UserManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
+import rehabilitationzoo.db.jpa.JPAUserManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Habitat;
+import rehabilitationzoo.db.pojos.users.Role;
+import rehabilitationzoo.db.pojos.users.User;
 import utils.KeyboardInput;
 import utils.Utils;
 
 public class Menu {
 	
-	public static DBManager dbman = new JDBCManager();	
+	public static DBManager dbman = new JDBCManager();			//should be private
+	public static UserManager userMan = new JPAUserManager(); 	//should be private
 	
+	//TODO all methods here should be private if we can
 	
 	public static void main(String[] args) throws Exception, IOException{
 	
 		dbman.connect();
+		userMan.Connect();
 	
+		do {
+			//LOGGING IN
+			System.out.println("Choose an option: ");
+			System.out.println("1. Resgister ");
+			System.out.println("2. Login ");
+			System.out.println("0. Exit the program ");
+			int choice = Utils.readInt();
+			
+	        switch (choice) {
+	            case 1:
+	            	register();
+	                break;
+	                
+	            case 2: 
+	            	login();
+	            	break;
+	            	
+	            case 0:
+	            	dbman.disconnect();
+	            	userMan.Disconnect();
+	            	System.exit(0);
+	            	break;
+	            	
+	            default:
+	                System.out.println("Error, nonvalid input.");
+	                break;
+	        }
+        
+		}while (true);
+		
+	}
+	
+	public static void register() throws IOException, Exception {
+		System.out.println("Please type in your email address:");
+		String email = Utils.readLine();
+		//We can ask for it twice, for checking, but Rodrigo does not like it much
+		
+		System.out.println("Now write your password:");
+		String password = Utils.readLine();
+		
+		System.out.println(userMan.getRoles());
+		System.out.println("Type the chosen role ID: ");
+		int id = Utils.readInt();
+		Role role = userMan.getRole(id);
+		
+		MessageDigest md = MessageDigest.getInstance("MD5"); //for changing the password into a different language which is MD5
+		md.update(password.getBytes());
+		byte[] hash = md.digest(); //the hash that is the one that translates
+		
+		User user = new User (email, hash, role);
+		userMan.newUser(user);
+	}
+	
+	public static void login() throws IOException, SQLException {
+		System.out.println("Please type in your email address:");
+		String email = Utils.readLine();
+		
+		System.out.println("Now write your password:");
+		String password = Utils.readLine();
+		
+		User user = userMan.checkPassword(email, password); //we do not need a hash bc of the method we are using
+		if (user == null) {
+			System.out.println("Wrong email of password");
+		}else if (user.getRole().getName().equalsIgnoreCase("vet")) {
+			vetOption1();
+		}else if (user.getRole().getName().equalsIgnoreCase("zookeeper")) {
+			zooKeeperOption3();
+		}else if (user.getRole().getName().equalsIgnoreCase("admin")) {
+			adminOption2();
+		}
+		
+		
+	}
+	
+	public static void oldMenu() throws Exception, IOException{
+		
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");
@@ -45,19 +130,20 @@ public class Menu {
 	            case 3: 
 	            	zooKeeperOption3();
 	            	break;
+	            	
 	            case 0:
 	            	dbman.disconnect();
+	            	userMan.Disconnect();
 	            	System.exit(0);
 	            	break;
+	            	
 	            default:
 	                System.out.println("Error, nonvalid input.");
 	                break;
 	        }
         
 		}while (true);
-		
 	}
-	
  	
 	public static void vetOption1() throws IOException, SQLException {
  		int vetMainChoice;

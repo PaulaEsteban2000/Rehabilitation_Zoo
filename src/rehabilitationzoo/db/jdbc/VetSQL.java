@@ -27,8 +27,8 @@ public class VetSQL implements VetManager{
 		List<String> animalTypes = new ArrayList<String>();
 		
 		try {
-		String sql = "SELECT type DISTINCT FROM animals"; 				//TODO DISTINCT esta bien??
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	//TODO esta bien??
+		String sql = "SELECT type FROM animals_characteristics"; 			
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 		ResultSet rs = prep.executeQuery();
 		
 		while (rs.next()) { //like hasNext
@@ -51,12 +51,14 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenType(String animalType) {
+		kk ni warra porque no hay characteristics_id en animals
+		
 		List<Animal> animals = new ArrayList<Animal>();
 			
 			try {
-			String sql = "SELECT * FROM animals WHERE type = ?"; 				//TODO esta bien??
+			String sql = "SELECT * DISTINCT FROM animals WHERE type = ?"; 				// esta bien??
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-			prep.setString(1, "%" + animalType + "%");							//TODO esta bien??
+			prep.setString(1, "%" + animalType + "%");							// esta bien??
 			ResultSet rs = prep.executeQuery();
 			
 			while (rs.next()) { //like hasNext
@@ -90,6 +92,8 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch) {
+		kk ni warra porque no hay characteristics_id en animals
+		
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {
@@ -136,7 +140,7 @@ public class VetSQL implements VetManager{
 			String sql = "UPDATE illnesses SET prothesis=?, WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + bol + "%");
-			s.setString(1, "%" + getIllnessIdByName(illness) + "%");
+			s.setString(2, "%" + getIllnessIdByName(illness) + "%");
 			s.executeUpdate();
 			s.close();
 
@@ -177,9 +181,9 @@ public class VetSQL implements VetManager{
 		Integer id = null;
 		
 		try {
-			String sql = "SELECT id FROM illnesses WHERE name LIKE ?"; 		//TODO esta bien??
+			String sql = "SELECT id FROM illnesses WHERE name LIKE ?"; 		// esta bien??
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-			prep.setString(1, "%" + illness.getName() + "%");				//TODO esta bien??
+			prep.setString(1, "%" + illness.getName() + "%");				// esta bien??
 			ResultSet rs = prep.executeQuery();
 			
 			while (rs.next()) { //like hasNext
@@ -201,9 +205,9 @@ public class VetSQL implements VetManager{
 		Integer id = null;
 			
 			try {
-				String sql = "SELECT id FROM animals WHERE name LIKE ?"; 		//TODO esta bien??
+				String sql = "SELECT id FROM animals WHERE name LIKE ?"; 		// esta bien??
 				PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-				prep.setString(1, "%" + animal.getName() + "%");				//TODO esta bien??
+				prep.setString(1, "%" + animal.getName() + "%");				// esta bien??
 				ResultSet rs = prep.executeQuery();
 				
 				while (rs.next()) { //like hasNext
@@ -247,7 +251,7 @@ public class VetSQL implements VetManager{
 			String sql = "UPDATE illnesses SET quarantine=?, WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + bol + "%");
-			s.setString(1, "%" + getIllnessIdByName(illness) + "%");
+			s.setString(2, "%" + getIllnessIdByName(illness) + "%");
 			s.executeUpdate();
 			s.close();
 
@@ -262,9 +266,9 @@ public class VetSQL implements VetManager{
 		Integer id = null;
 			
 			try {
-				String sql = "SELECT id FROM drugTypes WHERE type LIKE ?"; 	//TODO esta bien??
+				String sql = "SELECT id FROM drugTypes WHERE type LIKE ?"; 	// esta bien??
 				PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-				prep.setString(1, "%" + type + "%");						//TODO esta bien??
+				prep.setString(1, "%" + type + "%");						// esta bien??
 				ResultSet rs = prep.executeQuery();
 				
 				while (rs.next()) { //like hasNext
@@ -291,8 +295,8 @@ public class VetSQL implements VetManager{
 		List<String> habitatNames = new ArrayList<String>();
 		
 		try {
-		String sql = "SELECT * DISTINCT FROM habitats"; 			    //TODO DISTINCT esta bien??
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	//TODO esta bien??
+		String sql = "SELECT * DISTINCT FROM habitats"; 			    // DISTINCT esta bien??
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	// esta bien??
 		ResultSet rs = prep.executeQuery();
 		
 		while (rs.next()) { //like hasNext
@@ -360,6 +364,8 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<String> getAnimalTypesInAHabitat(Habitat habitat){
+		kk ni warra porque no hay characteristics_id en animals
+		
 		List<String> types = new ArrayList<String>();
 		
 		try {
@@ -388,6 +394,8 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenHabitatAndType(String habitatName, String animalType) {
+		kk ni warra porque no hay characteristics_id en animals
+		
 		List<Animal> animals = new ArrayList<Animal>();
 			
 			try {
@@ -440,9 +448,9 @@ public class VetSQL implements VetManager{
 		Integer id = null;
 		
 		try {
-			String sql = "SELECT id FROM habitats WHERE name LIKE ?"; 		//TODO esta bien??
+			String sql = "SELECT id FROM habitats WHERE name LIKE ?"; 		// esta bien??
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-			prep.setString(1, "%" + habitatName + "%");						//TODO esta bien??
+			prep.setString(1, "%" + habitatName + "%");						// esta bien??
 			ResultSet rs = prep.executeQuery();
 			
 			while (rs.next()) { //like hasNext
@@ -464,9 +472,9 @@ public class VetSQL implements VetManager{
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {
-		String sql = "SELECT * FROM animals WHERE habitat_id = ?"; 				//TODO esta bien??
+		String sql = "SELECT * FROM animals WHERE habitat_id = ?"; 				// esta bien??
 		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-		prep.setString(1, "%" + getHabitatIdByName(habitatNameToSearch) + "%");	//TODO esta bien??
+		prep.setString(1, "%" + getHabitatIdByName(habitatNameToSearch) + "%");	// esta bien??
 		ResultSet rs = prep.executeQuery();
 		
 		while (rs.next()) { //like hasNext
@@ -502,8 +510,8 @@ public class VetSQL implements VetManager{
 		List<String> drugTypes = new ArrayList<String>();
 			
 			try {
-			String sql = "SELECT type DISTINCT FROM drugTypes"; 			//TODO DISTINCT esta bien??
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	//TODO esta bien??
+			String sql = "SELECT type DISTINCT FROM drugTypes"; 			// DISTINCT esta bien??
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	// esta bien??
 			ResultSet rs = prep.executeQuery();
 			
 			while (rs.next()) { //like hasNext
@@ -592,8 +600,8 @@ public class VetSQL implements VetManager{
 		Integer numberOfIllnesses = null;
 		
 		try {
-			String sql = "SELECT type COUNT FROM illnesses WHERE ????"; 	//TODO COUNT esta bien??
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	//TODO esta bien??
+			String sql = "SELECT type COUNT FROM illnesses WHERE ????"; 	// COUNT esta bien??
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	// esta bien??
 			ResultSet rs = prep.executeQuery();
 			
 			while (rs.next()) { //like hasNext
@@ -610,10 +618,14 @@ public class VetSQL implements VetManager{
 		return numberOfIllnesses;
 		
 	}
+	
+	public List<String> getDrugNamesGivenType(String drugName){
+		return null;
+	}
 
 	//TODO este tampoco
 	@Override
-	public Illness setIllnessOnAnimal(String name) {
+	public Illness setIllnessOnAnimal(Illness illness) {
 		// TODO Auto-generated method stub
 		return null;
 	}

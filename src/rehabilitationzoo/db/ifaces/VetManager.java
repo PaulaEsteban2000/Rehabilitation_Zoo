@@ -29,6 +29,8 @@ public interface VetManager {
 			public Integer getNumberOfIllnessesAnAnimalHas();
 			void addIllness(Illness illness);
 			public void illnessQuarantine (Boolean bol, Illness illness); 
+			public List<String> getDrugTypes();
+			public List<String> getDrugNamesGivenType(String drugName);
 			public Integer getTypeOfDrugId(String type);
 				//public Integer getIllnessIdByName(Illness illness); is used here as well
 	
@@ -49,10 +51,10 @@ public interface VetManager {
 				
 	///////////////////////////////////////////////////////////////////////////////////
 			
-	public List<String> getDrugTypes();
+	
 	public List<Illness> getAnimalIllnesses();
 		
-	public Illness setIllnessOnAnimal(String name); //remember each can have more than one
+	public Illness setIllnessOnAnimal(Illness illness); //remember each can have more than one
 	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
 		//and now setting the rest of the parameters for the drug (that will be empty until now)...
 		//set treatmentDuration, periodBetweenDosis, dosis 

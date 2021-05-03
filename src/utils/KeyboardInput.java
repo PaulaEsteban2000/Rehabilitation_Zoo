@@ -37,21 +37,20 @@ public class KeyboardInput {
 		
 		return habitatToCheck;
 	}
-	
 	//
 	//
 	public static Animal askForAnimal() throws IOException {
 		//TODO solo poder acceder a animales con freedom y death date NULL
 		
 		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
-		System.out.println("These are the types of animals existent in our recovery center. Please choose one or enter a new one:");
+		System.out.println("These are the types of animals we take care of in our recovery center. Please choose one:");
 		List<String> types = vetMan.getAnimalTypesInZoo();
 		System.out.println(types);
 		String animalType = Utils.readLine();
 		
 		System.out.println("These are the names of the animals under the given type. Please choose the one:");
 		List<Animal> animalsGivenType = vetMan.getAnimalsGivenType(animalType);
-		System.out.println(animalsGivenType);
+		printAnimalNames(animalsGivenType);
 		String animalName = Utils.readLine();
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
@@ -74,6 +73,13 @@ public class KeyboardInput {
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
 		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	}
+	//
+	//
+	public static void printAnimalNames(List<Animal> animalsGivenType) {
+		for (int a = 0; a < animalsGivenType.size(); a++) {
+			System.out.println(animalsGivenType.get(a).getName());
+		}
 	}
 	//
 	//
@@ -114,8 +120,12 @@ public class KeyboardInput {
 					String bodyPart = Utils.readLine();
 					String name = bodyPart + "_prothesis";
 					Illness illness = new Illness(name, false, true, null);
-					//Add illness and/or link to patient
-					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception?
+					//TODO al igual deberia meterlo en la db y volverlo a recibir ya con el id relleno
+					//NATALIA, MARIA: preguntar juntas what if we add an existent illness?? -> exception?
+					
+					//TODO Add illness and/or link to patient
+					vetMan.addIllness(illness); //esto aqui bien?
+					vetMan.setIllnessOnAnimal(illness);
 					
 					vetMan.prothesisInstallation(true, illness, animalToDiagnose); //here the release date should be changed if parameter true
 					System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days.");
@@ -154,16 +164,12 @@ public class KeyboardInput {
 		Drug drug = null ;
 		
 		for (int a = 0; a < numberOfIllnesses; a++) {
-			System.out.println("These are the illnesses we can take care of. Please choose one: ");
-			//TODO metodo que imprima las enfermedades que podemos curar de la lista
-			//System.out.println(illnessesWeCanCure);
-			//TODO check for correct spelling (in every other case as well)
-			
+
 			System.out.println("This is the illness number " + vetMan.getNumberOfIllnessesAnAnimalHas() + " your animal has.");
 			System.out.println("What is the name of the new illness you just diagnosed?: new illness input number" + (a+1));
 			nameOfIllness = Utils.readLine(); //TODO check spelling
 			
-			Illness newIllness = new Illness(nameOfIllness, null, false, null);
+			Illness newIllness = new Illness(nameOfIllness, null);
 			vetMan.addIllness(newIllness);
 			//TODO setIllnessOnAnimal(String name)
 			
@@ -172,13 +178,11 @@ public class KeyboardInput {
 				+ "b. No." + "\n");
 				String quarantineChoice = Utils.readLine();
 					if (quarantineChoice.equals("a")) {
+						newIllness.setQuarantine(true);
 						vetMan.illnessQuarantine(true, newIllness);
-						//NOT KNOW IF NEEDED ----...
-						System.out.println("How many days should the animal be ecxluded?");
-						quarantineDays = Utils.readInt();
-						//...----
 						System.out.println("The animal will be put int quarantine.");
 					} else if(quarantineChoice.equals("b")) {
+						newIllness.setQuarantine(false);
 						vetMan.illnessQuarantine(false, newIllness);
 						System.out.println("The animal will not be put int quarantine.");
 					} else {
@@ -191,12 +195,18 @@ public class KeyboardInput {
 				String drugsChoice = Utils.readLine();
 					if (drugsChoice.equals("a") ) {
 						System.out.println("These are the types of medicines we have in the center at the moment: ");
-						//TODO imprimir tipos de medicamentos disponibles de lista o como?
+						List<String> drugTypes = vetMan.getDrugTypes();
+						System.out.println(drugTypes);
+						//TODO cambiar relacion de drug y drugType a 1-n
 						
 						System.out.println("What type of drug will the animal need to take?");
 						String drugType = Utils.readLine();
 						//TODO check for correct spelling (in every other case as well)
 						
+						
+						System.out.println("These are the medicines we have for that type: ");
+						List<String> drugNames = vetMan.getDrugNamesGivenType(drugType);
+						System.out.println(drugNames);
 						System.out.println("Please type in the name of the drug to administrate: ");
 						String nameOfDrug = Utils.readLine();
 						
@@ -204,16 +214,15 @@ public class KeyboardInput {
 						Integer treatmentDuration = Utils.readInt();
 						
 						System.out.println("What will the period between the dosis be? Please type the number of days between each dosis");
-						//TODO check if this date supports adding and subtracting days/hours
-						//this should probably be fixed on each drug?
+						//TODO this should probably be fixed on each drug?
 						Integer periodBetweenDosis = Utils.readInt();
 						
 						System.out.println("How many grams of the medicine will it need to take everyday?");
 						Integer dosis = Utils.readInt();
 						
 						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, vetMan.getTypeOfDrugId(drugType), dosis);
-						//TODO animal.addDrug(); 
-						//TODO drug to illness??
+						//TODO vetMan.drugPrescription(); 
+						//TODO drug to illness?? how are they related?
 					} else if(drugsChoice.equals("b") ) {
 						break;	
 					} else {
