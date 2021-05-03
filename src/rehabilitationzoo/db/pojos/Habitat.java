@@ -13,21 +13,21 @@ public class Habitat implements Serializable {
 	private static final long serialVersionUID = 1947022899735841747L;
 
 	private Integer id; //No need to be in constructor
-	public String name;
+	private String name;
 	private Date lastCleaned;
-	private Float waterLevel;
+	private Date waterTank;
 	private Integer temperature;
 	private LightType light;
 	
 	private List<Animal> animals; 
 	private List<GroundType> grounds; //cambio post presentacion dado por rodrigo
 	
-	public Habitat(String name, Date lastCleaned, Float waterLevel, Integer temperature,
+	public Habitat(String name, Date lastCleaned, Date waterTank, Integer temperature,
 			LightType light, List<Animal> animals, List<GroundType> grounds) {
 		super();
 		this.name = name;
 		this.lastCleaned = lastCleaned;
-		this.waterLevel = waterLevel;
+		this.waterTank = waterTank;
 		this.temperature = temperature;
 		this.light = light;
 		
@@ -35,12 +35,12 @@ public class Habitat implements Serializable {
 		this.grounds = new ArrayList<GroundType>();
 	}
 	
-	public Habitat(Integer id, String name, Date lastCleaned, Float waterLevel, Integer temperature, LightType light) {
+	public Habitat(Integer id, String name, Date lastCleaned, Date waterTank, Integer temperature, LightType light) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.lastCleaned = lastCleaned;
-		this.waterLevel = waterLevel;
+		this.waterTank = waterTank;
 		this.temperature = temperature;
 		this.light = light;
 	}
@@ -96,13 +96,13 @@ public class Habitat implements Serializable {
 	}
 
 
-	public Float getWaterLevel() {
-		return waterLevel;
+	public Date getWaterTank() {
+		return waterTank;
 	}
 
 
-	public void setWaterLevel(Float waterLevel) {
-		this.waterLevel = waterLevel;
+	public void setWaterTank(Date waterTank) {
+		this.waterTank = waterTank;
 	}
 
 

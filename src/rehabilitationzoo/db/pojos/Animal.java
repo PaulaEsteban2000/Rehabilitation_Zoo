@@ -12,16 +12,18 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private static final long serialVersionUID = 723080679524606900L; //"signature" for this class, all objects in the class will have the same one
 																		// automatically turning "Animal" into a file (when calling a specific method)
 	
-	public static  Integer id; //No need to be in constructor
-	public  Date enterDate;
+	private   Integer id; //No need to be in constructor
+	private  Date enterDate;
 	private Integer habitat_id; //fk to habitat the animal lives in
-	//public static FeedingType feedingType;
-	public static Date lastBath;	
-	public static Date lastFed;
-	public static Date deathDate;
-	public static Date freedomDate;
-	//public static AnimalType type; //elephant, giraffe...
-	public   String name; //for easy access when still do not have a "barcode reader"
+	private FeedingType feedingType;
+	private Date lastBath;	
+	private Date lastFed;
+	private Date lastDrug;
+	private Date deathDate;
+	private Date freedomDate;
+	private String type; //elephant, giraffe...
+	private  String name; //for easy access when still do not have a "barcode reader"
+
 	
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
