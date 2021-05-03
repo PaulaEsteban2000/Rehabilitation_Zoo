@@ -12,19 +12,24 @@ public class Worker implements Serializable {
 	 */
 	private static final long serialVersionUID = 1409279678686881422L;
 
-	private Integer id; //No need to be in constructor
-	private String name;
-	private String lastName;
-	private Date hireDate;
-	private Integer salary;
-	private WorkerType type;
 	
-	private List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
+
+
+	public static Integer id; //No need to be in constructor
+	public  String name;
+	public String lastname;
+	public  Date hireDate;
+	public  Float salary;
+	public static WorkerType type;
+	public String whichHabitatDoYouWorkOn;
+	
+	public static List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
 	
 	
-	public Worker(String name, Date hireDate, Integer salary, WorkerType type, List<Animal> animals) {
+	public Worker(String name,String lastname, Date hireDate, Float salary, WorkerType type, List<Animal> animals) {
 		super();
 		this.name = name;
+		this.lastname= lastname;
 		this.hireDate = hireDate;
 		this.salary = salary;
 		this.type = type; 
@@ -32,6 +37,26 @@ public class Worker implements Serializable {
 												//cannot have a List, but an ArrayList (or any other class that implements list)
 	}
 	
+	public Worker (String name, String lastname, Date hireDate, Float salary, WorkerType type) { //VET O ADMINISTRATOR
+		super();
+		this.name = name;
+		this.lastname= lastname;
+		this.hireDate = hireDate;
+		this.salary = salary;
+		this.type = type; 
+		
+	}
+	
+	public Worker (String name, String lastname, Date hireDate, Float salary, WorkerType type,String whichHabitatDoYouWorkOn) { //ESTE ES PARA EL ZOO KEEPER
+		super();
+		this.name = name;
+		this.lastname= lastname;
+		this.hireDate = hireDate;
+		this.salary = salary;
+		this.type = type; 
+		this.whichHabitatDoYouWorkOn =whichHabitatDoYouWorkOn;
+		
+	}
 	
 	/**public Worker(Integer id, String name, Date hireDate) {
 		super();
@@ -111,12 +136,12 @@ public class Worker implements Serializable {
 
 
 	public String getLastName() {
-		return lastName;
+		return lastname;
 	}
 
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLastName(String lastname) {
+		this.lastname = lastname;
 	}
 
 
@@ -130,17 +155,17 @@ public class Worker implements Serializable {
 	}
 
 
-	public Integer getSalary() {
+	public Float getSalary() {
 		return salary;
 	}
 
 
-	public void setSalary(Integer salary) {
+	public void setSalary(Float salary) {
 		this.salary = salary;
 	}
 
 
-	public WorkerType getType() {
+	 	public WorkerType getType() {
 		return type;
 	}
 
@@ -150,6 +175,16 @@ public class Worker implements Serializable {
 	}
 
 
+	public String getwhichHabitatDoYouWorkOn(){
+		return whichHabitatDoYouWorkOn;
+	}
+
+
+	public void setwhichHabitatDoYouWorkOn(String whichHabitatDoYouWorkOn) {
+		this.whichHabitatDoYouWorkOn = whichHabitatDoYouWorkOn;
+	}
+	
+	
 	public List<Animal> getAnimals() {
 		return animals;
 	}
@@ -159,6 +194,7 @@ public class Worker implements Serializable {
 		this.animals = animals;
 	}
 
+	
 
 	@Override
 	public String toString() {

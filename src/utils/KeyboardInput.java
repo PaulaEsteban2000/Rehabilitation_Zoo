@@ -6,17 +6,26 @@ import java.sql.SQLException;
 //>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
 
+import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
+
 import rehabilitationzoo.db.ifaces.ZooKeeperManager;
+
+import rehabilitationzoo.db.jdbc.AdministratorSQL;
+
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.jdbc.VetSQL;
 import rehabilitationzoo.db.jdbc.ZooKeeperSQL;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.Worker;
+import rehabilitationzoo.db.pojos.WorkerType;
+import rehabilitationzoo.db.ui.Menu;
 
 public class KeyboardInput {
 	
@@ -26,12 +35,16 @@ public class KeyboardInput {
 	//Ademas asi podeis ver lo que he hecho por si alguno os sirve (pero no los toqueis sin preguntarme u os corto las manos:) )
 	//
 	//
-	public static VetManager vetMan = new VetSQL();	
+	public static VetManager vetMan = new VetSQL();		
+	public static AdministratorManager adminMan = new AdministratorSQL();
 	//
 	//
 	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
+		System.out.println("These are our actual habitats.");
+		List<String> habitatNames= vetMan.getAllHabitatsNames();
+		System.out.println(habitatNames);
 		System.out.println("Please input the name of the habitat to check its animals: ");
-		String habitatName = Utils.readLine();
+		String name = Utils.readLine();
 		Habitat habitatToCheck = null;
 		
 		return habitatToCheck;
@@ -55,25 +68,39 @@ public class KeyboardInput {
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
 		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	
 	}
 	//
 	//
 	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
 		//TODO solo poder acceder a animales con freedom y death date NULL
 		
-		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
 		System.out.println("These are the types of animals existent in the habitat. Please choose one or enter a new one:");
-		List<String> types = vetMan.getAnimalTypesInZoo();
-		System.out.println(types);
+		List<String> animalsTypesInHabitat = vetMan.getAnimalTypesInAHabitat(habitat);
+		printAnimalTypesInHabitat(animalsTypesInHabitat);
 		String animalType = Utils.readLine();
 		
 		System.out.println("These are the names of the animals under the given type in the habitat. Please choose the one:");
-		List<Animal> animalsGivenType = vetMan.getAnimalsInHabitat(animalType);
-		System.out.println(animalsGivenType);
+		List<Animal> animalsGivenType = vetMan.getAnimalsGivenHabitatAndType(habitat.getName(), animalType);
+		printAnimalNamesInHabitat(animalsGivenType);
 		String animalName = Utils.readLine();
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
 		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	}
+	//
+	//
+	public static void printAnimalTypesInHabitat(List<String> animalsInHabitat) {
+		for (int a = 0; a < animalsInHabitat.size(); a++) {
+			System.out.println(animalsInHabitat.get(a));
+		}
+	}
+	//
+	//
+	public static void printAnimalNamesInHabitat(List<Animal> animalsInHabitat) {
+		for (int a = 0; a < animalsInHabitat.size(); a++) {
+			System.out.println(animalsInHabitat.get(a).getName());
+		}
 	}
 	//
 	//
@@ -101,7 +128,8 @@ public class KeyboardInput {
 					String name = bodyPart + "_prothesis";
 					Illness illness = new Illness(name, false, true, null);
 					//Add illness and/or link to patient
-					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception?
+					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception? 
+					//Pues que no se almacena como una illness nueva
 					
 					vetMan.prothesisInstallation(true, illness, animalToDiagnose); //here the release date should be changed if parameter true
 					System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days.");
@@ -214,12 +242,8 @@ public class KeyboardInput {
 	public static void animalCheckSubMenu(Habitat habitatToCheck) throws IOException, SQLException {
 		int stateOption = 0;
 		
-		System.out.println("These are the animals living in your habitat.");
-		List<Animal> animalsInHabitat = vetMan.getAnimalsInHabitat(habitatToCheck.getName());
-		System.out.println(animalsInHabitat);
-		
 		Animal animalToCheck = KeyboardInput.askForAnimalFromHabitat(habitatToCheck);
-		//should be something to not leave the habitat until all animals are checked
+		//TODO should do something to not leave the habitat until all animals are checked
 		//attribute for habitat for lastChecked when done?
 		
 		do {
@@ -268,20 +292,12 @@ public class KeyboardInput {
 	////////////////////////METODOS DE PAULA: FIN///////////////////////////////////////////////////////////////////////////////
 
 	
-	public static List<Animal> storeAnimals = new LinkedList<Animal>();
 	
 	
-	//esto ^ ya no hace falta, no? Si estais de acuerdo borradlo - Paula
-	
-	public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
+	/*public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
 	//	ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
 	
 	
-	//No deberia hacer un constructor vacio primero??
-	
-	//public KeyboardInput() {
-	//	KeyboardInput.storeAnimals=new LinkedList<Animal>();
-	//}
 	
 	
 	
@@ -296,33 +312,82 @@ public class KeyboardInput {
 				 Animal.type=typesOfAnimalsInTheZoo.get(i);
 			 }
 		 }
-		
+
 		return realAnimal;	
 	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
 	// ya que estamos, marcamos el tipo de animal que es
 	
+		 
+	*/
 	
 	
-	public static void addAnimal(Animal unAnimal) {
-		KeyboardInput.storeAnimals.add(unAnimal);
+	
+	public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
+		adminMan.addAnimal(anAnimal);		
+	}	 
+		 
+		 
+	
+	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
+		adminMan.introducingAnimalsTypes(anAnimalType);
+	}	 
+		
+	
+	public static boolean isThisAnHabitat(String nameHabitat) {
+		boolean success=false;
+		 List<String> weSeeTheHabitats= vetMan.getAllHabitatsNames();
+		 
+			 for(int i = 0; i<weSeeTheHabitats.size(); i++){
+				 if( nameHabitat.equals(weSeeTheHabitats.get(i)) ) {
+					 success=true;
+				 }  
+		 }
+		return success;		
+	}
+	
+	
+	
+	public static void addWorker (Worker worker) {
+		adminMan.introducingWorkers(worker);
 		
 	}
 	
+	public static boolean firingWorkers(String workerName, String workerLastName) {
+		
+      String totalName= workerName+ " "+ workerLastName;
+      boolean deleted= false;
+		
+		List<String> allWorkersName = adminMan.getAllWorkersNamesAndLastNames();
+		
+		for(int i = 0; i<allWorkersName.size(); i++){
+			 if(totalName.equals(allWorkersName.get(i)) ) {
+				 
+				 adminMan.deleteThisWorker(totalName);
+				 deleted=true;
+				 
+			 }
+				
+			 } 
+		return deleted;
+		
+	}
 
 	
-	public static void puttingIdsAnimals(Animal unAnimal) {
-		int unId;
+	public static void modificationsSalary(String name, String lastname, Float salary) {
 		
-		unId= storeAnimals.indexOf(unAnimal);
-		Animal.id=unId;
-		System.out.print("\n"+"id del animal:"+Animal.id+"\n");
-		
+	}
+	
+	public static void modificationsHabitat(String name, String lastname, String unhabitat) {
+			
+		}
+	
+	public static void modificationsJob(String name, String lastname, WorkerType typeOfJob) {
 		
 	}
 	
 	
 
-public static void main(String[] args) {
+/*public static void main(String[] args) {
 	
  typesOfAnimalsInTheZoo.add("giraffe");
  typesOfAnimalsInTheZoo.add("elephant");
@@ -371,7 +436,7 @@ public static void main(String[] args) {
 	                System.out.print(storeAnimals.get(i)+"\n");
 	            }
 			} 
-		}
+		}*/
 
 
 
@@ -459,6 +524,9 @@ public static void drugAdminSubMenu(Habitat habitat, Integer stateOption) throws
 
 
 	}
+
+
+
 
 
 
