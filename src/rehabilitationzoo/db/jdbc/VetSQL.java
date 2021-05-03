@@ -22,6 +22,7 @@ public class VetSQL implements VetManager{
 	
 ////////////DIAGNOSIS
 	
+	
 	@Override
 	public List<String> getAnimalTypesInZoo() {
 		List<String> animalTypes = new ArrayList<String>();
@@ -65,16 +66,16 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				String type = rs.getString("type");
+				//String type = rs.getString("type");
 				String name = rs.getString("name");
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				Animal animal = new Animal (id, enterDate, habitat_id, /*feedingType,*/ lastBath, lastFed, deathDate, freedomDate,/* type,*/ name);
 				
 				animals.add(animal);
 			}
@@ -107,16 +108,16 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				String type = rs.getString("type");
+				//String type = rs.getString("type");
 				String name = rs.getString("name");
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				Animal animal = new Animal (id, enterDate, habitat_id,/* feedingType,*/ lastBath, lastFed, deathDate, freedomDate, /*type,*/ name);
 				
 				animals.add(animal);
 			}
@@ -164,7 +165,7 @@ public class VetSQL implements VetManager{
 			String sql = "UPDATE animals SET freedomDate=?, WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
-			s.setString(1, "%" + getAnimalId(animal) + "%");
+			s.setString(2, "%" + getAnimalId(animal) + "%");
 			s.executeUpdate();
 			s.close();
 
@@ -331,7 +332,7 @@ public class VetSQL implements VetManager{
 				String sql = "UPDATE animal SET freedomDate=?, WHERE id=?";
 				PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 				s.setString(1, "%" + newDate + "%");
-				s.setString(1, "%" + animal.getId() + "%");
+				s.setString(2, "%" + animal.getId() + "%");
 				s.executeUpdate();
 				s.close();
 
@@ -346,7 +347,7 @@ public class VetSQL implements VetManager{
 				String sql = "UPDATE animal SET deathDate=?, WHERE id=?";
 				PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 				s.setString(1, "%" + newDate + "%");
-				s.setString(1, "%" + animal.getId() + "%");
+				s.setString(2, "%" + animal.getId() + "%");
 				s.executeUpdate();
 				s.close();
 
@@ -364,14 +365,17 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<String> getAnimalTypesInAHabitat(Habitat habitat){
-		kk ni warra porque no hay characteristics_id en animals
 		
 		List<String> types = new ArrayList<String>();
+		//REESCRIBIRLO QUE AHORA HAY UNA TABLA
 		
 		try {
-		String sql = "SELECT type FROM animals WHERE habitat_id = ?"; 			
+		String sql = "SELECT ac.name FROM animals_characteristics AS ac \r\n"	//TODO ver que va bien
+				+ "	JOIN animals AS a ON a.type_id = ac.id \r\n"
+				+ "	JOIN habitats AS h ON a.habitat_id = h.id \r\n"
+				+ "	WHERE name LIKE ? FROM habitats"; 			
 		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-		prep.setString(1, "%" + habitat.getId() + "%");
+		prep.setString(1, "%" + habitat.getName() + "%");
 		ResultSet rs = prep.executeQuery();
 		
 		while (rs.next()) { //like hasNext
@@ -393,13 +397,19 @@ public class VetSQL implements VetManager{
 	}
 	
 	@Override
-	public List<Animal> getAnimalsGivenHabitatAndType(String habitatName, String animalType) {
-		kk ni warra porque no hay characteristics_id en animals
-		
+	public List<Animal> getAnimalsGivenHabitatAndType(String habitatName, String animalType) {		
 		List<Animal> animals = new ArrayList<Animal>();
 			
 			try {
-			String sql = "SELECT * FROM animals WHERE type = ? AND habitat_id = ?"; 			
+			String sql = "\r\n"
+					+ "SELECT * FROM animals AS a JOIN habitats AS h ON a.habitat_id=h.id \r\n" //TODO HELP
+					+ "	JOIN animals_characteristics AS ac ON ac.id = a.type_id\r\n"
+					+ "	WHERE name LIKE ? FROM habitat \r\n"
+					+ "	AND type LIKE ? FROM animals_characteristics"; 	
+			
+			//WHERE habitat_id = " + getHabitatIdByName(?) + "
+			//AND type_id = " + getTypeIdByName(?) + "
+			
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			prep.setString(1, "%" + animalType + "%");	
 			prep.setString(2, "%" + getHabitatIdByName(habitatName) + "%");
@@ -409,16 +419,16 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				String type = rs.getString("type");
+				//String type = rs.getString("type");
 				String name = rs.getString("name");
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				Animal animal = new Animal (id, enterDate, habitat_id, /*feedingType,*/ lastBath, lastFed, deathDate, freedomDate,/* type,*/ name);
 				
 				animals.add(animal);
 			}
@@ -468,7 +478,7 @@ public class VetSQL implements VetManager{
 	}
 	
 	@Override
-	public List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException {
+	public List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException {  // Tambien lo utiliza zoo keeper
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {
@@ -481,16 +491,16 @@ public class VetSQL implements VetManager{
 			int id = rs.getInt("id");
 			Date enterDate = rs.getDate("enterDate");
 			Integer habitat_id = rs.getInt("habitat_id");
-			FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+			//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 			Date lastBath = rs.getDate("lastBath");
 			Date lastFed = rs.getDate("lastFed");
 			Date deathDate = rs.getDate("deathDate");
 			Date freedomDate = rs.getDate("freedomDate");
-			String type = rs.getString("type");
+			//String type = rs.getString("type");
 			String name = rs.getString("name");
 			
 			System.out.println(name);//esto por favor me lo quitas despues ;)
-			Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+			Animal animal = new Animal (id, enterDate, habitat_id,/* feedingType,*/ lastBath, lastFed, deathDate, freedomDate,/* type,*/ name);
 			
 			animals.add(animal);
 		}

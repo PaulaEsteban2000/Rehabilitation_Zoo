@@ -6,25 +6,38 @@ import java.sql.SQLException;
 //>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
 
+import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
+
+import rehabilitationzoo.db.ifaces.ZooKeeperManager;
+
+import rehabilitationzoo.db.jdbc.AdministratorSQL;
+
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.jdbc.VetSQL;
+import rehabilitationzoo.db.jdbc.ZooKeeperSQL;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.Worker;
+import rehabilitationzoo.db.pojos.WorkerType;
+import rehabilitationzoo.db.ui.Menu;
 
 public class KeyboardInput {
 	
+	public static AdministratorManager adminMan = new AdministratorSQL();
 	
 	/////////////////////////METODOS DE PAULA: INICIO////////////////////////////////////////////////////////////////////////////
 	//Los meto aqui entre comentarios por separado porque si no se descoloca todo y me agobia tener que ordenarlo cada vez
 	//Ademas asi podeis ver lo que he hecho por si alguno os sirve (pero no los toqueis sin preguntarme u os corto las manos:) )
 	//
 	//
-	public static VetManager vetMan = new VetSQL();	
+	public static VetManager vetMan = new VetSQL();		
+
 	//
 	//
 	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
@@ -55,10 +68,11 @@ public class KeyboardInput {
 		
 		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
 		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	
 	}
 	//
 	//
-	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {
+	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
 		//TODO solo poder acceder a animales con freedom y death date NULL
 		
 		System.out.println("These are the types of animals existent in the habitat. Please choose one or enter a new one:");
@@ -120,12 +134,17 @@ public class KeyboardInput {
 					String bodyPart = Utils.readLine();
 					String name = bodyPart + "_prothesis";
 					Illness illness = new Illness(name, false, true, null);
+
 					//TODO al igual deberia meterlo en la db y volverlo a recibir ya con el id relleno
 					//NATALIA, MARIA: preguntar juntas what if we add an existent illness?? -> exception?
 					
 					//TODO Add illness and/or link to patient
 					vetMan.addIllness(illness); //esto aqui bien?
 					vetMan.setIllnessOnAnimal(illness);
+					
+					//Add illness and/or link to patient
+					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception? 
+					//Pues que no se almacena como una illness nueva
 					
 					vetMan.prothesisInstallation(true, illness, animalToDiagnose); //here the release date should be changed if parameter true
 					System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days.");
@@ -218,7 +237,7 @@ public class KeyboardInput {
 						Integer periodBetweenDosis = Utils.readInt();
 						
 						System.out.println("How many grams of the medicine will it need to take everyday?");
-						Integer dosis = Utils.readInt();
+						Float dosis = Float.parseFloat(Utils.readLine());
 						
 						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, vetMan.getTypeOfDrugId(drugType), dosis);
 						//TODO vetMan.drugPrescription(); 
@@ -287,23 +306,6 @@ public class KeyboardInput {
 	////////////////////////METODOS DE PAULA: FIN///////////////////////////////////////////////////////////////////////////////
 
 	
-	public static List<Animal> storeAnimals = new LinkedList<Animal>();
-	
-	
-	//esto ^ ya no hace falta, no? Si estais de acuerdo borradlo - Paula
-	
-	public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
-	//	ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
-	
-	
-	//No deberia hacer un constructor vacio primero??
-	
-	//public KeyboardInput() {
-	//	KeyboardInput.storeAnimals=new LinkedList<Animal>();
-	//}
-	
-	
-	
 	public static boolean isThisAnAnimal (String unAnimal) { //Esto no seria una excpecion mejor? - Paula <3
 		boolean realAnimal= false;
 		
@@ -315,137 +317,157 @@ public class KeyboardInput {
 				 Animal.type=typesOfAnimalsInTheZoo.get(i);
 			 }
 		 }
-		
+
 		return realAnimal;	
 	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
 	// ya que estamos, marcamos el tipo de animal que es
 	
+
+	
+	public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
+		adminMan.addAnimal(anAnimal);		
+	}	 
+		 
+		 
+	
+	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
+		adminMan.introducingAnimalsTypes(anAnimalType);
+	}	 
+		
+	
+	public static boolean isThisAnHabitat(String nameHabitat) {
+		boolean success=false;
+		 List<String> weSeeTheHabitats= vetMan.getAllHabitatsNames();
+		 
+			 for(int i = 0; i<weSeeTheHabitats.size(); i++){
+				 if( nameHabitat.equals(weSeeTheHabitats.get(i)) ) {
+					 success=true;
+				 }  
+		 }
+		return success;		
+	}
 	
 	
-	public static void addAnimal(Animal unAnimal) {
-		KeyboardInput.storeAnimals.add(unAnimal);
+	
+	public static void addWorker (Worker worker) {
+		adminMan.introducingWorkers(worker);
+		
+	}
+	
+	public static boolean firingWorkers(String workerName, String workerLastName) {
+		
+      String totalName= workerName+ " "+ workerLastName;
+      boolean deleted= false;
+		
+		List<String> allWorkersName = adminMan.getAllWorkersNamesAndLastNames();
+		
+		for(int i = 0; i<allWorkersName.size(); i++){
+			 if(totalName.equals(allWorkersName.get(i)) ) {
+				 	String[] parts = totalName.split(" ");
+					String part1Name = parts[0];
+					String part2Lastname = parts[1];
+					
+				 adminMan.deleteThisWorker(part1Name, part2Lastname);
+				 deleted=true;
+				 
+			 }
+				
+			 } 
+		return deleted;
+		
+	}
+
+	
+	public static boolean modificationsSalary(String name1, String lastname1, Float salary) {
+	boolean changes=false;
+	String anotherTotalName= name1 +" "+ lastname1;
+	List<String> anotherAllWorkersName= adminMan.getAllWorkersNamesAndLastNames();
+
+	
+		
+		for(int i = 0; i<anotherAllWorkersName.size(); i++){
+			 if(anotherTotalName.equals(anotherAllWorkersName.get(i)) ) {
+				 
+				adminMan.modifyWorker(name1, lastname1, null);
+				changes=true;
+				break;
+			 	} 
+			 }
+		return changes;
 		
 	}
 	
 
-	
-	public static void puttingIdsAnimals(Animal unAnimal) {
-		int unId;
-		
-		unId= storeAnimals.indexOf(unAnimal);
-		Animal.id=unId;
-		System.out.print("\n"+"id del animal:"+Animal.id+"\n");
-		
-		
+	public void addDrugType(String drugName) {
+		adminMan.addNewDrugType(drugName);	
 	}
 	
+	public void addDrug(Drug oneDrug) {
+		adminMan.addNewDrug(oneDrug);	
+	}
 	
-public static Habitat askForHabitat() throws IOException {
+	public void deleteDrug(Drug oneDrug) {
+		adminMan.addNewDrug(oneDrug);	
+	}
+
+
+
+/////////////////////////MARIA////////////////////////////////////////////////////////////////////////////
+	
+	
+	public static ZooKeeperManager zooKMan = new ZooKeeperSQL();	
 		
-		System.out.println("These are the habitats existent in our recovery center. Please choose the Id of one:");
-		Menu.dbman.printHabitatsNamesAndId();
-		Integer habitatId = Utils.readInt();
-		try {
-			Menu.dbman.getHabitatId(habitatId);
+	
+	public static Habitat askForHabitat() throws IOException, SQLException {
+			System.out.println("These are the habitats existent in our recovery center. Please choose the name of one:");
+			List<String> habitatsnames = zooKMan.getHabitats();
+			System.out.println(habitatsnames);
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		Habitat habitat = Menu.dbman.getHabitat(habitatId);
-		return habitat;
-	}
-	
-
-public static void main(String[] args) {
-	
- typesOfAnimalsInTheZoo.add("giraffe");
- typesOfAnimalsInTheZoo.add("elephant");
- 
-		boolean exito = false;
-		exito= isThisAnAnimal("giraffe");
-		
-		if(exito==true) {
-			System.out.print("The animal exits in the database"+"\n");
-			 
+			String habitatName = Utils.readLine();
 			
-			Date enterDate= LocalDate.of(2020,05,05 ) ; //Ahora esto da errores porque no usamos LocalDate, voy a averiguar si esto es verdad! yo me ocupo - Paula
+			Integer habId = zooKMan.getHabitatIdByName(habitatName);
+				
+			List<Habitat> habitat = zooKMan.getHabitatById(habId);
 			
-			    Animal infoAnimal= new Animal("giraffe", "Julia", enterDate);
-			    KeyboardInput.addAnimal(infoAnimal);
-			    System.out.print(Animal.id +"\n");
-			    System.out.print("Antes de meter el id"+Animal.id+"\n");
-			    KeyboardInput.puttingIdsAnimals(infoAnimal);
-			    System.out.print("Despues de meter el id"+Animal.id+"\n\n");
-			    
-			    
-			    Animal infoAnimal1= new Animal("elephant", "dumbo", enterDate);
-			    KeyboardInput.addAnimal(infoAnimal1);
-			    System.out.print(Animal.type +"\n"+Animal.name+"\n"+Animal.enterDate+"\n");
-			    System.out.print("Antes de meter el id "+Animal.id+"\n");
-			    KeyboardInput.puttingIdsAnimals(infoAnimal1);
-			    System.out.print("Despues de meter el id "+Animal.id+"\n\n");
-			    
-
-			    Animal infoAnimal3= new Animal("giraffe", "Paula", enterDate);
-			    KeyboardInput.addAnimal(infoAnimal3);
-			    System.out.print(Animal.id +"\n");
-			    System.out.print("Antes de meter el id"+Animal.id+"\n");
-			    KeyboardInput.puttingIdsAnimals(infoAnimal3);
-			    System.out.print("Despues de meter el id"+Animal.id+"\n\n");
-			    
-			    
-			    System.out.print("\nListamos los tipos de animales:\n");
-	            for (int i = 0; i <typesOfAnimalsInTheZoo.size() ; i++) {
-	                System.out.print(typesOfAnimalsInTheZoo.get(i)+"\n");
-	            }
-	            
-	            
-	            System.out.print("\nListamos la info de los animales que tenemos:\n");
-	            for (int i = 0; i <storeAnimals.size() ; i++) {
-	                System.out.print(storeAnimals.get(i)+"\n");
-	            }
-			} 
-		}
-
-
-public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) throws IOException {
-
-		
-		if(stateOption == 4) {
-			//TODO habitatToChange.setLastCleaned();
-		}
-		else {
-			//TODO habitatToChange.setWaterLevel();
-		}
-		
+			return habitat.get(0);
+			
 	}
-
-
-public static void drugAdminSubMenu(Habitat habitat, Integer stateOption) throws IOException {
-
 	
-	switch (stateOption) {
-	case 1:
-		habitat.getAnimals();
-		//TODO bucle que le vaya dando de comer a cada animal de la lista .feedAnimal(); //boolean?
-		break;
-	case 2:
-		//TODO bucle que le vaya bañando a cada animal de la lista .batheAnimal(); //boolean?
-		break;
-	case 3: 
-		// TODO bucle que le vaya dando las drugs a cada animal de la lista .drugAdministrationToAnimal(Animal animal); //boolean?
-		break;
-		
-	default: 
-		break;
-	
-		}
+
+	public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) throws IOException {
+			
+			if(stateOption == 4) {
+				zooKMan.cleanHabitat(habitatToChange);
+			}
+			else {
+				zooKMan.fillUpWaterTank(habitatToChange);
+			}
+			
 	}
+	
+	
+	public static void AnimalSubMenu(Habitat habitat, Integer stateOption) throws IOException {
+	
+		switch (stateOption) {
+			case 1:
+				zooKMan.feedAnimals(habitat);
+				break;
+				
+			case 2:
+				zooKMan.batheAnimals(habitat);
+				break;
+				
+			case 3: 
+				zooKMan.drugAdministrationToAnimals(habitat);
+				break;
+				
+			default: 
+				break;
+		}
+	
+	}
+	
+
 }
-
-
-
-
 
 

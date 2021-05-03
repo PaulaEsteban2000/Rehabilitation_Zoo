@@ -16,21 +16,11 @@ public class Drug implements Serializable{
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
 	private Integer drugType_id;
-	private int dosis;
+	private float dosis;
 	
 	private List<Animal> animals; 
 	private List<Illness> illnesses; 
-	
-	public Drug(Integer id, String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,
-			int dosis) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.treatmentDuration = treatmentDuration;
-		this.periodBetweenDosis = periodBetweenDosis;
-		this.drugType_id = drugType_id;
-		this.dosis = dosis;
-	}
+		
 
 	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,  List<Animal> animals, int dosis,  List<Illness> illness) {
 		super();
@@ -45,7 +35,7 @@ public class Drug implements Serializable{
 		
 	}
 	
-	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id, int dosis) {
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id, Float dosis) {
 		super();
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
@@ -53,9 +43,8 @@ public class Drug implements Serializable{
 		this.drugType_id = drugType_id;
 		this.dosis = dosis;
 	}
-	
 
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -126,12 +115,12 @@ public class Drug implements Serializable{
 	}
 
 
-	public int getDosis() {
+	public float getDosis() {
 		return dosis;
 	}
 
 
-	public void setDosis(int dosis) {
+	public void setDosis(float dosis) {
 		this.dosis = dosis;
 	}
 
@@ -154,6 +143,7 @@ public class Drug implements Serializable{
 	public void setIllnesses(List<Illness> illnesses) {
 		this.illnesses = illnesses;
 	}
+
 
 	
 	
