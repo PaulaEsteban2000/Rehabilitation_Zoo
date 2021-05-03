@@ -380,6 +380,7 @@ public class VetSQL implements VetManager{
 	@Override
 	public List<String> getAnimalTypesInAHabitat(Habitat habitat){
 		List<String> types = new ArrayList<String>();
+		//REESCRIBIRLO QUE AHORA HAY UNA TABLA
 		
 		try {
 		String sql = "SELECT type FROM animals WHERE habitat_id = ?"; 			
