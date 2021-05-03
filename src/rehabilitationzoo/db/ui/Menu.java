@@ -44,34 +44,8 @@ public class Menu {
 	                
 	            case 3: 
 	            	zooKeeperOption3();
-	            	//a. manage animals
-	            		//a. add
-	            			//newAnimal
-	            		//b. return
-	            			//1. getAnimal
-	            			//2. changeReleaseDate
-	            		//c. dead
-	            			//1. getAnimal
-	            			//2. changeDeathDate
-	            	//b. manage workers
-	            		//a. hire
-	            			//new worker
-	            		//b. fire
-	            			//1. getWorker
-	            			//2. delete worker
-	            		//c. modify
-	            			//salary
-	            	//c. manage drugs 
-	            		//a. add
-	    					//new drug
-	            		//b. delete
-	    					//1. getDrug
-	    					//2. delete drug
-	            		//c. modify
-	            			//??
-	    			//salary
-	            	//exit
 	            	break;
+	            	
 	            case 0:
 	            	dbman.disconnect();
 	            	System.exit(0);
@@ -158,7 +132,7 @@ public class Menu {
 							//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
 							if(exito==true) {
 		
-							    String unAnimal= KeyboardInput.whichType(readAnimal);
+						//	    String unAnimal= KeyboardInput.whichType(readAnimal);
 							    
 							    System.out.print("\n"+"Put a name to the animal");
 							    String name = Utils.readLine();
@@ -258,7 +232,7 @@ public class Menu {
 	}
  	
  	
-	public static void zooKeeperOption3()  throws IOException{
+	public static void zooKeeperOption3() throws IOException, SQLException{
 		int zooKeeperChoice;
 		Integer habitatId;
  		
@@ -275,8 +249,6 @@ public class Menu {
 				+ "	6. Go back to users menu."+ "\n") ;
 		
 				zooKeeperChoice = Utils.readInt();
-		
-		
 			switch (zooKeeperChoice) {
 				case 1:
 				case 2: 
@@ -297,7 +269,7 @@ public class Menu {
 					System.out.println("Error, nonvalid input.");
 					break;
 			}
-		}while(zooKeeperChoice != 6); //No deberia haber un case 0???
+		}while(zooKeeperChoice != 6); 
 		
 		
 	}

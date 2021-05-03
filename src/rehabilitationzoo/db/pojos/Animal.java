@@ -18,6 +18,7 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private FeedingType feedingType;
 	private Date lastBath;	
 	private Date lastFed;
+	private Date lastDrug;
 	private Date deathDate;
 	private Date freedomDate;
 	private String type; //elephant, giraffe...

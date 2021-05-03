@@ -331,7 +331,7 @@ public class VetSQL implements VetManager{
 	}
 	
 	@Override
-	public List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException {
+	public List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException {  // Tambien lo utiliza zoo keeper
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {

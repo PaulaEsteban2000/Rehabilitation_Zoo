@@ -8,8 +8,10 @@ import java.util.*;
 
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
+import rehabilitationzoo.db.ifaces.ZooKeeperManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.jdbc.VetSQL;
+import rehabilitationzoo.db.jdbc.ZooKeeperSQL;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
@@ -56,7 +58,7 @@ public class KeyboardInput {
 	}
 	//
 	//
-	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {
+	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
 		//TODO solo poder acceder a animales con freedom y death date NULL
 		
 		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
@@ -319,22 +321,6 @@ public class KeyboardInput {
 	}
 	
 	
-public static Habitat askForHabitat() throws IOException {
-		
-		System.out.println("These are the habitats existent in our recovery center. Please choose the Id of one:");
-		Menu.dbman.printHabitatsNamesAndId();
-		Integer habitatId = Utils.readInt();
-		try {
-			Menu.dbman.getHabitatId(habitatId);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		Habitat habitat = Menu.dbman.getHabitat(habitatId);
-		return habitat;
-	}
-	
 
 public static void main(String[] args) {
 	
@@ -388,6 +374,30 @@ public static void main(String[] args) {
 		}
 
 
+
+/////////////////////////MARIA////////////////////////////////////////////////////////////////////////////
+	
+	
+public static ZooKeeperManager zooKMan = new ZooKeeperSQL();	
+	
+public static Habitat askForHabitat() throws IOException, SQLException {
+		
+		System.out.println("These are the habitats existent in our recovery center. Please choose the name of one:");
+		List<String> habitatsnames = zooKMan.getHabitats();
+		System.out.println(habitatsnames);
+		
+		String habitatName = Utils.readLine();
+		
+		Integer habId = zooKMan.getHabitatIdByName(habitatName);
+			
+		List<Habitat> habitat = zooKMan.getHabitatById(habId);
+		
+		return habitat.get(0);
+		
+		
+	}
+	
+
 public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) throws IOException {
 
 		
@@ -404,24 +414,52 @@ public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) 
 public static void drugAdminSubMenu(Habitat habitat, Integer stateOption) throws IOException {
 
 	
+	System.out.println("These are the animals living in your habitat.");
+	List<Animal> animalsInHabitat = vetMan.getAnimalsInHabitat(habitat.getName());
+	System.out.println(animalsInHabitat);
+	
+	Animal animalCheck = KeyboardInput.askForAnimalFromHabitat(habitat);
+	//should be something to not leave the habitat until all animals are checked
+	//attribute for habitat for lastChecked when done?
+	
+	
 	switch (stateOption) {
 	case 1:
-		habitat.getAnimals();
 		//TODO bucle que le vaya dando de comer a cada animal de la lista .feedAnimal(); //boolean?
 		break;
 	case 2:
 		//TODO bucle que le vaya bañando a cada animal de la lista .batheAnimal(); //boolean?
 		break;
 	case 3: 
+		
+		
+		
+		
 		// TODO bucle que le vaya dando las drugs a cada animal de la lista .drugAdministrationToAnimal(Animal animal); //boolean?
 		break;
 		
 	default: 
 		break;
+		
+
+		
+		
+		
+		
+		
+				
+	
+			
+		
+		
 	
 		}
+
+
+
+
 	}
-}
+
 
 
 
