@@ -336,7 +336,7 @@ public class Menu {
 				case 1:
 				case 2: 
 				case 3:
-					KeyboardInput.drugAdminSubMenu(habitatToSearch, zooKeeperChoice);
+					KeyboardInput.AnimalSubMenu(habitatToSearch, zooKeeperChoice);
 					break;
 					
 					

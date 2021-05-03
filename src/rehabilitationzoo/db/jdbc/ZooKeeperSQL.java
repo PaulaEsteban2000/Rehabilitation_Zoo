@@ -16,24 +16,20 @@ import rehabilitationzoo.db.pojos.LightType;
 
 public class ZooKeeperSQL implements ZooKeeperManager{
 
-	@Override
-	public void printHabitatsNamesAndId() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
-	public void drugAdministrationToAnimal(Animal animal) { //TODO
+	public void drugAdministrationToAnimals(Habitat habitat) { 
 			LocalDate localToday = LocalDate.now(); 
-			LocalDate localDrugDay = localToday.plusDays();
+			LocalDate localDrugDay = localToday.plusDays(1);
 			String stringDrugDay = localDrugDay.toString();
 			Date newDate = Date.valueOf(stringDrugDay);
 				
 			try {
-				String sql = "UPDATE animal SET lastDrug=?, WHERE id=?";
+				String sql = "UPDATE animal AS a JOIN habitat AS hab ON a.habitat_id=hab.id SET lastDrug=?, WHERE hab.id=?";
 				PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 				s.setString(1, "%" + newDate + "%");
-				s.setString(1, "%" + animal.getId() + "%");
+				s.setString(2, "%" + habitat.getId() + "%");
 				s.executeUpdate();
 				s.close();
 
@@ -137,28 +133,43 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 	
 
 	@Override
-	public void feedAnimal() { //TODO
-		// TODO Auto-generated method stub
+	public void feedAnimals(Habitat habitat) { 
+		LocalDate localToday = LocalDate.now(); 
+		LocalDate localFeedDay = localToday.plusDays(1);
+		String stringFeedDay = localFeedDay.toString();
+		Date newDate = Date.valueOf(stringFeedDay);
+			
+		try {
+			String sql = "UPDATE animal AS a JOIN habitat AS hab ON a.habitat_id=hab.id SET lastFed=?, WHERE hab.id=?";
+			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
+			s.setString(1, "%" + newDate + "%");
+			s.setString(2, "%" + habitat.getId() + "%");
+			s.executeUpdate();
+			s.close();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
-	public void batheAnimal(Habitat habitat) {
+	public void batheAnimals(Habitat habitat) {
 		LocalDate localToday = LocalDate.now(); 
 		LocalDate localBathingDay = localToday.plusDays(7);
 		String stringBathingDay = localBathingDay.toString();
 		Date newDate = Date.valueOf(stringBathingDay);
 		
 		try {
-			String sql = "UPDATE habitat SET lastCleaned=?, WHERE id=?";
+			String sql = "UPDATE animal AS a JOIN habitat AS hab ON a.habitat_id=hab.id SET lastBath=?, WHERE hab.id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
-			s.setString(1, "%" + habitat.getId() + "%");
+			s.setString(2, "%" + habitat.getId() + "%");
 			s.executeUpdate();
 			s.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		
 	}
 

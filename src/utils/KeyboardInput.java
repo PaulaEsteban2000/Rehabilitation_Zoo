@@ -467,63 +467,45 @@ public static void habitatSubMenu(Habitat habitatToChange, Integer stateOption) 
 
 		
 		if(stateOption == 4) {
-			//TODO habitatToChange.setLastCleaned();
+			zooKMan.cleanHabitat(habitatToChange);
+			
 		}
 		else {
-			//TODO habitatToChange.setWaterLevel();
+			
+			zooKMan.fillUpWaterTank(habitatToChange);
 		}
 		
 	}
 
 
-public static void drugAdminSubMenu(Habitat habitat, Integer stateOption) throws IOException {
+public static void AnimalSubMenu(Habitat habitat, Integer stateOption) throws IOException {
 
-	
-	System.out.println("These are the animals living in your habitat.");
-	List<Animal> animalsInHabitat = vetMan.getAnimalsInHabitat(habitat.getName());
-	System.out.println(animalsInHabitat);
-	
-	Animal animalCheck = KeyboardInput.askForAnimalFromHabitat(habitat);
-	//should be something to not leave the habitat until all animals are checked
-	//attribute for habitat for lastChecked when done?
 	
 	
 	switch (stateOption) {
 	case 1:
-		//TODO bucle que le vaya dando de comer a cada animal de la lista .feedAnimal(); //boolean?
+		zooKMan.feedAnimals(habitat);
+		
+		
 		break;
 	case 2:
-		//TODO bucle que le vaya bañando a cada animal de la lista .batheAnimal(); //boolean?
+		zooKMan.batheAnimals(habitat);
+		
 		break;
 	case 3: 
+		zooKMan.drugAdministrationToAnimals(habitat);
 		
-		
-		
-		
-		// TODO bucle que le vaya dando las drugs a cada animal de la lista .drugAdministrationToAnimal(Animal animal); //boolean?
 		break;
 		
 	default: 
 		break;
 		
 
-		
-		
-		
-		
-		
-				
-	
-			
-		
-		
-	
 		}
 
-
-
-
 	}
+
+}
 
 
 

@@ -77,6 +77,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   //+ " feedingType	ENUM	NOT NULL, "
 					   + " lastBath		DATE	NOT NULL, "
 					   + " lastFed		DATE	NOT NULL, "
+					   + " lastDrug		DATE	NOT NULL, "
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
 					 //  + " type			STRING	NOT NULL, "
