@@ -88,7 +88,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt4 = c.createStatement();
 			String sql4 = "CREATE TABLE workers "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name			TEXT	NOT NULL	UNIQUE, "
+					   + " name			TEXT	NOT NULL, "
 					   + " lastName 	TEXT	NOT NULL, "
 					   + " hireDate		DATE	NOT NULL, "
 					   + " salary		FLOAT	NOT NULL, "
@@ -111,7 +111,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
 					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id), "
-					   + " dosis 				INTEGER	NOT NULL)";					   
+					   + " dosis 				FLOAT	NOT NULL)";					   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			

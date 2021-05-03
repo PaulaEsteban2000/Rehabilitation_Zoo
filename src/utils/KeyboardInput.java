@@ -361,8 +361,11 @@ public class KeyboardInput {
 		
 		for(int i = 0; i<allWorkersName.size(); i++){
 			 if(totalName.equals(allWorkersName.get(i)) ) {
-				 
-				 adminMan.deleteThisWorker(totalName);
+				 	String[] parts = totalName.split(" ");
+					String part1Name = parts[0];
+					String part2Lastname = parts[1];
+					
+				 adminMan.deleteThisWorker(part1Name, part2Lastname);
 				 deleted=true;
 				 
 			 }
@@ -373,16 +376,36 @@ public class KeyboardInput {
 	}
 
 	
-	public static void modificationsSalary(String name, String lastname, Float salary) {
+	public static boolean modificationsSalary(String name1, String lastname1, Float salary) {
+	boolean changes=false;
+	String anotherTotalName= name1 +" "+ lastname1;
+	List<String> anotherAllWorkersName= adminMan.getAllWorkersNamesAndLastNames();
+
+	
+		
+		for(int i = 0; i<anotherAllWorkersName.size(); i++){
+			 if(anotherTotalName.equals(anotherAllWorkersName.get(i)) ) {
+				 
+				adminMan.modifyWorker(name1, lastname1, null);
+				changes=true;
+				break;
+			 	} 
+			 }
+		return changes;
 		
 	}
 	
-	public static void modificationsHabitat(String name, String lastname, String unhabitat) {
-			
-		}
+
+	public void addDrugType(String drugName) {
+		adminMan.addNewDrugType(drugName);	
+	}
 	
-	public static void modificationsJob(String name, String lastname, WorkerType typeOfJob) {
-		
+	public void addDrug(Drug oneDrug) {
+		adminMan.addNewDrug(oneDrug);	
+	}
+	
+	public void deleteDrug(Drug oneDrug) {
+		adminMan.addNewDrug(oneDrug);	
 	}
 	
 	
