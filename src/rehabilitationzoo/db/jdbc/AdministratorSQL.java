@@ -1,12 +1,18 @@
 package rehabilitationzoo.db.jdbc;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
+import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Worker;
 
 public class AdministratorSQL implements AdministratorManager{
@@ -28,9 +34,9 @@ public class AdministratorSQL implements AdministratorManager{
 		try {
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); //JDBCManager.c porque asi tenemos una sola conexion abierta en la clase que se encarga de la DB - Paula
-			String sql = "INSERT INTO animals (enterDate,feedingType,lastBath,lastFed,deathDate,freedomDate,type,name)";
-			sql+= "VALUES ('" + animal.getEnterDate() + "','" + animal.getHabitat_id() + "','" + animal.getFeedingType() + "','" +
-			animal.getLastBath() + "','" + animal.getLastFed() + "','" + animal.getFreedomDate() + "','"+ animal.getType() +  "','" + animal.getName() + ")";
+			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed,deathDate,freedomDate,name)";
+			sql+= "VALUES ('" + animal.getEnterDate() + "','"  + animal.getLastBath() + "','" 
+							  + animal.getFreedomDate() + "','" + animal.getName() + ")";
 			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -40,19 +46,83 @@ public class AdministratorSQL implements AdministratorManager{
 			e.printStackTrace();
 		}
 	}
+	
+	
 
-	@Override
-	public void returAnimalToTheWilderness(Animal animal) {
-		// TODO Auto-generated method stub
-		
+	public void introducingAnimalsTypes (AnimalType animalType) { 
+		try {
+			//Ids are chosen by the database
+			Statement stmt = JDBCManager.c.createStatement(); 
+			String sql = "INSERT INTO animals characteristics(id, type,feedingType)";
+			sql+= "VALUES ('" + AnimalType.getType() + "','" + AnimalType.getWhatDoYouEat() + ")";
+			
+			System.out.println(sql);
+			stmt.executeUpdate(sql);
+			stmt.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
 
-	@Override
-	public void markAnimalAsDeceased(Animal animal) {
-		// TODO Auto-generated method stub
-		
+	
+	public void introducingWorkers (Worker aWorker) {//Id is chosen by the database
+
+		try {  			
+			
+			Statement stmt = JDBCManager.c.createStatement(); 
+			String sql = "INSERT INTO workers (name, lastname, hireDate, salary, workerType, whichHabitatDoYouWorkOn )";
+			sql+= "VALUES ('" + aWorker.getName() + "','" + aWorker.getLastName() + "','" +aWorker.getHireDate()+ "','" +aWorker.getSalary()
+			+ aWorker.getType()+ "','" + aWorker.getwhichHabitatDoYouWorkOn() + ")";
+			
+			System.out.println(sql);
+			stmt.executeUpdate(sql);
+			stmt.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
-
+	
+	
+	public List<String> getAllWorkersNamesAndLastNames(){
+		List<String> workersNamesAndLastNames = new ArrayList<String>();
+		
+		try {
+		String sql = "SELECT names,lastnames FROM workers"; 			    
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+		ResultSet rs = prep.executeQuery();
+		
+		while (rs.next()) { //like hasNext
+			String nameAndLastName = rs.getString("name"+" lastname");
+			workersNamesAndLastNames.add (nameAndLastName);
+		}
+		
+			prep.close();
+			rs.close();
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	return workersNamesAndLastNames;
+	
+	}
+	
+	public void deleteThisWorker(String nameAndLastName) {
+		
+		try {
+			String sql = "DELETE * FROM workers WHERE name LIKE ? AND WHERE lastname LIKE ?"; 			    
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery();
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+		
 	@Override
 	public void hireWorker(Worker worker) {
 		// TODO Auto-generated method stub

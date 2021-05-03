@@ -6,15 +6,20 @@ import java.sql.SQLException;
 //>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
 
+import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
+import rehabilitationzoo.db.jdbc.AdministratorSQL;
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.jdbc.VetSQL;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.Worker;
+import rehabilitationzoo.db.pojos.WorkerType;
 import rehabilitationzoo.db.ui.Menu;
 
 public class KeyboardInput {
@@ -25,7 +30,8 @@ public class KeyboardInput {
 	//Ademas asi podeis ver lo que he hecho por si alguno os sirve (pero no los toqueis sin preguntarme u os corto las manos:) )
 	//
 	//
-	public static VetManager vetMan = new VetSQL();	
+	public static VetManager vetMan = new VetSQL();		
+	public static AdministratorManager adminMan = new AdministratorSQL();
 	//
 	//
 	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
@@ -117,7 +123,8 @@ public class KeyboardInput {
 					String name = bodyPart + "_prothesis";
 					Illness illness = new Illness(name, false, true, null);
 					//Add illness and/or link to patient
-					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception?
+					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception? 
+					//Pues que no se almacena como una illness nueva
 					
 					vetMan.prothesisInstallation(true, illness, animalToDiagnose); //here the release date should be changed if parameter true
 					System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days.");
@@ -280,8 +287,12 @@ public class KeyboardInput {
 	////////////////////////METODOS DE PAULA: FIN///////////////////////////////////////////////////////////////////////////////
 
 	
-	public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
+	
+	
+	/*public static ArrayList<String> typesOfAnimalsInTheZoo = new ArrayList<String>();
 	//	ELEPHANT, LION, TIGER, RHINO, HIPO, GIRAFFE, MONKEY, DOLPHIN, WHALE, DEER, REINDEER
+	
+	
 	
 	
 	
@@ -296,12 +307,78 @@ public class KeyboardInput {
 				 Animal.type=typesOfAnimalsInTheZoo.get(i);
 			 }
 		 }
-		
+
 		return realAnimal;	
 	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
 	// ya que estamos, marcamos el tipo de animal que es
 	
+		 
+	*/
+	
+	
+	
+	public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
+		adminMan.addAnimal(anAnimal);		
+	}	 
+		 
+		 
+	
+	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
+		adminMan.introducingAnimalsTypes(anAnimalType);
+	}	 
+		
+	
+	public static boolean isThisAnHabitat(String nameHabitat) {
+		boolean success=false;
+		 List<String> weSeeTheHabitats= vetMan.getAllHabitatsNames();
+		 
+			 for(int i = 0; i<weSeeTheHabitats.size(); i++){
+				 if( nameHabitat.equals(weSeeTheHabitats.get(i)) ) {
+					 success=true;
+				 }  
+		 }
+		return success;		
+	}
+	
+	
+	
+	public static void addWorker (Worker worker) {
+		adminMan.introducingWorkers(worker);
+		
+	}
+	
+	public static boolean firingWorkers(String workerName, String workerLastName) {
+		
+      String totalName= workerName+ " "+ workerLastName;
+      boolean deleted= false;
+		
+		List<String> allWorkersName = adminMan.getAllWorkersNamesAndLastNames();
+		
+		for(int i = 0; i<allWorkersName.size(); i++){
+			 if(totalName.equals(allWorkersName.get(i)) ) {
+				 
+				 adminMan.deleteThisWorker(totalName);
+				 deleted=true;
+				 
+			 }
+				
+			 } 
+		return deleted;
+		
+	}
 
+	
+	public static void modificationsSalary(String name, String lastname, Float salary) {
+		
+	}
+	
+	public static void modificationsHabitat(String name, String lastname, String unhabitat) {
+			
+		}
+	
+	public static void modificationsJob(String name, String lastname, WorkerType typeOfJob) {
+		
+	}
 	
 	
 public static Habitat askForHabitat() throws IOException {

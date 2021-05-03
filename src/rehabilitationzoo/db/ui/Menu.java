@@ -4,21 +4,27 @@ import java.io.*;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.FeedingType;
 import rehabilitationzoo.db.pojos.Habitat;
+import rehabilitationzoo.db.pojos.Worker;
+import rehabilitationzoo.db.pojos.WorkerType;
 import utils.KeyboardInput;
 import utils.Utils;
+
+
 
 public class Menu {
 	
 	public static DBManager dbman = new JDBCManager();	
+	
+	public ArrayList<String> differentHabitats = new ArrayList<String>(); //Names of the habitats we add
+
 	
 	
 	public static void main(String[] args) throws Exception, IOException{
@@ -91,8 +97,21 @@ public class Menu {
 		}while(vetMainChoice != 3);
 	}
  	
+	//THIS IS FOR THE VET
+	
+    //RETURN ANIMAL TO WILDERNESS (UPDATE) 
+   	//When an animal enter we don´t insert any freedomDate
+   	//If the animal enters again the freedomDate will be NULL
+ 
+    //MARK ANIMAL AS DEAD (UPDATE)
+    //BOOLEAN
+	
+	
+	
+	//TODO PAULA: Put the method for the diagnosis of the new animal
+	
  	
- 	public static void adminOption2() throws NumberFormatException, IOException {
+ 	public static void adminOption2() throws NumberFormatException, IOException, SQLException {
  
  		int adminChoice;
  		boolean exito=false;
@@ -113,21 +132,20 @@ public class Menu {
 					System.out.println("\n"+"1. MANAGE OF ANIMALS"+"\n");
 					System.out.println("Select the option that fits you the best"+"\n"
 							+	"1.Add animals"+"\n"
-				        	+	"2.Return animals to wilderness"+"\n"
-				        	+	"3.Mark animals as dead"+"\n"
-				        	+ 	"4.Go back"+ "\n");
+				        	+	"2.Add new types of animals to the zoo"+"\n"
+				        	+	"3.Go back"+ "\n");
+					
 					int manageOfAnimals= Utils.readInt();
 					
 					switch(manageOfAnimals) {
-					case 1:
-						//ADD ANIMAL (INSERT)
+					case 1://ADD ANIMAL (INSERT)
 						   
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = Utils.readLine();
 							
-							exito=KeyboardInput.isThisAnAnimal(readAnimal);//metodo donde compare si lo que hemos puesto es un animal o no
+							//exito=KeyboardInput.isThisAnAnimal(readAnimal);//metodo donde compare si lo que hemos puesto es un animal o no
 							//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
-							if(exito==true) {
+							//if(exito==true) {
 		
 							  //  String unAnimal= KeyboardInput.whichType(readAnimal);
 							    
@@ -148,43 +166,119 @@ public class Menu {
 							    Date enterDate= new Date (year,  month, day) ;
 							    
 							    
-							    Animal anAnimal = new Animal(enterDate, Animal.feedingType, Animal.lastBath, Animal.lastFed,
-							    		Animal.deathDate, Animal.freedomDate, Animal.type, name);
+							    Animal anAnimal = new Animal(enterDate, Animal.lastBath, Animal.lastFed,Animal.deathDate, Animal.freedomDate, name);
+							    KeyboardInput.addAnimalInTheZoo(anAnimal); //DIRECTLY WE HAVE TO ADD IT TO THE TABLES IN SQL
+							   
+							    System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							    
-							    KeyboardInput.addAnimal(anAnimal); //DIRECTLY WE HAVE TO ADD IT TO THE TABLES IN SQL
-							    KeyboardInput.puttingIdsAnimals(anAnimal);
-
+								//}
+								//else {
+								//	System.out.print("\n"+" That is not a type of animal present on the zoo"+"\n");
+								//}
+							    break;
 							    
-								System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
+							
+						case 2://ADD ANIMALTYPE (INSERT)
+							
+							System.out.print("\n"+"Which animal would you like to add to the zoo?"+"\n");
+							String readAnimal1 = Utils.readLine();
+							
+							//WE CHECK IF THE ANIMAL EXITS OR NOT IN THE ZOO
+							
+							System.out.print("\n"+ "Introduce the feeding type of the "+readAnimal1 +"\n"+"Remember they could be CARNIVORE, HERVIBORE or OMNIVORE"+"\n");
+							String foodType = Utils.readLine();
+							FeedingType aType =FeedingType.valueOf(foodType);
+								
+							AnimalType animalType= new AnimalType (readAnimal1, aType);
+							//KeyboardInput.typesOfAnimalsInTheZoo(readAnimal1);
+							KeyboardInput.addAnimalTypeInTheZoo(animalType);
+							
+							System.out.print("\n"+"New animal introduced in the zoo"+"\n");
+							break;
+							
+						case 3: 
+							break;
+							 
+						default :	
+							System.out.println("Error, nonvalid input.");
+							break;
+								
 							}
-							else {
-								System.out.print("\n"+" That is not a type of animal present on the zoo"+"\n");
-							}
-							
-							
-							
-							
-						
-						}
-						
-						
-						//THIS IS FOR THE VET
-		                	
-		                //RETURN ANIMAL TO WILDERNESS (UPDATE) 
-		               	//When an animal enter we don´t insert any freedomDate
-		               	//If the animal enters again the freedomDate will be NULL
-		             
-		                //MARK ANIMAL AS DEAD (UPDATE)
-		                //BOOLEAN
-						
-						
-						
-						//TODO PAULA: Put the method for the diagnosis of the new animal
-	                	
-	                break;
+					break;
 	                
 	                case 2:
-	                	System.out.println("\n"+"MANAGEMENT OF THE WORKERS"+"\n");
+	                	System.out.println("\n"+"2.MANAGEMENT OF THE WORKERS"+"\n");
+	                	
+	                	System.out.println("Select the option that fits you the best"+"\n"
+								+	"1.Hire workers"+"\n"
+					        	+	"2.Fire workers"+"\n"
+					        	+	"3.Modify worker´s salary"+ "\n"
+	                			+   "4.Go back"+ "\n");
+						
+						int manageOfWorkers= Utils.readInt();
+						
+						switch(manageOfWorkers) {
+						case 1:
+							
+							System.out.print("\n"+ "Introduce the name of the new worker"+"\n");
+							String workerName= Utils.readLine();
+							System.out.print("\n"+ "Introduce the lastname"+"\n");
+							String workerLastName= Utils.readLine();
+							System.out.print("\n"+"Select the job that the worker is going to have"+"\n" );
+							
+							 System.out.print("\n"+"Introduce the date of the worker we just hired"+"\n");
+							    
+							    System.out.print("\n"+"Introduce the day");
+							    int day = Utils.readInt();
+
+							    System.out.print("\n"+"Introduce the month");
+							    int month = Utils.readInt();
+
+							    System.out.print("\n"+"Introduce the year");
+							    int year = Utils.readInt();
+							    
+							    Date workerDate= new Date (year,  month, day) ;
+							
+							
+							System.out.print("\n"+ "Introduce the salary of "+workerName+ " " +workerLastName+"\n");
+							String salary=  Utils.readLine();
+							float workerSalary= Float.parseFloat(salary);
+							
+							System.out.print("\n"+ "Introduce the job of the new worker"+"\n"+"Remember, the posibilities are:ZOO_KEEPER, VETERINARY ,ADMINISTRATOR "+"\n");
+							String aWork= Utils.readLine();
+							WorkerType job= WorkerType.valueOf(aWork);
+							
+							
+							
+							
+							if( WorkerType.ZOO_KEEPER.equals(job)) {
+							System.out.print("\n"+ "Introduce the habitat where "+workerName+" is going to work "+"\n");
+							String whichType= Utils.readLine();
+							
+							Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job, whichType);
+							//Mostramos todos los animales con los que va a trabajar esta persona
+							}
+							
+							
+							else {
+								Worker workerInfo2 = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
+							}
+							
+									
+							break;
+						case 2: break;
+						case 3: break;
+							
+							
+						case 4: 
+							break;
+							 
+						default :	
+							System.out.println("Error, nonvalid input.");
+							break;
+	                	
+						}
+						break;
 						
 	                	//HIRE WORKER (INSERT, UPDATE)
 	                	//Add worker to the database
@@ -193,7 +287,6 @@ public class Menu {
 	                	//Eliminate worker from the database and the arraylist
 	                	//MODIFY WORKER´S SALARY
 	                	
-	                    break;
 	                    
 	                case 3:
 	                	System.out.println("\n"+"MANAGEMENT OF DRUGS"+"\n");
@@ -260,6 +353,7 @@ public class Menu {
 		
 		
 	}
+	
 
 
 }

@@ -15,55 +15,55 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	public static  Integer id; //No need to be in constructor
 	public  Date enterDate;
 	private Integer habitat_id; //fk to habitat the animal lives in
-	public static FeedingType feedingType;
+	//public static FeedingType feedingType;
 	public static Date lastBath;	
 	public static Date lastFed;
 	public static Date deathDate;
 	public static Date freedomDate;
-	public static String type; //elephant, giraffe...
-	public  String name; //for easy access when still do not have a "barcode reader"
+	//public static AnimalType type; //elephant, giraffe...
+	public   String name; //for easy access when still do not have a "barcode reader"
 	
 	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
 	private List<Drug> drugs; 
     
 	
-    public Animal(String type, String name, Date enterDate) {
-    	this.type=type;
+    public Animal(String name, Date enterDate) {
     	this.name= name;
 		this.enterDate = enterDate;
     }
     
 
-	public Animal(Integer id, Date enterDate, Integer habitat_id, FeedingType feedingType, Date lastBath, Date lastFed,
-			Date deathDate, Date freedomDate, String type, String name) {
+	public Animal(Integer id, Date enterDate, Integer habitat_id,/*FeedingType feedingType,*/ Date lastBath, Date lastFed,
+			Date deathDate, Date freedomDate, /*AnimalType type,*/ String name) {
 		super();
 		this.id = id;
 		this.enterDate = enterDate;
 		this.habitat_id = habitat_id;
-		this.feedingType = feedingType;
+		//this.feedingType = feedingType;
 		this.lastBath = lastBath;
 		this.lastFed = lastFed;
 		this.deathDate = deathDate;
 		this.freedomDate = freedomDate;
-		this.type = type;
+		//this.type = type;
 		this.name = name;
 	}
 
 	
-	public Animal(Date enterDate, FeedingType feedingType, Date lastBath, Date lastFed,
-			Date deathDate, Date freedomDate, String type, String name) {
+	public Animal(Date enterDate, /*FeedingType feedingType,*/ Date lastBath, Date lastFed,
+			Date deathDate, Date freedomDate, /*AnimalType type,*/ String name) {
 		super();
 		this.enterDate = enterDate;
-		this.feedingType = feedingType;
+		//this.feedingType = feedingType;
 		this.lastBath = lastBath;
 		this.lastFed = lastFed;
 		this.deathDate = deathDate;
 		this.freedomDate = freedomDate;
-		this.type = type;
+		//this.type = type;
 		this.name = name;
 	}
-	
+
+
 	@Override //To compare ids
 	public int hashCode() { //if two objects have the same id, they'll have the same hashCode
 		final int prime = 31;
@@ -107,14 +107,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 
 
-	public String getType() {
+	/*public AnimalType getType() {
 		return type;
 	}
 
 
-	public void setType(String type) {
+	public void setType(AnimalType type) {
 		this.type = type;
-	}
+	}*/
 
 
 	public Date getEnterDate() {
@@ -137,14 +137,14 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 	
 
-	public FeedingType getFeedingType() {
+	/*public FeedingType getFeedingType() {
 		return feedingType;
 	}
 
 
 	public void setFeedingType(FeedingType feedingType) {
 		this.feedingType = feedingType;
-	}
+	}*/
 
 
 	public Date getLastBath() {
@@ -219,8 +219,8 @@ public class Animal implements Serializable { //Serializable is used to have thi
 
 	@Override
 	public String toString() {
-		return "Animal [name=" + name + ", type=" + type + ", enterDate=" + enterDate + ", habitat_id=" + habitat_id
-				+ ", feedingType=" + feedingType + ", lastBath=" + lastBath
+		return "Animal [name=" + name +/* ", type=" + type +*/ ", enterDate=" + enterDate + ", habitat_id=" + habitat_id
+				/*+ ", feedingType=" + feedingType*/ + ", lastBath=" + lastBath
 				+ ", lastFed=" + lastFed + ", deathDate=" + deathDate + ", freedomDate=" + freedomDate + ", illnesses="
 				+ illnesses + ", drugs=" + drugs + "]"; //No workers print so as to avoid stackOverflow Error (loop)
 	}

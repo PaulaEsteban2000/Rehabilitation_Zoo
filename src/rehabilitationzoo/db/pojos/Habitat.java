@@ -13,7 +13,7 @@ public class Habitat implements Serializable {
 	private static final long serialVersionUID = 1947022899735841747L;
 
 	private Integer id; //No need to be in constructor
-	private String name;
+	public String name;
 	private Date lastCleaned;
 	private Float waterLevel;
 	private Integer temperature;

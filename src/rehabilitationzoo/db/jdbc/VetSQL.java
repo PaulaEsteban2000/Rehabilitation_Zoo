@@ -22,6 +22,25 @@ public class VetSQL implements VetManager{
 	
 ////////////DIAGNOSIS
 	
+	
+	
+	//POR SI TE SIRVE PARA LUEGO BB
+	
+	/*@Override
+	public void returAnimalToTheWilderness(Animal animal) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void markAnimalAsDeceased(Animal animal) {
+		// TODO Auto-generated method stub
+		
+	}*/
+	
+	
+	
+	
 	@Override
 	public List<String> getAnimalTypesInZoo() {
 		List<String> animalTypes = new ArrayList<String>();
@@ -63,16 +82,16 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				String type = rs.getString("type");
+				//String type = rs.getString("type");
 				String name = rs.getString("name");
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				Animal animal = new Animal (id, enterDate, habitat_id, /*feedingType,*/ lastBath, lastFed, deathDate, freedomDate,/* type,*/ name);
 				
 				animals.add(animal);
 			}
@@ -103,16 +122,16 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				String type = rs.getString("type");
+				//String type = rs.getString("type");
 				String name = rs.getString("name");
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				Animal animal = new Animal (id, enterDate, habitat_id,/* feedingType,*/ lastBath, lastFed, deathDate, freedomDate, /*type,*/ name);
 				
 				animals.add(animal);
 			}
@@ -401,16 +420,16 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				String type = rs.getString("type");
+				//String type = rs.getString("type");
 				String name = rs.getString("name");
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+				Animal animal = new Animal (id, enterDate, habitat_id, /*feedingType,*/ lastBath, lastFed, deathDate, freedomDate,/* type,*/ name);
 				
 				animals.add(animal);
 			}
@@ -473,16 +492,16 @@ public class VetSQL implements VetManager{
 			int id = rs.getInt("id");
 			Date enterDate = rs.getDate("enterDate");
 			Integer habitat_id = rs.getInt("habitat_id");
-			FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
+			//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 			Date lastBath = rs.getDate("lastBath");
 			Date lastFed = rs.getDate("lastFed");
 			Date deathDate = rs.getDate("deathDate");
 			Date freedomDate = rs.getDate("freedomDate");
-			String type = rs.getString("type");
+			//String type = rs.getString("type");
 			String name = rs.getString("name");
 			
 			System.out.println(name);//esto por favor me lo quitas despues ;)
-			Animal animal = new Animal (id, enterDate, habitat_id, feedingType, lastBath, lastFed, deathDate, freedomDate, type, name);
+			Animal animal = new Animal (id, enterDate, habitat_id,/* feedingType,*/ lastBath, lastFed, deathDate, freedomDate,/* type,*/ name);
 			
 			animals.add(animal);
 		}

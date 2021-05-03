@@ -12,6 +12,11 @@ public interface VetManager {
 	//PARTE DE PAULA - VET
 	
 	
+	//METODOS QUE HAY QUE PONER
+	//public void markAnimalAsDeceased(Animal animal);
+	//public void FreedomDateOfTheAnimal(Animal animal);
+	
+	
 	//1. ANIMAL DIAGNOSIS - only on arrival
 	
 		//a. askForAnimal
