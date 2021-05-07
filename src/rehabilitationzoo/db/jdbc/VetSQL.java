@@ -52,6 +52,17 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenType(String animalType) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	//	kk ni warra porque no hay characteristics_id en animals
+=======
+<<<<<<< HEAD
+		//kk ni warra porque no hay characteristics_id en animals
+=======
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		
 		List<Animal> animals = new ArrayList<Animal>();
 			
@@ -93,7 +104,14 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch) {
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 	//	kk ni warra porque no hay characteristics_id en animals
 		
 		List<Animal> animals = new ArrayList<Animal>();

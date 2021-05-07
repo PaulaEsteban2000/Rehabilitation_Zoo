@@ -2,6 +2,7 @@ package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,15 @@ public class Habitat implements Serializable {
 	}
 	
 	
+	public Habitat(String name, LocalDate lastCleaned, LocalDate waterTank, Integer temperature, LightType light) {
+		super();
+		this.name = name;
+		this.lastCleaned = lastCleaned;
+		this.waterTank = waterTank;
+		this.temperature = temperature;
+		this.light = light;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
