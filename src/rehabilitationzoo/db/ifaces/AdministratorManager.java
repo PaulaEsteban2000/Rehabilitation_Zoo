@@ -6,6 +6,7 @@ import java.util.List;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
+import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Worker;
 
 public interface AdministratorManager {
@@ -44,7 +45,7 @@ public interface AdministratorManager {
 
 		
 
-
+		public void addHabitat(Habitat habitat);
 
 
 		

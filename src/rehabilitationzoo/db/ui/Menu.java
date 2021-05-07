@@ -18,6 +18,7 @@ import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.FeedingType;
 import rehabilitationzoo.db.pojos.Habitat;
+import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.users.Role;
 import rehabilitationzoo.db.pojos.users.User;
 import rehabilitationzoo.db.pojos.Worker;
@@ -488,6 +489,55 @@ public class Menu {
 						+	"2.Add new drugs "+"\n"
 			        	+	"3.Deletes drugs"+"\n"
 			        	+	"4.Go back"+ "\n");
+            	
+            	
+            	
+            	
+            	int manageOfHabitats= Utils.readInt();
+				
+				switch(manageOfHabitats) {
+				
+				case 1:
+					System.out.print("\n"+"Introduce the name of the habitat"+"\n");
+					String name = Utils.readLine();
+					
+					LocalDate lastCleaned = LocalDate.now(); 
+					LocalDate waterTank = LocalDate.now(); 
+					
+					System.out.print("\n"+"Introduce the temperature "+"\n");
+					Integer temperature = Utils.readInt();
+					
+					System.out.print("\n"+"Introduce the period of days between the dosis"+"\n");
+					String lightStr = Utils.readLine();
+					LightType light= LightType.valueOf(lightStr);
+					
+					
+					Habitat habitat = new Habitat(name, lastCleaned, waterTank, temperature, light);
+					
+					 System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
+					    
+					
+
+					break;
+					
+				case 2:
+					
+					
+					break;
+					
+				case 3:
+					
+					
+					break;
+					
+				case 4: break;
+					
+				default: 
+					System.out.print("\nThat is not an  valid option\n");
+					break;
+				}
+	
+                break;//case 3 del menu principal
 				
 		 
 		 

@@ -330,6 +330,10 @@ public class KeyboardInput {
 		adminMan.addAnimal(anAnimal);		
 	}	 
 		 
+
+	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException {
+		adminMan.addHabitat(habitat);
+	}	
 		 
 	
 	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
