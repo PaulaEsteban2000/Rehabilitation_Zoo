@@ -33,6 +33,7 @@ public class Menu {
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
 	//TODO all methods here should be private if we can
+	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
 	
 	public static void main(String[] args) throws Exception, IOException{

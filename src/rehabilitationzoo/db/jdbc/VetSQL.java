@@ -52,12 +52,16 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenType(String animalType) {
+<<<<<<< HEAD
 		//kk ni warra porque no hay characteristics_id en animals
+=======
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		
 		List<Animal> animals = new ArrayList<Animal>();
 			
 			try {
-			String sql = "SELECT * DISTINCT FROM animals WHERE type = ?"; 				// esta bien??
+			String sql = "SELECT * FROM animals	AS a JOIN animals_characteristics AS ac ON ac.id = a.type_id"
+					+ " WHERE type = ? FROM animals_characteristics"; 					// esta bien??
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			prep.setString(1, "%" + animalType + "%");							// esta bien??
 			ResultSet rs = prep.executeQuery();
@@ -93,12 +97,16 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch) {
+<<<<<<< HEAD
 	//	kk ni warra porque no hay characteristics_id en animals
 		
+=======
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {
-			String sql = "SELECT * FROM animals WHERE name LIKE ? AND WHERE type LIKE ?";
+			String sql = "SELECT * FROM animals AS a JOIN animals_characteristics AS ac ON ac.type = a.type_id "
+					+ "WHERE a.name LIKE ? AND WHERE ac.type LIKE ?";
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
 			prep.setString(1, "%" + nameToSearch + "%");
 			prep.setString(2, "%" + typeToSearch + "%");
@@ -108,16 +116,15 @@ public class VetSQL implements VetManager{
 				int id = rs.getInt("id");
 				Date enterDate = rs.getDate("enterDate");
 				Integer habitat_id = rs.getInt("habitat_id");
-				//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
 				Date lastBath = rs.getDate("lastBath");
 				Date lastFed = rs.getDate("lastFed");
+				Date lastDrug = rs.getDate("lastDrug");
 				Date deathDate = rs.getDate("deathDate");
 				Date freedomDate = rs.getDate("freedomDate");
-				//String type = rs.getString("type");
+				int typeId = rs.getInt("type_id");
 				String name = rs.getString("name");
 				
-				System.out.println(name);//esto por favor me lo quitas despues ;)
-				Animal animal = new Animal (id, enterDate, habitat_id,/* feedingType,*/ lastBath, lastFed, deathDate, freedomDate, /*type,*/ name);
+				Animal animal = new Animal (id, enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, typeId, name);
 				
 				animals.add(animal);
 			}
@@ -365,9 +372,7 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<String> getAnimalTypesInAHabitat(Habitat habitat){
-		
 		List<String> types = new ArrayList<String>();
-		//REESCRIBIRLO QUE AHORA HAY UNA TABLA
 		
 		try {
 		String sql = "SELECT ac.name FROM animals_characteristics AS ac \r\n"	//TODO ver que va bien
@@ -560,7 +565,7 @@ public class VetSQL implements VetManager{
 					Integer treatmentDuration = rs.getInt("treatmentDuration");
 					Integer periodBetweenDosis = rs.getInt("periodBetweenDosis");
 					Integer drugType_id = rs.getInt("drugType_id");
-					Integer dosis = rs.getInt("dosis");					
+					Float dosis = rs.getFloat("dosis");					
 					
 					System.out.println(name);//esto por favor me lo quitas despues ;)
 					Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id, dosis);
@@ -581,11 +586,12 @@ public class VetSQL implements VetManager{
 
 	
 	//TODO al ser una n-n no se muy bien como hacer estos metodos:
+	
 	@Override 
 	public List<Illness> getAnimalIllnesses() { 
 	  List<Illness> illnesses = new ArrayList<Illness>();
 	  
-	  try { //TODO no se hacer para coger todas las enfermedades de un animal: Java directamente?
+	  try {
 	  String sql = "SELECT * FROM illnesses"; 
 	  PreparedStatement prep = JDBCManager.c.prepareStatement(sql); ResultSet rs = prep.executeQuery();
 	  
@@ -604,8 +610,7 @@ public class VetSQL implements VetManager{
 	  return illnesses;
 	  
 	  }
-	
-	//TODO este tampoco
+
 	@Override
 	public Integer getNumberOfIllnessesAnAnimalHas() {
 		Integer numberOfIllnesses = null;
@@ -634,18 +639,39 @@ public class VetSQL implements VetManager{
 		return null;
 	}
 
-	//TODO este tampoco
 	@Override
-	public Illness setIllnessOnAnimal(Illness illness) {
-		// TODO Auto-generated method stub
-		return null;
+	public void setIllnessOnAnimal(Illness illness, Animal animal) {
+		// Cuando se le diagnostica una enfermedad a un animal, conectar una cosa con la otra
+		
+		try {
+			String sql = "UPDATE xxx";
+			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
+			s.setString(1, "%" + illness.getName() + "%");
+			s.setString(2, "%" + animal.getId() + "%");
+			s.executeUpdate();
+			s.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
-	//TODO rt
 	@Override
-	public void drugPrescription(Drug drug) {
-		// TODO Auto-generated method stub
+	public void drugPrescription(Drug drug, Animal animal) {
+		// Cuando se le receta una medicina a un animal, conectar una cosa con la otra
 		
+		try {
+			String sql = "UPDATE xx";
+			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
+			s.setString(1, "%" + drug.getName() + "%");
+			s.setString(2, "%" + animal.getId() + "%");
+			s.executeUpdate();
+			s.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

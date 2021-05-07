@@ -105,7 +105,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql2 = "CREATE TABLE groundTypes "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " habitat_id 	INTEGER	NOT NULL	REFERENCES habitats(id), "
-					   + " type			TEXT	NOT NULL )";
+					   + " type			STRING	NOT NULL )";
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 			
@@ -113,7 +113,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql8 = "CREATE TABLE animals_characteristics "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " feedingType	ENUM		NOT NULL, "
-					   + " type			STRING		NOT NULL )";
+					   + " type			STRING		NOT NULL	UNIQUE )";
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 			

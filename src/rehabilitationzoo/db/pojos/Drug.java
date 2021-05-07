@@ -43,8 +43,20 @@ public class Drug implements Serializable{
 		this.drugType_id = drugType_id;
 		this.dosis = dosis;
 	}
+	
 
+	public Drug(Integer id, String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,
+			float dosis) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.treatmentDuration = treatmentDuration;
+		this.periodBetweenDosis = periodBetweenDosis;
+		this.drugType_id = drugType_id;
+		this.dosis = dosis;
+	}
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
