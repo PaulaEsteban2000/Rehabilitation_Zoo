@@ -19,6 +19,8 @@ public interface AdministratorManager {
 	//1. MANAGE ANIMALS
 		public void addAnimal(Animal animal) throws SQLException;
 		public void introducingAnimalsTypes(AnimalType animalType) throws SQLException;
+		public List<String> getAnimalTypesByName();
+		public List<String> getAnimalTypesById(String name);
 		
 		
 	//2. MANAGE WORKERS
@@ -36,6 +38,16 @@ public interface AdministratorManager {
 		public Drug searchDrugByName(String name);  
 		public void deleteDrug(Drug drug);
 		// public void modifyDrug(Drug drug); //needed?
+
+
+
+
+		
+
+
+
+
+		
 		
 		
 }

@@ -15,13 +15,13 @@ public class Worker implements Serializable {
 	
 
 
-	public static Integer id; //No need to be in constructor
-	public  String name;
-	public String lastname;
-	public  Date hireDate;
-	public  Float salary;
-	public static WorkerType type;
-	public String whichHabitatDoYouWorkOn;
+	private  Integer id; //No need to be in constructor
+	private  String name;
+	private  String lastname;
+	private  Date hireDate;
+	private  Float salary;
+	private WorkerType type;
+	private String whichHabitatDoYouWorkOn;
 	
 	public static List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
 	

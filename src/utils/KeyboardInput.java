@@ -309,12 +309,14 @@ public class KeyboardInput {
 	public static boolean isThisAnAnimal (String unAnimal) { //Esto no seria una excpecion mejor? - Paula <3
 		boolean realAnimal= false;
 		
+		List <String> typesOfAnimalsInTheZoo=adminMan.getAnimalTypesByName();
+		
 		
 		 for( int i=0; i<typesOfAnimalsInTheZoo.size(); i++) {
 			 
 			 if(unAnimal.compareTo(typesOfAnimalsInTheZoo.get(i))==0) {
 				 realAnimal=true;
-				 Animal.type=typesOfAnimalsInTheZoo.get(i);
+				   
 			 }
 		 }
 
@@ -398,15 +400,15 @@ public class KeyboardInput {
 	}
 	
 
-	public void addDrugType(String drugName) {
+	public static void addDrugType(String drugName) {
 		adminMan.addNewDrugType(drugName);	
 	}
 	
-	public void addDrug(Drug oneDrug) {
+	public static void addDrug(Drug oneDrug) {
 		adminMan.addNewDrug(oneDrug);	
 	}
 	
-	public void deleteDrug(Drug oneDrug) {
+	public static void deleteDrug(Drug oneDrug) {
 		adminMan.addNewDrug(oneDrug);	
 	}
 

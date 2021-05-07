@@ -9,8 +9,8 @@ public class AnimalType implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L; //Serializable is used to have things exist outside memory (in the computer)
 
-	private static String type;
-	private static FeedingType whatDoYouEat;
+	private  String type;
+	private  FeedingType whatDoYouEat;
 	
 	private List<Animal> animals; 
 	
@@ -20,24 +20,27 @@ public class AnimalType implements Serializable {
 		   this.setWhatDoYouEat(whatDoYouEat);
 	   }
 
+	   public AnimalType (String type) {
+		   this.setType(type);
+	   }
 
-	public static String getType() {
+	public String getType() {
 		return type;
 	}
 
 
 	public void setType(String type) {
-		AnimalType.type = type;
+		this.type = type;
 	}
 
 
-	public static FeedingType getWhatDoYouEat() {
+	public FeedingType getWhatDoYouEat() {
 		return whatDoYouEat;
 	}
 
 
 	public void setWhatDoYouEat(FeedingType whatDoYouEat) {
-		AnimalType.whatDoYouEat = whatDoYouEat;
+		this.whatDoYouEat = whatDoYouEat;
 	}
 
 

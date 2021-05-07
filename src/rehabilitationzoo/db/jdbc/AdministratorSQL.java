@@ -1,5 +1,7 @@
 package rehabilitationzoo.db.jdbc;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,13 +15,22 @@ import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
+import rehabilitationzoo.db.pojos.FeedingType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.Worker;
+//import sample.db.pojos.Department;
 
 public class AdministratorSQL implements AdministratorManager{
 
 
+	 private Connection c;
+	    //in all classes that uses a connection 
+	    
+		public void AdministratorSQLConnection (Connection c) {
+			
+			this.c=c;
+		}
 
 	@Override
 	public void addAnimal(Animal animal) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
@@ -45,8 +56,8 @@ public class AdministratorSQL implements AdministratorManager{
 		try {
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
-			String sql = "INSERT INTO animals characteristics(id, type,feedingType)";
-			sql+= "VALUES ('" + AnimalType.getType() + "','" + AnimalType.getWhatDoYouEat() + ")";
+			String sql = "INSERT INTO animals_characteristics(type,feedingType)";
+			sql+= "VALUES ('" + animalType.getType() + "','" + animalType.getWhatDoYouEat() + ")";
 			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -55,6 +66,70 @@ public class AdministratorSQL implements AdministratorManager{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@Override
+	public List<String> getAnimalTypesByName() {
+		List<String> typesOfAnimals = new ArrayList<String>();
+		
+		
+		try {
+			Statement stmt = JDBCManager.c.createStatement(); 
+			String sql = "SELECT type FROM animals_characteristics"; 			    
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery();
+			
+			while (rs.next()) { //like hasNext
+				String type = rs.getString("type");
+				typesOfAnimals.add(type);
+				//FeedingType whatDoYouEat =  FeedingType.valueOf(rs.getString("feedingType")) ;
+				//AnimalType newType = new AnimalType(type, whatDoYouEat);
+				
+				//numberOfIllnesses = Integer.parseInt(rs.getString("xxx")); 
+			
+				System.out.print("In SQL: Se ha guardado"+"\n");
+			}
+			
+			System.out.println(sql);
+			prep.executeUpdate(sql);
+
+				rs.close();
+				stmt.close();
+				System.out.println("Search finished.");// Retrieve data: end
+				
+				prep.close();// Close database connection
+				
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		
+	return typesOfAnimals;	
+	}	
+	
+	@Override
+	public List<String> getAnimalTypesById(String name) {
+		List<String> typesOfAnimals = new ArrayList<String>();
+		
+		
+		try {
+			String sql = "SELECT id FROM animals_characteristics WHERE type LIKE ? "; 			    
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery();
+			
+			while (rs.next()) { //like hasNext
+				String type = rs.getString("type");
+				typesOfAnimals.add(type);
+			}
+			
+				prep.close();
+				rs.close();
+				
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		
+	return typesOfAnimals;	
 	}
 	
 
@@ -139,7 +214,8 @@ public class AdministratorSQL implements AdministratorManager{
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "INSERT INTO drugTypes type ";
-			sql+= "VALUES ('" + DrugType.getType() +")"; //que tiene que ser todo static dice
+			DrugType aDrugType = new DrugType(drugName);
+			sql+= "VALUES ('" + aDrugType.getType() +")"; //que tiene que ser todo static dice
 			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -159,7 +235,7 @@ public class AdministratorSQL implements AdministratorManager{
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "INSERT INTO drugs ";
-			sql+= "VALUES ('" + Drug.getName() +"','" + oneDrug.getTreatmentDuration() + "','" +oneDrug.getPeriodBetweenDosis()+ "','" 
+			sql+= "VALUES ('" + oneDrug.getName() +"','" + oneDrug.getTreatmentDuration() + "','" +oneDrug.getPeriodBetweenDosis()+ "','" 
 			+ oneDrug.getType()+ "','" + oneDrug.getDosis() + ")"; //que tiene que ser static dice
 			
 			System.out.println(sql);

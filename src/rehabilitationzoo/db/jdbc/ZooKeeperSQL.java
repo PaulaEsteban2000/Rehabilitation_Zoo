@@ -184,7 +184,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 			String sql = "UPDATE habitat SET lastCleaned=?, WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
-			s.setString(1, "%" + habitat.getId() + "%");
+			s.setString(2, "%" + habitat.getId() + "%");
 			s.executeUpdate();
 			s.close();
 
@@ -205,7 +205,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 			String sql = "UPDATE habitat SET waterTank=?, WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
-			s.setString(1, "%" + habitat.getId() + "%");
+			s.setString(2, "%" + habitat.getId() + "%");
 			s.executeUpdate();
 			s.close();
 
