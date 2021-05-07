@@ -52,7 +52,7 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenType(String animalType) {
-		kk ni warra porque no hay characteristics_id en animals
+	//	kk ni warra porque no hay characteristics_id en animals
 		
 		List<Animal> animals = new ArrayList<Animal>();
 			
@@ -93,7 +93,7 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch) {
-		kk ni warra porque no hay characteristics_id en animals
+	//	kk ni warra porque no hay characteristics_id en animals
 		
 		List<Animal> animals = new ArrayList<Animal>();
 		

@@ -159,7 +159,7 @@ public class AdministratorSQL implements AdministratorManager{
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "INSERT INTO drugs ";
-			sql+= "VALUES ('" + Drug.getName() +"','" + oneDrug.getTreatmentDuration() + "','" +oneDrug.getPeriodBetweenDosis()+ "','" 
+			sql+= "VALUES ('" + oneDrug.getName() +"','" + oneDrug.getTreatmentDuration() + "','" +oneDrug.getPeriodBetweenDosis()+ "','" 
 			+ oneDrug.getType()+ "','" + oneDrug.getDosis() + ")"; //que tiene que ser static dice
 			
 			System.out.println(sql);
