@@ -33,6 +33,7 @@ public class Menu {
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
 	//TODO all methods here should be private if we can
+	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
 	
 	public static void main(String[] args) throws Exception, IOException{
@@ -173,80 +174,75 @@ public class Menu {
 					System.out.println("Select the option that fits you the best"+"\n"
 							+	"1.Add animals"+"\n"
 				        	+	"2.Add new types of animals to the zoo"+"\n"
-				        	+	"3.Go back"+ "\n");
+				        	+	"3.Show all the animals in the zoo"+ "\n"
+				        	+ 	"4.Go back"+ "\n");
 					
 					int manageOfAnimals= Utils.readInt();
 					
 					switch(manageOfAnimals) {
-	case 1://ADD ANIMAL (INSERT) 
-						
-						//añadir el lastfed y lastbathe de hoy mismo
-						   
+						case 1://ADD ANIMAL (INSERT)  
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = Utils.readLine();
 							
-							//exito=KeyboardInput.isThisAnAnimal(readAnimal);//metodo donde compare si lo que hemos puesto es un animal o no
-							//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
-							//if(exito==true) {
-		
-
-						//	    String unAnimal= KeyboardInput.whichType(readAnimal);
-
-							  //  String unAnimal= KeyboardInput.whichType(readAnimal);
-
+							boolean exito1 = KeyboardInput.isThisAnAnimal(readAnimal);//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
+							if(exito1==true) {
 							    
 							    System.out.print("\n"+"Put a name to the animal");
 							    String name = Utils.readLine();
-							    
 							    System.out.print("\n"+"Introduce the enter date of the "+ readAnimal +" "+ name +"\n");
-							    
 							    System.out.print("\n"+"Introduce the day");
 							    int day = Utils.readInt();
-
 							    System.out.print("\n"+"Introduce the month");
 							    int month = Utils.readInt();
-
 							    System.out.print("\n"+"Introduce the year");
 							    int year = Utils.readInt();
+							    LocalDate enterLocalDate = LocalDate.of(year, month, day);
+							    Date enterDate = Date.valueOf(enterLocalDate);
+							    LocalDate now = LocalDate.now();
+							    Date today = Date.valueOf(now); //lastfed + lastbathe
 							    
-							    
-							    Date enterDate = new Date (year,  month, day) ;
-							    
-							    
-							    Animal anAnimal = new Animal(enterDate, anAnimal.getLastBath(), anAnimal.getlastFed,Animal.deathDate, Animal.freedomDate, name);
+							    Animal anAnimal = new Animal(enterDate, today, today,null, null, name);
 							    KeyboardInput.addAnimalInTheZoo(anAnimal); //DIRECTLY WE HAVE TO ADD IT TO THE TABLES IN SQL
-							   
 							    System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
-							    
-								//}
-								//else {
-								//	System.out.print("\n"+" That is not a type of animal present on the zoo"+"\n");
-								//}
 							    
 							    KeyboardInput.firstDiagnosisSubMenu(anAnimal); //Paula: first diagnosis of an animal
 							    
+								}
+								else {
+									System.out.print("\n"+" That is not a type of animal present on the zoo"+"\n");
+								}
 							    break;
+							
 							    
 							
 						case 2://ADD ANIMALTYPE (INSERT)
-							
+					
 							System.out.print("\n"+"Which animal would you like to add to the zoo?"+"\n");
-							String readAnimal1 = Utils.readLine();
-							
-							//WE CHECK IF THE ANIMAL EXITS OR NOT IN THE ZOO
-							
-							System.out.print("\n"+ "Introduce the feeding type of the "+readAnimal1 +"\n"+"Remember they could be CARNIVORE, HERVIBORE or OMNIVORE"+"\n");
-							String foodType = Utils.readLine();
-							FeedingType aType =FeedingType.valueOf(foodType);
+							String readAnimal1 = Utils.readLine();//WE CHECK IF THE ANIMAL EXITS OR NOT IN THE ZOO
+							boolean weHaveThisType = KeyboardInput.isThisAnAnimal(readAnimal1);
+							if(weHaveThisType == true) {
+								System.out.print("\n"+"We already have this type of animal in the zoo.");
+								break;
+							}
+							else {
+								System.out.print("\n"+ "Introduce the feeding type of the "+readAnimal1 +"\n"+"Remember they could be CARNIVORE, HERVIBORE or OMNIVORE"+"\n");
+								String foodType = Utils.readLine();
+								FeedingType aType =FeedingType.valueOf(foodType);
+									
+								AnimalType animalType= new AnimalType (readAnimal1, aType);
+								//KeyboardInput.typesOfAnimalsInTheZoo(readAnimal1);
+								KeyboardInput.addAnimalTypeInTheZoo(animalType);
 								
-							AnimalType animalType= new AnimalType (readAnimal1, aType);
-							//KeyboardInput.typesOfAnimalsInTheZoo(readAnimal1);
-							KeyboardInput.addAnimalTypeInTheZoo(animalType);
-							
-							System.out.print("\n"+"New animal introduced in the zoo"+"\n");
+								System.out.print("\n"+"New animal introduced in the zoo"+"\n");
+								}
 							break;
 							
 						case 3: 
+							
+							List <String>allTheAnimals = KeyboardInput.adminMan.getAnimalTypesByName();
+							for(int i=0; i<allTheAnimals.size(); i++) {
+								System.out.print((i+1)+allTheAnimals.get(i)+"\n");
+							}
 							break;
 							 
 						default :	
@@ -461,7 +457,7 @@ public class Menu {
 							List <String> differentDrugTypes1 = KeyboardInput.adminMan.getDrugTypes();
 							boolean realDrug1= false;
 							
-							for(int i = 0; i<differentDrugTypes.size(); i++){
+							for(int i = 0; i<differentDrugTypes1.size(); i++){
 								 if(drugToDelete.equals(differentDrugTypes1.get(i)) ) {
 									 realDrug1 = true;
 									 break;
@@ -470,7 +466,7 @@ public class Menu {
 							
 							if(realDrug1==true) {
 								Drug drug2= (Drug) KeyboardInput.adminMan.searchDrugByName(drugToDelete);
-								boolean deletedornot= KeyboardInput.deleteDrug(drug2);//static
+								 KeyboardInput.deleteDrug(drug2);//static
 								
 							}
 							
