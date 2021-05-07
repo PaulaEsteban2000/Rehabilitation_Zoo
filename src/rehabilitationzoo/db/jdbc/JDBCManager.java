@@ -49,27 +49,30 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
 	
 	public void createHabitats() {
+		
+		PreparedStatement prep = null; //JDBCManager.c.prepareStatement(sql1); //evita la SQL injection
+		
 		try {
 			//Id is chosen by the database
-			
 			LocalDate localToday = LocalDate.now(); //only way to add dates
 			String stringToday = localToday.toString();
 			Date newDate = Date.valueOf(stringToday);
 			
-			Statement stmt1 = JDBCManager.c.createStatement(); 
+			
 			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)";
-			sql1+= "VALUES (northPole, " + newDate + ", " + newDate + ", -15, " + LightType.MEDIUM + ")";
+			sql1+= "VALUES (´northPole´, " + newDate + ", " + newDate + ",-15, " + LightType.MEDIUM + ")";
 			
-			stmt1.executeUpdate(sql1);
-			stmt1.close();
+			prep = JDBCManager.c.prepareStatement(sql1);
+			prep.executeUpdate(sql1);
+			prep.close();
 			
 			
-			Statement stmt2 = JDBCManager.c.createStatement(); 
-			String sql2 = "INSERT INTO animals_characteristics (feedingType, type)";
-			sql2+= "VALUES (" + FeedingType.CARNIVORE + ", lion)";
+			//Statement stmt2 = JDBCManager.c.createStatement(); 
+			//String sql2 = "INSERT INTO animals_characteristics (feedingType, type)";
+			//sql2+= "VALUES (" + FeedingType.CARNIVORE + ", lion)";
 			
-			stmt2.executeUpdate(sql2);
-			stmt2.close();
+			//stmt2.executeUpdate(sql2);
+			//stmt2.close();
 			
 			//... ESTOS SERIAN LOS DATOS QUE TENDRIA LA DB AL INICIARSE
 			//y seria anhadir el resto de habitats y tipos de animales que queramos tener en el zoo de momento 

@@ -31,7 +31,7 @@ public interface VetManager {
 				public Integer getAnimalId(Animal animal);
 			
 		//c. illnessesInputSubMenu
-			public Integer getNumberOfIllnessesAnAnimalHas();
+			public Integer getNumberOfIllnessesAnAnimalHas(Animal animal);
 			void addIllness(Illness illness);
 			public void illnessQuarantine (Boolean bol, Illness illness); 
 			public List<String> getDrugTypes();
@@ -57,7 +57,7 @@ public interface VetManager {
 	///////////////////////////////////////////////////////////////////////////////////
 			
 	
-	public List<Illness> getAnimalIllnesses();
+	public List<Illness> getAnimalIllnesses(Animal animal);
 		
 	public void setIllnessOnAnimal(Illness illness, Animal animal); //remember each can have more than one
 	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
@@ -67,7 +67,6 @@ public interface VetManager {
 			
 	Integer getHabitatIdByName(String habitatName) throws SQLException;
 	List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException;
-	
 		
 
 		

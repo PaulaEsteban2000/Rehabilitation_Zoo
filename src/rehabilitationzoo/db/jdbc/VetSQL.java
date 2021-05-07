@@ -52,10 +52,6 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenType(String animalType) {
-<<<<<<< HEAD
-		//kk ni warra porque no hay characteristics_id en animals
-=======
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		
 		List<Animal> animals = new ArrayList<Animal>();
 			
@@ -97,11 +93,9 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch) {
-<<<<<<< HEAD
+
 	//	kk ni warra porque no hay characteristics_id en animals
 		
-=======
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		List<Animal> animals = new ArrayList<Animal>();
 		
 		try {
@@ -157,7 +151,7 @@ public class VetSQL implements VetManager{
 		}
 		
 		
-		if (getNumberOfIllnessesAnAnimalHas() == 0) {
+		if (getNumberOfIllnessesAnAnimalHas(animal) == 0) { 
 			
 		LocalDate localToday = LocalDate.now(); //only way to add dates
 		LocalDate localHealingDay = localToday.plusDays(30);
@@ -586,14 +580,18 @@ public class VetSQL implements VetManager{
 
 	
 	//TODO al ser una n-n no se muy bien como hacer estos metodos:
+	//animal con su lista de illness
+	
 	
 	@Override 
-	public List<Illness> getAnimalIllnesses() { 
+	public List<Illness> getAnimalIllnesses(Animal animal) { 
 	  List<Illness> illnesses = new ArrayList<Illness>();
 	  
 	  try {
-	  String sql = "SELECT * FROM illnesses"; 
-	  PreparedStatement prep = JDBCManager.c.prepareStatement(sql); ResultSet rs = prep.executeQuery();
+	  String sql = "SELECT * FROM illnesses AS i JOIN animals AS a ON i.id=a.id WHERE a.id LIKE ?"; 
+	  PreparedStatement prep = JDBCManager.c.prepareStatement(sql); 
+		prep.setString(1, "%" + animal.getId() + "%");
+		ResultSet rs = prep.executeQuery();
 	  
 	  while(rs.next()) { 
 		  int drugId = rs.getInt("id"); String name = rs.getString("name"); 
@@ -611,12 +609,13 @@ public class VetSQL implements VetManager{
 	  
 	  }
 
+
 	@Override
-	public Integer getNumberOfIllnessesAnAnimalHas() {
+	public Integer getNumberOfIllnessesAnAnimalHas(Animal animal) {
 		Integer numberOfIllnesses = null;
 		
 		try {
-			String sql = "SELECT type COUNT FROM illnesses WHERE ????"; 	// COUNT esta bien??
+			String sql = "SELECT id COUNT FROM illnesses AS i JOIN animals AS a ON i.id=a.id WHERE a.id LIKE ?"; 	// COUNT esta bien??
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	// esta bien??
 			ResultSet rs = prep.executeQuery();
 			
@@ -644,7 +643,7 @@ public class VetSQL implements VetManager{
 		// Cuando se le diagnostica una enfermedad a un animal, conectar una cosa con la otra
 		
 		try {
-			String sql = "UPDATE xxx";
+			String sql = "UPDATE illnesses WH";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + illness.getName() + "%");
 			s.setString(2, "%" + animal.getId() + "%");
@@ -673,6 +672,7 @@ public class VetSQL implements VetManager{
 			e.printStackTrace();
 		}
 	}
+
 
 
 }

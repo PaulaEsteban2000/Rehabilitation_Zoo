@@ -230,7 +230,7 @@ public class AdministratorSQL implements AdministratorManager{
 	}
 	
 	@Override
-	public void addNewDrug (Drug oneDrug) {
+	public void addNewDrug(Drug oneDrug) {
 		try {
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
@@ -332,8 +332,6 @@ public class AdministratorSQL implements AdministratorManager{
 		return drugId;
 		
 	}
-	
-	
 	
 
 
