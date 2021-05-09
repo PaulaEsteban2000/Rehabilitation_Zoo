@@ -56,12 +56,6 @@ public class Drug implements Serializable{
 		this.dosis = dosis;
 	}
 
-<<<<<<< HEAD
-
-
-=======
-	
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 	@Override
 	public int hashCode() {
 		final int prime = 31;

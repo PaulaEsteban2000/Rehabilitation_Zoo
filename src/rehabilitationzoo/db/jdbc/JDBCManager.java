@@ -28,13 +28,16 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:./db/management.db"); //could change this to prettier name
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
-			this.createTables();
 			
-			createHabitats();
+			this.createTables();
+			this.createHabitats();
+			
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 	}
 	
@@ -58,7 +61,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt1 = JDBCManager.c.createStatement(); 
 			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)";
-			sql1+= "VALUES (northPole, " + newDate + ", " + newDate + ", -15, " + LightType.MEDIUM + ")";
+			sql1+= "VALUES ('northPole', '" + newDate + "', '" + newDate + "', '-15', '" + LightType.MEDIUM + "')";
 			
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
@@ -66,7 +69,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt2 = JDBCManager.c.createStatement(); 
 			String sql2 = "INSERT INTO animals_characteristics (feedingType, type)";
-			sql2+= "VALUES (" + FeedingType.CARNIVORE + ", lion)";
+			sql2+= "VALUES ('" + FeedingType.CARNIVORE + "', 'lion')";
 			
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
@@ -78,6 +81,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 		} catch(Exception e) {
 			e.printStackTrace();
+			
 		}
 	}
 	
