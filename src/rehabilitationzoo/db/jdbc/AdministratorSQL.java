@@ -18,20 +18,13 @@ import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.FeedingType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
 //import sample.db.pojos.Department;
 
 public class AdministratorSQL implements AdministratorManager{
 
-
-	 private Connection c;
-	    //in all classes that uses a connection 
-	    
-		public void AdministratorSQLConnection (Connection c) {
-			
-			this.c=c;
-		}
-
+	
 	@Override
 	public void addAnimal(Animal animal) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
@@ -43,6 +36,24 @@ public class AdministratorSQL implements AdministratorManager{
 			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
+			stmt.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addHabitat(Habitat habitat) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
+		try {
+			//Ids are chosen by the database
+			Statement stmt = JDBCManager.c.createStatement(); //JDBCManager.c porque asi tenemos una sola conexion abierta en la clase que se encarga de la DB - Paula
+			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)";
+			sql1+= "VALUES ('" + habitat.getName() + ", " + habitat.getLastCleaned() + ", " + habitat.getWaterTank() + "','" 
+							+ ",  "+ habitat.getTemperature() + ",  "+ habitat.getLight() +")";
+		
+			
+			System.out.println(sql1);
+			stmt.executeUpdate(sql1);
 			stmt.close();
 			
 		} catch(Exception e) {
@@ -230,7 +241,7 @@ public class AdministratorSQL implements AdministratorManager{
 	}
 	
 	@Override
-	public void addNewDrug (Drug oneDrug) {
+	public void addNewDrug(Drug oneDrug) {
 		try {
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
@@ -332,8 +343,6 @@ public class AdministratorSQL implements AdministratorManager{
 		return drugId;
 		
 	}
-	
-	
 	
 
 

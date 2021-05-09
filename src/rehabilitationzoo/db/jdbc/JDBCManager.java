@@ -30,7 +30,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			
 			this.createTables();
-			this.createHabitats();
+			this.loadInitialData();
 			
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
@@ -51,26 +51,31 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	}
 	
 	
-	public void createHabitats() {
+	public void loadInitialData() {
+		
+		PreparedStatement prep = null; //evita la SQL injection
+		
 		try {
 			//Id is chosen by the database
-			
-			LocalDate localToday = LocalDate.now(); //only way to add dates
+			LocalDate localToday = LocalDate.now(); //only way to add(sum) dates
 			String stringToday = localToday.toString();
 			Date newDate = Date.valueOf(stringToday);
 			
 			Statement stmt1 = JDBCManager.c.createStatement(); 
 			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)";
-			sql1+= "VALUES ('northPole', '" + newDate + "', '" + newDate + "', '-15', '" + LightType.MEDIUM + "')";
+			sql1+= " VALUES ('northPóle', '" + newDate + "', '" + newDate + "', '-15', '" + LightType.MEDIUM + "')";
 			
+			System.out.println(sql1);
+			
+			//prep = JDBCManager.c.prepareStatement(sql1);
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
 			
 			
+
 			Statement stmt2 = JDBCManager.c.createStatement(); 
 			String sql2 = "INSERT INTO animals_characteristics (feedingType, type)";
 			sql2+= "VALUES ('" + FeedingType.CARNIVORE + "', 'lion')";
-			
 			stmt2.executeUpdate(sql2);
 			stmt2.close();
 			
@@ -85,8 +90,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		}
 	}
 	
-	
-
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface
 		
@@ -179,7 +182,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt9 = c.createStatement();
 			String sql9 = "CREATE TABLE animal_drug "
-					   + "(drug_id	INTEGER	REFERENCES drug(id), "
+					   + "(drug_id		INTEGER	REFERENCES drug(id), "
 					   + " animal_id	INTEGER	REFERENCES animal(id), "
 					   + " PRIMARY KEY (drug_id, animal_id) )";
 			stmt9.executeUpdate(sql9);

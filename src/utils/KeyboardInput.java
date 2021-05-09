@@ -240,7 +240,13 @@ public class KeyboardInput {
 						Float dosis = Float.parseFloat(Utils.readLine());
 						
 						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, vetMan.getTypeOfDrugId(drugType), dosis);
-						//TODO vetMan.drugPrescription(); 
+						//save drug bbdd
+						
+						//asocias drug al animal
+						//animalToDiagnose.setDrug(drug);
+						
+						//guardar drug del animal en la tabla de la relacion
+						vetMan.drugPrescription(animalToDiagnose); 
 						//TODO drug to illness?? how are they related?
 					} else if(drugsChoice.equals("b") ) {
 						break;	
@@ -330,6 +336,10 @@ public class KeyboardInput {
 		adminMan.addAnimal(anAnimal);		
 	}	 
 		 
+
+	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException {
+		adminMan.addHabitat(habitat);
+	}	
 		 
 	
 	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
