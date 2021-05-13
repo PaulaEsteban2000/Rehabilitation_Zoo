@@ -47,6 +47,7 @@ public class Menu {
 		KeyboardInput key = new KeyboardInput();
 		key.weAddHabitats();
 		key.weAddDrugTypes();
+		key.weAddAnimalTypes();
 	
 		do {
 			//LOGGING IN
@@ -165,8 +166,6 @@ public class Menu {
  		boolean exito=false;
  		
 
- 		
- 		
 		do {
 			
 			System.out.println("Select an option: "+"\n" 
@@ -208,12 +207,13 @@ public class Menu {
 							    System.out.print("\n"+"Introduce the year");
 							    int year = Utils.readInt();
 							    LocalDate enterLocalDate = LocalDate.of(year, month, day);
-							    Date enterDate = Date.valueOf(enterLocalDate);
+							    Date enterDate =Date.valueOf (enterLocalDate);
+							    
 							    LocalDate now = LocalDate.now();
 							    Date today = Date.valueOf(now); //lastfed + lastbathe
 							    
 							    Animal anAnimal = new Animal(enterDate, today, today,null, null, name);
-							    KeyboardInput.addAnimalInTheZoo(anAnimal); //DIRECTLY WE HAVE TO ADD IT TO THE TABLES IN SQL
+							    KeyboardInput.addAnimalInTheZoo(anAnimal); 
 							    System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							    
 							    KeyboardInput.firstDiagnosisSubMenu(anAnimal); //Paula: first diagnosis of an animal

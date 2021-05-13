@@ -64,7 +64,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt1 = c.createStatement();
 			String sql1 = "CREATE TABLE habitats "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name			TEXT	NOT NULL	UNIQUE, " 
+					   + " name			TEXT	NOT NULL, " //UNIQUE
 					   + " lastCleaned	DATE	NOT NULL, "
 					   + " waterTank	DATE	NOT NULL, "
 					   + " temperature	FLOAT	NOT NULL, "
@@ -84,7 +84,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql8 = "CREATE TABLE animals_characteristics "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " feedingType	ENUM		NOT NULL, "
-					   + " type			STRING		NOT NULL	UNIQUE )";
+					   + " type			STRING		NOT NULL)"; //UNIQUE
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 			
@@ -99,7 +99,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
 					   + " type_id		INTEGER	NOT NULL	REFERENCES animals_characteristics(id), "
-					   + " name			STRING	NOT NULL	UNIQUE)";
+					   + " name			STRING	NOT NULL)"; //UNIQUE
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
@@ -127,7 +127,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drugs "
 					   + "(id					INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name					TEXT	NOT NULL	UNIQUE, "
+					   + " name					TEXT	NOT NULL, "//UNIQUE
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
 					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id) )";			   
@@ -137,7 +137,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE illnesses "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name			STRING	NOT NULL	UNIQUE, "
+					   + " name			STRING	NOT NULL, " //UNIQUE
 					   + " quarantine	BOOLEAN	NOT NULL, "
 					   + " prothesis	BOOLEAN	NOT NULL, "
 					   + " drug_id 		INTEGER	NOT NULL	REFERENCES Drug(id) )";
