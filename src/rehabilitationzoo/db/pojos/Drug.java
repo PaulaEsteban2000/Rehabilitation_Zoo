@@ -16,52 +16,53 @@ public class Drug implements Serializable{
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
 	private Integer drugType_id;
-	private float dosis;
+	//private float dosis;
 	
 	private List<Animal> animals; 
 	private List<Illness> illnesses; 
 		
 
-	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,  List<Animal> animals, int dosis,  List<Illness> illness) {
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,  List<Animal> animals,  List<Illness> illness) {
 		super();
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
 		this.periodBetweenDosis = periodBetweenDosis;
 		this.drugType_id = drugType_id;
-		this.dosis = dosis;
 		
 		this.animals = new ArrayList<Animal>();
 		this.illnesses = new ArrayList<Illness>();
 		
 	}
 	
-	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id, Float dosis) {
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id) {
 		super();
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
 		this.periodBetweenDosis = periodBetweenDosis;
 		this.drugType_id = drugType_id;
-		this.dosis = dosis;
 	}
 	
 
-	public Drug(Integer id, String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,
-			float dosis) {
+	public Drug(Integer id, String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.treatmentDuration = treatmentDuration;
 		this.periodBetweenDosis = periodBetweenDosis;
 		this.drugType_id = drugType_id;
-		this.dosis = dosis;
+	}
+	
+	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis/*, List<Animal> animals, List<Illness> illness*/) {
+		super();
+		this.name = name;
+		this.treatmentDuration = treatmentDuration;
+		this.periodBetweenDosis = periodBetweenDosis;
+		
+		//this.animals = new ArrayList<Animal>();
+		//this.illnesses = new ArrayList<Illness>();
+		
 	}
 
-<<<<<<< HEAD
-
-
-=======
-	
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -129,16 +130,6 @@ public class Drug implements Serializable{
 
 	public void setType(Integer drugType_id) {
 		this.drugType_id = drugType_id;
-	}
-
-
-	public float getDosis() {
-		return dosis;
-	}
-
-
-	public void setDosis(float dosis) {
-		this.dosis = dosis;
 	}
 
 

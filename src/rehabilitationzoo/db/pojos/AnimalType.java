@@ -15,11 +15,19 @@ public class AnimalType implements Serializable {
 	private List<Animal> animals; 
 	
 	
-	   public AnimalType (String type, FeedingType whatDoYouEat) {
+	  /* public AnimalType (String type, FeedingType whatDoYouEat) {
 		   this.setType(type);
 		   this.setWhatDoYouEat(whatDoYouEat);
+	   }*/
+
+	  
+	   public AnimalType (String type, FeedingType whatDoYouEat) {
+		   this.type= type;
+		   this.whatDoYouEat= whatDoYouEat;
 	   }
 
+	   
+	   
 	   public AnimalType (String type) {
 		   this.setType(type);
 	   }

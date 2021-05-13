@@ -1,4 +1,5 @@
 package rehabilitationzoo.db.ui;
+import rehabilitationzoo.db.jdbc.JDBCManager;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -33,6 +34,7 @@ public class Menu {
 	private static DBManager dbman = new JDBCManager();			//should be private
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
+	
 	//TODO all methods here should be private if we can
 	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
@@ -41,6 +43,10 @@ public class Menu {
 	
 		dbman.connect();
 		userMan.Connect();
+		
+		KeyboardInput key = new KeyboardInput();
+		key.weAddHabitats();
+		key.weAddDrugTypes();
 	
 		do {
 			//LOGGING IN
@@ -150,6 +156,7 @@ public class Menu {
  	
 	
 	//TODO PAULA: Put the method for the diagnosis of the new animal
+	// NATALIAS MENU
 	
  	
 	private static void adminOption2() throws NumberFormatException, IOException, SQLException {
@@ -157,17 +164,20 @@ public class Menu {
  		int adminChoice;
  		boolean exito=false;
  		
+
+ 		
+ 		
 		do {
+			
 			System.out.println("Select an option: "+"\n" 
         	+	"1.Manage animals"+"\n"
         	+	"2.Manage workers"+"\n"
         	+	"3.Manage drugs"+"\n"
-        	+   "4.Manage habitats"+"\n"
-        	+ 	"5.Go back"+ "\n");
+        	+ 	"4.Go back"+ "\n");
 		
 			adminChoice = Utils.readInt();
 		
-			while(true) {
+			//while(true) {
 				switch (adminChoice) {
 			 
 				case 1:
@@ -284,8 +294,9 @@ public class Menu {
 							    System.out.print("\n"+"Introduce the year");
 							    int year = Utils.readInt();
 							    
-							    Date workerDate= new Date (year,  month, day) ;
-							
+							    LocalDate workerLocalDate = LocalDate.of(year, month, day);
+							    Date workerDate = Date.valueOf(workerLocalDate);
+							    
 							
 							System.out.print("\n"+ "Introduce the salary of "+workerName+ " " +workerLastName+"\n");
 							String salary=  Utils.readLine();
@@ -300,6 +311,8 @@ public class Menu {
 							
 							if( WorkerType.ZOO_KEEPER.equals(job)) {
 							System.out.print("\n"+ "Introduce the habitat where "+workerName+" is going to work "+"\n");
+							System.out.print("Remember that the habitats that we have are "+ KeyboardInput.adminMan.weListHabitats());
+							
 							String whichType= Utils.readLine();
 							
 							boolean realHabitat =KeyboardInput.isThisAnHabitat(whichType);
@@ -405,18 +418,20 @@ public class Menu {
 						case 1:
 							System.out.print("\n"+"Introduce the name of the new drug type"+"\n");
 							String drugType = Utils.readLine();
+							System.out.print("\n"+"Introduce the dosis"+"\n");
+							String unadosis = Utils.readLine();
+							Float dosis = Float.parseFloat(unadosis);
 							
-							DrugType addDrugType = new DrugType (drugType);
+							DrugType aDrugType = new DrugType (drugType, dosis);
+							KeyboardInput.addDrugType(drugType,dosis );
 							
+							//KeyboardInput.adminMan.listDrugTypes();
 		
 							break;
 							
 						case 2:
 							System.out.print("\n"+"Introduce the name of the new drug that youre going to introduce in the zoo"+"\n");
 							String drugName = Utils.readLine();
-							System.out.print("\n"+"Introduce the dosis of drug that the animal is going to take"+"\n");
-							String drugType0 = Utils.readLine();
-							Float dosis= Float.parseFloat(drugType0);
 							
 							System.out.print("\n"+"Introduce the treatment duration"+"\n");
 							String stringDuration = Utils.readLine();
@@ -441,7 +456,7 @@ public class Menu {
 							
 							if(realDrug==true) {
 								int idDrug= KeyboardInput.adminMan.getIdsFromDrugs(drugType1);
-								Drug createADrug = new Drug(drugName, duration, days, idDrug, dosis);
+								Drug createADrug = new Drug(drugName, duration, days, idDrug);
 								KeyboardInput.addDrug(createADrug); //static
 								}
 							
@@ -481,68 +496,8 @@ public class Menu {
 						}
 			
 	                    break;//case 3 del menu principal
-	 case 4:
-
-				System.out.println("\n"+"1. MANAGE OF HABITATS"+"\n");
-            	System.out.println("Select the option that fits you the best"+"\n"
-						+	"1.Add a new Habitat"+"\n"
-						+	"2.Add new drugs "+"\n"
-			        	+	"3.Deletes drugs"+"\n"
-			        	+	"4.Go back"+ "\n");
-            	
-            	
-            	
-            	
-            	int manageOfHabitats= Utils.readInt();
-				
-				switch(manageOfHabitats) {
-				
-				case 1:
-					System.out.print("\n"+"Introduce the name of the habitat"+"\n");
-					String name = Utils.readLine();
-					
-					LocalDate lastCleaned = LocalDate.now(); 
-					LocalDate waterTank = LocalDate.now(); 
-					
-					System.out.print("\n"+"Introduce the temperature "+"\n");
-					Integer temperature = Utils.readInt();
-					
-					System.out.print("\n"+"Introduce the period of days between the dosis"+"\n");
-					String lightStr = Utils.readLine();
-					LightType light= LightType.valueOf(lightStr);
-					
-					
-					Habitat habitat = new Habitat(name, lastCleaned, waterTank, temperature, light);
-					
-					 System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
-					    
-					
-
-					break;
-					
-				case 2:
-					
-					
-					break;
-					
-				case 3:
-					
-					
-					break;
-					
-				case 4: break;
-					
-				default: 
-					System.out.print("\nThat is not an  valid option\n");
-					break;
-				}
 	
-                break;//case 3 del menu principal
-				
-		 
-		 
-		 				break;
-	 case 5:
+	 case 4:
 		 				//GO BACK
 	                	//exit(0); //EXIT FOR THE WHILE(TRUE) METHOD
 		 				break;
@@ -551,7 +506,7 @@ public class Menu {
 	                    System.out.print("\nThat is not an option\n");
 	        }
 			
-			}//while
+			//}//while
 	
 		}while(adminChoice != 4);
 	}

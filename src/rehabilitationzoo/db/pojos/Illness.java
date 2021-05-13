@@ -43,7 +43,12 @@ public class Illness implements Serializable{
 		this.quarantine = quarantine;
 	}
 
-
+	public Illness (String name, Boolean quarantine, Boolean prothesis) {
+		super();
+		this.name = name;
+		this.quarantine = quarantine;
+		this.prothesis = prothesis;
+	}
 
 	public Illness (Integer id, String name, Boolean quarantine, Boolean prothesis) {
 		super();

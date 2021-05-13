@@ -30,7 +30,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			this.createTables();
 			
-			createHabitats();
+			//this.createHabitats();
+			//this.createDrugTypes();
+			
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
 		} catch (Exception e) {
@@ -46,46 +48,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void createHabitats() {
-		
-		PreparedStatement prep = null; //JDBCManager.c.prepareStatement(sql1); //evita la SQL injection
-		
-		try {
-			//Id is chosen by the database
-			LocalDate localToday = LocalDate.now(); //only way to add dates
-			String stringToday = localToday.toString();
-			Date newDate = Date.valueOf(stringToday);
-			
-			
-			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)";
-			sql1+= "VALUES (´northPole´, " + newDate + ", " + newDate + ",-15, " + LightType.MEDIUM + ")";
-			
-			prep = JDBCManager.c.prepareStatement(sql1);
-			prep.executeUpdate(sql1);
-			prep.close();
-			
-			
-			//Statement stmt2 = JDBCManager.c.createStatement(); 
-			//String sql2 = "INSERT INTO animals_characteristics (feedingType, type)";
-			//sql2+= "VALUES (" + FeedingType.CARNIVORE + ", lion)";
-			
-			//stmt2.executeUpdate(sql2);
-			//stmt2.close();
-			
-			//... ESTOS SERIAN LOS DATOS QUE TENDRIA LA DB AL INICIARSE
-			//y seria anhadir el resto de habitats y tipos de animales que queramos tener en el zoo de momento 
-			//(contando con las opciones de anhadir mas de cada uno en el menu del admin, claro) - Paula
-			
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface
 		
@@ -142,7 +104,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastName 	TEXT	NOT NULL, "
 					   + " hireDate		DATE	NOT NULL, "
 					   + " salary		FLOAT	NOT NULL, "
-					   + " workerType	ENUM	NOT NULL ,"
+					   + " workerType	ENUM	NOT NULL, "
 					   + " inWhichHabitatDoYouWork TEXT NULL)";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
@@ -150,18 +112,19 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt6 = c.createStatement();
 			String sql6 = "CREATE TABLE drugTypes "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " type	TEXT	NOT NULL )"; 
+					   + " type	TEXT	NOT NULL, " 
+					   + " dosis FLOAT NOT NULL)";
+			
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 			
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drugs "
 					   + "(id					INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name					TEXT	NOT NULL	UNIQUE,"
+					   + " name					TEXT	NOT NULL	UNIQUE, "
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id), "
-					   + " dosis 				FLOAT	NOT NULL)";					   
+					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id) )";			   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
@@ -200,19 +163,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " PRIMARY KEY (illness_id, animal_id) )";
 			stmt11.executeUpdate(sql11);
 			stmt11.close();
-			
-
-//			//- - - - - - - - - - - -NEW - - - - - - - - - - - -- - - - - - - - - - -  - - - - //
-//			Statement stmt12 = c.createStatement(); 
-//			String sql12 = "CREATE TABLE animal_animalType "
-//					   + "(animal_id	INTEGER REFERENCES animal(id), "
-//					   + " animals_characteristics_id	INTEGER REFERENCES animals_characteristics(id), "
-//					   + " PRIMARY KEY (animals_characteristics_id, animal_id) )";
-//			stmt12.executeUpdate(sql12);
-//			stmt12.close();
-//
-//			//- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -  - - - - //
-			
+					
 			
 		}  catch (SQLException e) {
 		if (!e.getMessage().contains("already exists")) {

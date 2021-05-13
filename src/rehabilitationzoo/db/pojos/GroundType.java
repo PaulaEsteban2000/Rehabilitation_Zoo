@@ -14,6 +14,11 @@ public class GroundType {
 		this.habitat_id = habitat;
 	}
 	
+	public GroundType(String type) {
+		super();
+		this.type = type;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

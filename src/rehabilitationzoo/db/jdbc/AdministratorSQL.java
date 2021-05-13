@@ -1,6 +1,8 @@
 package rehabilitationzoo.db.jdbc;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
@@ -21,59 +24,105 @@ import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
 //import sample.db.pojos.Department;
+import utils.KeyboardInput;
 
 public class AdministratorSQL implements AdministratorManager{
 
 
+    List<DrugType> listOfDrugTypes = new ArrayList<DrugType>();
+    
+	
 	 private Connection c;
 	    //in all classes that uses a connection 
 	    
 		public void AdministratorSQLConnection (Connection c) {
-			
 			this.c=c;
 		}
 
+		
+		//ANIMALS METHODS 
+		
+		
 	@Override
-	public void addAnimal(Animal animal) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
+	public void addAnimal(Animal animal) throws SQLException{ //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
-			//Ids are chosen by the database
-			Statement stmt = JDBCManager.c.createStatement(); //JDBCManager.c porque asi tenemos una sola conexion abierta en la clase que se encarga de la DB - Paula
+			
 			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed,deathDate,freedomDate,name)";
-			sql+= "VALUES ('" + animal.getEnterDate() + "','"  + animal.getLastBath() + "','" 
-							  + animal.getFreedomDate() + "','" + animal.getName() + ")";
+			sql+= "VALUES ('" + animal.getEnterDate() + "','"  + animal.getLastBath() + "','" + animal.getLastFed() + "','" 
+							  + animal.getDeathDate() + "','"  + animal.getFreedomDate() + "','" + animal.getName() + ")";
+
+			PreparedStatement pstmt = JDBCManager.c.prepareStatement(sql); 
+				
+			System.out.println(sql);
+			pstmt.executeUpdate(sql);
+			pstmt.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void updateAnimal(Animal animal) {
+		try {
+			String sql = "UPDATE animals ";
+			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
+			s.setString(2, "%" + animal.getLastBath() + "%");
+			s.setString(3, "%" + animal.getLastFed() + "%");
+			s.setString(4, "%" + animal.getLastDrug() + "%");
+			s.setString(5, "%" + animal.getDeathDate() + "%");
+			s.setString(6, "%" + animal.getFreedomDate() + "%");
 			
 			System.out.println(sql);
-			stmt.executeUpdate(sql);
-			stmt.close();
-			
-		} catch(Exception e) {
+			s.executeUpdate();
+			s.close();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+			
+	} //SOLO QUIERO MODIFICAR ESTO, SERIA ASI NO?
 	
-	public void addHabitat(Habitat habitat) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
-		try {
-			//Ids are chosen by the database
-			Statement stmt = JDBCManager.c.createStatement(); //JDBCManager.c porque asi tenemos una sola conexion abierta en la clase que se encarga de la DB - Paula
-			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)";
-			sql1+= "VALUES ('" + habitat.getName() + ", " + habitat.getLastCleaned() + ", " + habitat.getWaterTank() + "','" 
-							+ ",  "+ habitat.getTemperature() + ",  "+ habitat.getLight() +")";
+	
+	public void listAnimals () { //we show all the animals in the database
 		
+		try {	
+		String sql = "SELECT * FROM animals "; 			
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+		ResultSet rs = prep.executeQuery();
+		
+		while (rs.next()) { 
+			int id = rs.getInt("id");
+			Date enterDate = rs.getDate("enterDate");
+			Integer habitat_id = rs.getInt("habitat_id");
+			Date lastBath = rs.getDate("lastBath");
+			Date lastFed = rs.getDate("lastFed");
+			Date lastDrug = rs.getDate("lastDrug");
+			Date deathDate = rs.getDate("deathDate");
+			Date freedomDate = rs.getDate("freedomDate");
+			int type_id = rs.getInt("type_id");
+			String name = rs.getString("name");
 			
-			System.out.println(sql1);
-			stmt.executeUpdate(sql1);
-			stmt.close();
+			Animal animal = new Animal (id, enterDate, habitat_id, lastBath, lastFed,lastDrug, deathDate, freedomDate, type_id , name);
 			
-		} catch(Exception e) {
+			System.out.println(sql);
+			prep.close();
+			rs.close();
+			
+		}
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
+			
 	}
+		
+		
+	//ANIMAL TYPES
 	
 	
 	@Override
-	public void introducingAnimalsTypes (AnimalType animalType) { 
-		try {
-			//Ids are chosen by the database
+	public void introducingAnimalsTypes (AnimalType animalType) throws SQLException{ 
+		//try {
 			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "INSERT INTO animals_characteristics(type,feedingType)";
 			sql+= "VALUES ('" + animalType.getType() + "','" + animalType.getWhatDoYouEat() + ")";
@@ -82,24 +131,22 @@ public class AdministratorSQL implements AdministratorManager{
 			stmt.executeUpdate(sql);
 			stmt.close();
 			
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		//} catch(Exception e) {
+		//	e.printStackTrace();
+		//}
 	}
 	
 	
 	@Override
-	public List<String> getAnimalTypesByName() {
+	public List<String> getAnimalTypesByName() {//PQ NO ME DEJA PONER throws SQLException
 		List<String> typesOfAnimals = new ArrayList<String>();
 		
-		
 		try {
-			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "SELECT type FROM animals_characteristics"; 			    
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			ResultSet rs = prep.executeQuery();
 			
-			while (rs.next()) { //like hasNext
+			while (rs.next()) { 
 				String type = rs.getString("type");
 				typesOfAnimals.add(type);
 				//FeedingType whatDoYouEat =  FeedingType.valueOf(rs.getString("feedingType")) ;
@@ -114,7 +161,6 @@ public class AdministratorSQL implements AdministratorManager{
 			prep.executeUpdate(sql);
 
 				rs.close();
-				stmt.close();
 				System.out.println("Search finished.");// Retrieve data: end
 				
 				prep.close();// Close database connection
@@ -126,8 +172,16 @@ public class AdministratorSQL implements AdministratorManager{
 	return typesOfAnimals;	
 	}	
 	
+	/*prep.setString(1, "%" + habitatName + "%");						// esta bien??
+	ResultSet rs = prep.executeQuery();
+	
+	while (rs.next()) { //like hasNext
+		id = rs.getInt("id");
+	}*/
+	
+	
 	@Override
-	public List<String> getAnimalTypesById(String name) {
+	public List<String> getAnimalTypesById(String name)  {//REVISAR
 		List<String> typesOfAnimals = new ArrayList<String>();
 		
 		
@@ -138,7 +192,7 @@ public class AdministratorSQL implements AdministratorManager{
 			
 			while (rs.next()) { //like hasNext
 				String type = rs.getString("type");
-				typesOfAnimals.add(type);
+				typesOfAnimals.add(type); //ESTO??
 			}
 			
 				prep.close();
@@ -150,7 +204,64 @@ public class AdministratorSQL implements AdministratorManager{
 		
 	return typesOfAnimals;	
 	}
+	//HABITATS
 	
+	@Override
+	public void addHabitat(Habitat habitat) /*throws AdminExceptions*/ {
+		try {
+			String sql = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)"; 
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery(); // SELECT?? no es solo para consultas?
+			
+			prep.setString(1, "%" + habitat.getName() + "%" );
+			prep.setString(2, "%" + habitat.getLastCleaned( )+ "%" );
+			prep.setString(3, "%" + habitat.getWaterTank() + "%" );
+			prep.setString(4, "%" + habitat.getTemperature() + "%" );
+			prep.setString(5, "%" + habitat.getLight() + "%" );
+			
+			
+				/*Date lastCleaned= rs.getDate("lastCleaned");
+				Date waterTank= rs.getDate("waterTank");
+				Integer temperature = rs.getInt("temperature");
+				String light = rs.getString("light");*/
+			
+			    prep.executeUpdate();
+				prep.close();
+				rs.close();
+				
+			}catch( Exception ex) {
+				ex.printStackTrace();
+				//if(java.sql.SQLException.) {
+				//	throw new AdminExceptions(AdminExceptions.AdminErrors.SQLEXCEPTION);
+				//}
+				//System.out.println("array containing all of the exceptions that were suppressed, typically by the try-with-resources statement, in order to deliver this exception: ");
+				//ex.getSuppressed();
+				}
+		
+	}
+	
+	
+	public List<String> weListHabitats()  {
+		List <String> namesHabitats = new ArrayList<String>();
+		
+		try {
+		String sql = "SELECT name FROM habitats "; 			    
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+		ResultSet rs = prep.executeQuery();
+		
+		while (rs.next()) { 
+			String name = rs.getString("name");
+			namesHabitats.add(name);
+		}
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return namesHabitats;		
+	}
+	
+	//WORKERS
 
 	@Override
 	public void introducingWorkers (Worker aWorker) {//Id is chosen by the database
@@ -227,26 +338,59 @@ public class AdministratorSQL implements AdministratorManager{
 			}	
 	}
 	
+	//DRUG TYPES 
+	
 	@Override
-	public void addNewDrugType (String drugName) {
+	public void addNewDrugType (String drugName, float dosis) {
 		try {
-			//Ids are chosen by the database
-			Statement stmt = JDBCManager.c.createStatement(); 
-			String sql = "INSERT INTO drugTypes type ";
-			DrugType aDrugType = new DrugType(drugName);
-			sql+= "VALUES ('" + aDrugType.getType() +")"; //que tiene que ser todo static dice
+			DrugType aDrugType = new DrugType(drugName, dosis);
+		    String sql= "INSERT INTO drugTypes (type,dosis) VALUES ('" + aDrugType.getType() +"','" + aDrugType.getDosis() +"')"; 
+		    PreparedStatement stmt = JDBCManager.c.prepareStatement(sql); 
 			
-			System.out.println(sql);
+		    listOfDrugTypes.add(aDrugType);
+		    
 			stmt.executeUpdate(sql);
 			stmt.close();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+}
 	
+public void listDrugTypes() {
+		try {	
+			
+		String sql = "SELECT * FROM drugTypes "; 			
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+		
+		ResultSet rs = prep.executeQuery();
+		System.out.println(sql);
+		while (rs.next()) { //like hasNext
+			int id = rs.getInt("id");
+			String type = rs.getString("type");
+			Float dosis = rs.getFloat("dosis");
+			
+			//DrugType drugs = new DrugType (id, type, dosis);
+			
+			
+			for(int i=0; i<listOfDrugTypes.size(); i++) {
+				System.out.println(listOfDrugTypes.get(i).getType());
+				System.out.println(listOfDrugTypes.get(i).getDosis());
+			}
+			
+			prep.close();
+			rs.close();
+			
+		}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+			
 	}
+	
+	
+	
+	//DRUGS 
 	
 	@Override
 	public void addNewDrug(Drug oneDrug) {
@@ -255,7 +399,7 @@ public class AdministratorSQL implements AdministratorManager{
 			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "INSERT INTO drugs ";
 			sql+= "VALUES ('" + oneDrug.getName() +"','" + oneDrug.getTreatmentDuration() + "','" +oneDrug.getPeriodBetweenDosis()+ "','" 
-			+ oneDrug.getType()+ "','" + oneDrug.getDosis() + ")"; //que tiene que ser static dice
+			+ oneDrug.getType()+ ")"; 
 			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
@@ -267,26 +411,7 @@ public class AdministratorSQL implements AdministratorManager{
 		
 	}
 
-	public List getDrugTypes() {
-		List<String> drugTypes = new ArrayList<String>();
-		
-		try {
-		String sql = "SELECT type FROM drugTypes"; 			    
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-		ResultSet rs = prep.executeQuery();
-		
-		while (rs.next()) { //like hasNext
-			String weGetTheTypes = rs.getString("type");
-			drugTypes.add (weGetTheTypes );
-		}
-			prep.close();
-			rs.close();
-			
-		}catch(Exception ex) {
-			ex.printStackTrace();
-	}	
-	return drugTypes;
-}
+	
 	
 	//	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id, Float dosis) {
 
@@ -299,7 +424,7 @@ public class AdministratorSQL implements AdministratorManager{
 		Float drugDosis=null;
 		Integer drugTypeId =null;;
 		
-		Drug searchedDrug= new Drug(drugName, drugTreatmentDuration, drugPeriodBetweenDosis, drugTypeId, drugDosis);
+		Drug searchedDrug= new Drug(drugName, drugTreatmentDuration, drugPeriodBetweenDosis, drugTypeId);
 		
 		
 		try {
@@ -311,10 +436,9 @@ public class AdministratorSQL implements AdministratorManager{
 					drugName=rs.getString("name");
 					drugPeriodBetweenDosis= rs.getInt("periodBetweenDosis");
 					drugTreatmentDuration =rs.getInt("treatmentDuration");
-					drugDosis=rs.getFloat("dosis");
 					drugTypeId = rs.getInt("drugType_id");
 					
-				   searchedDrug= new Drug(drugName, drugTreatmentDuration, drugPeriodBetweenDosis, drugTypeId, drugDosis );
+				   searchedDrug= new Drug(drugName, drugTreatmentDuration, drugPeriodBetweenDosis, drugTypeId );
 				}
 			
 				prep.close();
@@ -367,5 +491,18 @@ public class AdministratorSQL implements AdministratorManager{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
+	@Override
+	public List<String> getDrugTypes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+
 
 }

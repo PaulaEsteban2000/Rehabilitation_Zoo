@@ -52,18 +52,8 @@ public class VetSQL implements VetManager{
 	
 	@Override
 	public List<Animal> getAnimalsGivenType(String animalType) {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 	//	kk ni warra porque no hay characteristics_id en animals
-=======
-<<<<<<< HEAD
-		//kk ni warra porque no hay characteristics_id en animals
-=======
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
-		
+
 		List<Animal> animals = new ArrayList<Animal>();
 			
 			try {
@@ -104,14 +94,7 @@ public class VetSQL implements VetManager{
 
 	@Override
 	public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch) {
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 	//	kk ni warra porque no hay characteristics_id en animals
 		
 		List<Animal> animals = new ArrayList<Animal>();
@@ -509,7 +492,7 @@ public class VetSQL implements VetManager{
 			Date enterDate = rs.getDate("enterDate");
 			Integer habitat_id = rs.getInt("habitat_id");
 			//FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
-			Date waterTank = rs.getDate("waterTank");
+			//Date waterTank = rs.getDate("waterTank");
 			Date lastBath = rs.getDate("lastBath");
 			Date lastFed = rs.getDate("lastFed");
 			Date deathDate = rs.getDate("deathDate");
@@ -577,10 +560,10 @@ public class VetSQL implements VetManager{
 					Integer treatmentDuration = rs.getInt("treatmentDuration");
 					Integer periodBetweenDosis = rs.getInt("periodBetweenDosis");
 					Integer drugType_id = rs.getInt("drugType_id");
-					Float dosis = rs.getFloat("dosis");					
+					//Float dosis = rs.getFloat("dosis");					
 					
 					System.out.println(name);//esto por favor me lo quitas despues ;)
-					Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id, dosis);
+					Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id);
 					
 					drugs.add(drug);
 				}
@@ -683,6 +666,7 @@ public class VetSQL implements VetManager{
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + drug.getName() + "%");
 			s.setString(2, "%" + animal.getId() + "%");
+			
 			s.executeUpdate();
 			s.close();
 

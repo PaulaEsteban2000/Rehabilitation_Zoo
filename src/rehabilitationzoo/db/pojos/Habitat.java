@@ -47,7 +47,7 @@ public class Habitat implements Serializable {
 	}
 	
 	
-	public Habitat(String name, LocalDate lastCleaned, LocalDate waterTank, Integer temperature, LightType light) {
+	public Habitat(String name, Date lastCleaned, Date waterTank, Integer temperature, LightType light) {
 		super();
 		this.name = name;
 		this.lastCleaned = lastCleaned;
