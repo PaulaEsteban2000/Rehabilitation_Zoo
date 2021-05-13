@@ -63,7 +63,7 @@ public interface VetManager {
 	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
 		//and now setting the rest of the parameters for the drug (that will be empty until now)...
 		//set treatmentDuration, periodBetweenDosis, dosis 
-	public void drugPrescription(Drug drug, Animal animal); //links drug to animal //animal can be taking many
+	public void drugPrescription(Animal animal); //links drug to animal //animal can be taking many
 			
 	Integer getHabitatIdByName(String habitatName) throws SQLException;
 	List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException;

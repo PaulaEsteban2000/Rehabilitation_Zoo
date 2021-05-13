@@ -42,7 +42,6 @@ public class AdministratorSQL implements AdministratorManager{
 		
 		//ANIMALS METHODS 
 		
-		
 	@Override
 	public void addAnimal(Animal animal) throws SQLException{ //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {

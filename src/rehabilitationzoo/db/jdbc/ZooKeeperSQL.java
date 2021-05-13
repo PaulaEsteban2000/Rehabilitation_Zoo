@@ -212,7 +212,6 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-}
+	}
 	
 }

@@ -28,15 +28,16 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:./db/management.db"); //could change this to prettier name
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
-			this.createTables();
 			
-			//this.createHabitats();
-			//this.createDrugTypes();
+
+			this.createTables();
 			
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 	}
 	
@@ -48,6 +49,11 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			e.printStackTrace();
 		}
 	}
+	
+
+	
+	
+	
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface
 		
@@ -141,7 +147,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt9 = c.createStatement();
 			String sql9 = "CREATE TABLE animal_drug "
-					   + "(drug_id	INTEGER	REFERENCES drug(id), "
+					   + "(drug_id		INTEGER	REFERENCES drug(id), "
 					   + " animal_id	INTEGER	REFERENCES animal(id), "
 					   + " PRIMARY KEY (drug_id, animal_id) )";
 			stmt9.executeUpdate(sql9);

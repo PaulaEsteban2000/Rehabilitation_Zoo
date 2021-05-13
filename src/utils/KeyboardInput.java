@@ -2,10 +2,9 @@ package utils;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.sql.Date;
-import java.sql.PreparedStatement;
+import java.util.Date;
+
 import java.sql.SQLException;
-//>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
 
 import Exceptions.AdminExceptions;
@@ -244,7 +243,13 @@ public class KeyboardInput {
 						Float dosis = Float.parseFloat(Utils.readLine());
 						
 						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, vetMan.getTypeOfDrugId(drugType));
-						//TODO vetMan.drugPrescription(); 
+						//save drug bbdd
+						
+						//asocias drug al animal
+						//animalToDiagnose.setDrug(drug);
+						
+						//guardar drug del animal en la tabla de la relacion
+						vetMan.drugPrescription(animalToDiagnose); 
 						//TODO drug to illness?? how are they related?
 					} else if(drugsChoice.equals("b") ) {
 						break;	
@@ -425,7 +430,7 @@ public class KeyboardInput {
 	public void weAddHabitats() throws AdminExceptions { //THROW EXCEPTION
 		LocalDate localToday = LocalDate.now(); //only way to add dates
 		String stringToday = localToday.toString();
-		Date newDate =Date.valueOf(stringToday);
+		Date newDate =java.sql.Date.valueOf(localToday);
 		
 		Habitat northPole = new Habitat("Pole zone",newDate, newDate, -19, LightType.LOW );  
 		Habitat desert = new Habitat("Desert",newDate, newDate, 50, LightType.HIGH );
