@@ -16,10 +16,17 @@ public class Drug implements Serializable{
 	private Integer treatmentDuration;
 	private Integer periodBetweenDosis;
 	private Integer drugType_id;
-	//private float dosis;
 	
 	private List<Animal> animals; 
 	private List<Illness> illnesses; 
+	
+	public void addAnimal(Animal animal) {
+		this.animals.add(animal);
+	}
+	
+	public void addIllness(Illness illness) {
+		this.illnesses.add(illness);
+	}
 		
 
 	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,  List<Animal> animals,  List<Illness> illness) {
@@ -61,6 +68,11 @@ public class Drug implements Serializable{
 		//this.animals = new ArrayList<Animal>();
 		//this.illnesses = new ArrayList<Illness>();
 		
+	}
+
+	public Drug(int id2, String name2, Integer treatmentDuration2, Integer periodBetweenDosis2, Integer drugType_id2,
+			Integer dosis) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

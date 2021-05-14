@@ -19,14 +19,21 @@ public class Illness implements Serializable{
 	
 	private List<Animal> animals; 
 	
+	public void addAnimal(Animal animal) {
+		this.animals.add(animal);
+	}
 	
-	/**public Illness(Integer quarantineDays, Boolean prothesis) {
+	
+	public Illness(String name, Boolean quarantine, Boolean prothesis, Integer drug_id,
+			List<Animal> animals) {
 		super();
-		this.quarantineDays = quarantineDays;
+		this.name = name;
+		this.quarantine = quarantine;
 		this.prothesis = prothesis;
-	}*/
-	
-	
+		this.drug_id = drug_id;
+		this.animals = new ArrayList<Animal>();
+	}
+
 	public Illness(String name, Boolean quarantine, Boolean prothesis, Integer drug_id) {
 		super();
 		this.name = name;
@@ -34,28 +41,23 @@ public class Illness implements Serializable{
 		this.prothesis = prothesis;
 		this.drug_id = drug_id;
 	}
-	
-	
-	
-	public Illness(String name, Boolean quarantine) {
-		super();
-		this.name = name;
-		this.quarantine = quarantine;
-	}
 
-	public Illness (String name, Boolean quarantine, Boolean prothesis) {
-		super();
-		this.name = name;
-		this.quarantine = quarantine;
-		this.prothesis = prothesis;
-	}
-
+	
 	public Illness (Integer id, String name, Boolean quarantine, Boolean prothesis) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.quarantine = quarantine;
 		this.prothesis = prothesis;
+	}
+	
+	public Illness(Integer id, String name, Boolean quarantine, Boolean prothesis, Integer drug_id) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.quarantine = quarantine;
+		this.prothesis = prothesis;
+		this.drug_id = drug_id;
 	}
 
 
@@ -100,12 +102,12 @@ public class Illness implements Serializable{
 	}
 
 
-	public boolean getQuarantine() {
+	public Boolean getQuarantine() {
 		return quarantine;
 	}
 
 
-	public void setQuarantine(boolean quarantine) {
+	public void setQuarantine(Boolean quarantine) {
 		this.quarantine = quarantine;
 	}
 
@@ -120,12 +122,12 @@ public class Illness implements Serializable{
 	}
 
 
-	public Integer getDrug() {
+	public Integer getDrugId() {
 		return drug_id;
 	}
 
 
-	public void setDrug(Integer drug_id) {
+	public void setDrugId(Integer drug_id) {
 		this.drug_id = drug_id;
 	}
 
@@ -138,6 +140,16 @@ public class Illness implements Serializable{
 	public void setAnimals(List<Animal> animals) {
 		this.animals = animals;
 	}
+
+	@Override
+	public String toString() {
+		return "Illness [id=" + id + ", name=" + name + ", quarantine=" + quarantine + ", prothesis=" + prothesis
+				+ ", drug_id=" + drug_id + "]";
+	}
+
+
+	
+	
 
 	
 }

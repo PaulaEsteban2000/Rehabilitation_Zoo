@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import rehabilitationzoo.db.ifaces.VetManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.FeedingType;
@@ -15,11 +16,6 @@ import rehabilitationzoo.db.pojos.Worker;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
-	//private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	//sysout("Date of Birth: yyyy-MM-dd");
-	//String dob = Utils.readLine();
-	//LocalDate dobDate = LocalDate.parse(dob, formatter);
-	
 	public static Connection c; //TODO deberia ser private?
 
 
@@ -29,8 +25,28 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			c = DriverManager.getConnection("jdbc:sqlite:./db/management.db"); //could change this to prettier name
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			
-
 			this.createTables();
+			
+			VetManager vetMan = new VetSQL();	
+			List<String> habitatNames = vetMan.getAllHabitatsNames();
+			String name = "";
+			
+			for (int a = 0; a < habitatNames.size(); a++) {
+				name = habitatNames.get(a);
+				
+				if(name.equals("northPole")) {
+					break;
+				} 
+				
+			}
+			
+			
+			if(name.equals("northPole")) { //to avoid creation of initalData more than once
+				
+			} else {
+				this.loadInitialData();
+			}
+			
 			
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
@@ -50,9 +66,70 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		}
 	}
 	
-
 	
-	
+	public void loadInitialData() {
+		
+		PreparedStatement prep = null; //evita la SQL injection
+		
+		try {
+			//Id is chosen by the database
+			LocalDate localToday = LocalDate.now();
+			Date newDate = Date.valueOf(localToday);
+			
+//			Statement stmt1 = JDBCManager.c.createStatement(); 
+//			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)"
+//					+ " VALUES ('northPole', '" + newDate + "', '" + newDate + "', '-15', '" + LightType.MEDIUM + "')";
+//			stmt1.executeUpdate(sql1);
+//			stmt1.close();
+//			
+//			Statement stmt5 = JDBCManager.c.createStatement(); 
+//			String sql5 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)"
+//					+ " VALUES ('waitZone', '" + newDate + "', '" + newDate + "', '25', '" + LightType.MEDIUM + "')";
+//			stmt5.executeUpdate(sql5);
+//			stmt5.close();
+//			
+//			Statement stmt2 = JDBCManager.c.createStatement(); 
+//			String sql2 = "INSERT INTO animals_characteristics (feedingType, type) "
+//					+ "VALUES ('" + FeedingType.CARNIVORE + "', 'lion')";
+//			stmt2.executeUpdate(sql2);
+//			stmt2.close();
+//			
+//			
+//			Statement stmt3 = JDBCManager.c.createStatement(); 
+//			String sql3 = "INSERT INTO illnesses (name, quarantine, prothesis, drug_id ) "
+//					+ "VALUES ('legProthesis', 'false', 'true', null)";
+//			stmt3.executeUpdate(sql3);
+//			stmt3.close();
+//			
+//			
+//			Statement stmt4 = JDBCManager.c.createStatement(); 
+//			String sql4 = "INSERT INTO animals (enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, type_id, name) "
+//					+ "VALUES ('" + newDate + "', '2', '" + newDate + "', '" + newDate + "', '" + newDate + "', null, null, '1', 'Alex')";
+//			stmt4.executeUpdate(sql4);
+//			stmt4.close();
+//			
+//			Statement stmt6 = JDBCManager.c.createStatement(); 
+//			String sql6 = "INSERT INTO drugTypes (id, type) "
+//					+ "VALUES ('1', 'ointment')";
+//			stmt6.executeUpdate(sql6);
+//			stmt6.close();
+//			
+//			Statement stmt7 = JDBCManager.c.createStatement(); 
+//			String sql7 = "INSERT INTO drugs (id, name, treatmentDuration, periodBetweenDosis, drugType_id, dosis) "
+//					+ "VALUES ('1', 'cream', '10', '1', '1', '500')";
+//			stmt7.executeUpdate(sql7);
+//			stmt7.close();
+			
+			//... ESTOS SERIAN LOS DATOS QUE TENDRIA LA DB AL INICIARSE
+			//y seria anhadir el resto de habitats y tipos de animales que queramos tener en el zoo de momento 
+			//(contando con las opciones de anhadir mas de cada uno en el menu del admin, claro) - Paula
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+	}
 	
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface
@@ -64,7 +141,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt1 = c.createStatement();
 			String sql1 = "CREATE TABLE habitats "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name			TEXT	NOT NULL, " //UNIQUE
+					   + " name			TEXT	NOT NULL	UNIQUE, " 
 					   + " lastCleaned	DATE	NOT NULL, "
 					   + " waterTank	DATE	NOT NULL, "
 					   + " temperature	FLOAT	NOT NULL, "
@@ -84,7 +161,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql8 = "CREATE TABLE animals_characteristics "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " feedingType	ENUM		NOT NULL, "
-					   + " type			STRING		NOT NULL)"; //UNIQUE
+					   + " type			STRING		NOT NULL	UNIQUE )";
 			stmt8.executeUpdate(sql8);
 			stmt8.close();
 			
@@ -92,14 +169,14 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			String sql3 = "CREATE TABLE animals "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
 					   + " enterDate	DATE	NOT NULL, "
-					   + " habitat_id 	INTEGER NOT NULL 	REFERENCES habitats(id), "
+					   + " habitat_id 	INTEGER REFERENCES habitats(id), " //can be null when dead or released
 					   + " lastBath		DATE	NOT NULL, "
 					   + " lastFed		DATE	NOT NULL, "
 					   + " lastDrug		DATE	NOT NULL, "
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
 					   + " type_id		INTEGER	NOT NULL	REFERENCES animals_characteristics(id), "
-					   + " name			STRING	NOT NULL)"; //UNIQUE
+					   + " name			STRING	NOT NULL	UNIQUE)";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
@@ -127,28 +204,29 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt5 = c.createStatement();
 			String sql5 = "CREATE TABLE drugs "
 					   + "(id					INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name					TEXT	NOT NULL, "//UNIQUE
+					   + " name					TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
 					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id) )";			   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
+			
 			Statement stmt7 = c.createStatement();
 			String sql7 = "CREATE TABLE illnesses "
 					   + "(id			INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " name			STRING	NOT NULL, " //UNIQUE
-					   + " quarantine	BOOLEAN	NOT NULL, "
-					   + " prothesis	BOOLEAN	NOT NULL, "
-					   + " drug_id 		INTEGER	NOT NULL	REFERENCES Drug(id) )";
+					   + " name			STRING	NOT NULL, " 	//he quitado el unique (name) porque podemos tener 
+					   + " quarantine	BOOLEAN	NOT NULL, " 	//varias enfermedades con el mimso nombre pero 
+					   + " prothesis	BOOLEAN	NOT NULL, " 	//que unas requieran cuarentena por ejemplo y otras no - Paula
+					   + " drug_id 		INTEGER	REFERENCES drugs(id) )";
 					   
 			stmt7.executeUpdate(sql7);
 			stmt7.close();
-			
+
 			Statement stmt9 = c.createStatement();
 			String sql9 = "CREATE TABLE animal_drug "
-					   + "(drug_id		INTEGER	REFERENCES drug(id), "
-					   + " animal_id	INTEGER	REFERENCES animal(id), "
+					   + "(drug_id		INTEGER	REFERENCES drugs(id), "
+					   + " animal_id	INTEGER	REFERENCES animals(id), "
 					   + " PRIMARY KEY (drug_id, animal_id) )";
 			stmt9.executeUpdate(sql9);
 			stmt9.close();
@@ -156,20 +234,20 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			Statement stmt10 = c.createStatement();
 			String sql10 = "CREATE TABLE worker_animal "
-					   + "(worker_id	INTEGER REFERENCES worker(id), "
-					   + " animal_id	INTEGER REFERENCES animal(id), "
+					   + "(worker_id	INTEGER REFERENCES workers(id), "
+					   + " animal_id	INTEGER REFERENCES animals(id), "
 					   + " PRIMARY KEY (worker_id, animal_id) )";
 			stmt10.executeUpdate(sql10);
 			stmt10.close();
 			
 			Statement stmt11 = c.createStatement(); 
 			String sql11 = "CREATE TABLE animal_illness "
-					   + "(animal_id	INTEGER REFERENCES animal(id), "
-					   + " illness_id	INTEGER REFERENCES illness(id), "
+					   + "(animal_id	INTEGER REFERENCES animals(id), "
+					   + " illness_id	INTEGER REFERENCES illnesses(id), "
 					   + " PRIMARY KEY (illness_id, animal_id) )";
 			stmt11.executeUpdate(sql11);
 			stmt11.close();
-					
+			
 			
 		}  catch (SQLException e) {
 		if (!e.getMessage().contains("already exists")) {
