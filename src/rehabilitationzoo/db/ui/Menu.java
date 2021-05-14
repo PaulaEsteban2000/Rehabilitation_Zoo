@@ -43,11 +43,6 @@ public class Menu {
 		dbMan.connect();
 		userMan.Connect();
 		
-		KeyboardInput key = new KeyboardInput(); //TODO Static
-		key.weAddHabitats();
-		key.weAddDrugTypes();
-		key.weAddAnimalTypes();
-	
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");

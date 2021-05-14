@@ -13,6 +13,7 @@ import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
+import utils.KeyboardInput;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
@@ -34,17 +35,19 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			for (int a = 0; a < habitatNames.size(); a++) {
 				name = habitatNames.get(a);
 				
-				if(name.equals("northPole")) {
+				if(name.equals("Polar zone")) {
 					break;
 				} 
 				
 			}
 			
 			
-			if(name.equals("northPole")) { //to avoid creation of initalData more than once
+			if(name.equals("Polar zone")) { //to avoid creation of initalData more than once
 				
 			} else {
-				this.loadInitialData();
+				KeyboardInput.weAddHabitats();
+				KeyboardInput.weAddDrugTypes();
+				KeyboardInput.weAddAnimalTypes();
 			}
 			
 			

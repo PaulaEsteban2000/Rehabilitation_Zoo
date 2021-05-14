@@ -3,7 +3,6 @@ package utils;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
-//import java.util.Date;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -494,11 +493,11 @@ public class KeyboardInput {
 		adminMan.addNewDrug(oneDrug);	
 	}
 
-	public void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
+	public static void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		LocalDate localToday = LocalDate.now(); //only way to add dates
-		Date newDate =java.sql.Date.valueOf(localToday);
+		Date newDate = Date.valueOf(localToday);
 		
-		Habitat northPole = new Habitat("Pole zone",newDate, newDate, -19, LightType.LOW );  
+		Habitat northPole = new Habitat("Polar zone",newDate, newDate, -19, LightType.LOW );  
 		Habitat desert = new Habitat("Desert",newDate, newDate, 50, LightType.HIGH );
 		Habitat sabana = new Habitat("Sabana",newDate, newDate, 30, LightType.HIGH );
 		Habitat jungle = new Habitat("Jungle",newDate, newDate, 27, LightType.MEDIUM );
@@ -515,6 +514,7 @@ public class KeyboardInput {
 		Habitat waitZone = new Habitat("Wait Zone",newDate, newDate, 25, LightType.HIGH );
 		
 		adminMan.addHabitat(northPole);
+		System.out.println(vetMan.getHabitatByName("Polar zone").toString());
 		adminMan.addHabitat(desert);
 		adminMan.addHabitat(sabana);
 		adminMan.addHabitat(jungle);
@@ -531,7 +531,7 @@ public class KeyboardInput {
 		adminMan.addHabitat(waitZone);
 	}
 	
-	public void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
+	public static void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		
 		Float half = (float) 0.5;
 		Float one = (float) 1.0;
@@ -549,7 +549,7 @@ public class KeyboardInput {
 		
 	}
 	
-	public void weAddAnimalTypes() throws SQLException, AdminExceptions{
+	public static void weAddAnimalTypes() throws SQLException, AdminExceptions{
 		
 		AnimalType lion = new AnimalType("Lion", FeedingType.CARNIVORE);
 		AnimalType tiger = new AnimalType("Tiger", FeedingType.CARNIVORE);
@@ -592,18 +592,9 @@ public class KeyboardInput {
 		
 	
 	public static Habitat askForHabitat() throws IOException, SQLException {
-			System.out.println("These are the habitats existent in our recovery center. Please choose the name of one:");
-			List<String> habitatsnames = zooKMan.getHabitats();
-			System.out.println(habitatsnames);
+			Habitat habitat = KeyboardInput.askForHabitatToCheckItsAnimals();
 			
-			String habitatName = Utils.readLine();
-			
-			Integer habId = zooKMan.getHabitatIdByName(habitatName);
-				
-			List<Habitat> habitat = zooKMan.getHabitatById(habId);
-			
-			return habitat.get(0);
-			
+			return habitat;
 	}
 	
 

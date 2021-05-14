@@ -46,7 +46,7 @@ public class AdministratorSQL implements AdministratorManager{
 	public void addAnimal(Animal animal) throws SQLException{ //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
 			
-			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed,deathDate,freedomDate,name)" 
+			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed, lastDrug, deathDate,freedomDate,name)" 
 			 + "VALUES (?,?,?,?,?,?,?)";
 
 			PreparedStatement pstmt = JDBCManager.c.prepareStatement(sql); 
@@ -147,7 +147,6 @@ public class AdministratorSQL implements AdministratorManager{
 			prep.setString(1, animalType.getType());
 			prep.setString(2, feeding);
 			
-			System.out.println(sql);
 		    prep.executeUpdate();
 			prep.close();
 	
@@ -232,7 +231,6 @@ public class AdministratorSQL implements AdministratorManager{
 				prep.setInt(4,habitat.getTemperature());
 				prep.setString(5,light );
 					
-				System.out.println(sql);
 			    prep.executeUpdate();
 				prep.close();
 				
