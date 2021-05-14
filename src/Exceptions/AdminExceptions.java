@@ -4,7 +4,7 @@ public class AdminExceptions  extends Exception{
 
 	
 	public enum AdminErrors{
-		NULL, SQLEXCEPTION 
+		NULL, SQLstuff
 	}
 	
 	AdminErrors anError;
@@ -23,7 +23,7 @@ public class AdminExceptions  extends Exception{
 	public String toString() {
 		switch(getErrors()) {
 		
-		case SQLEXCEPTION: 
+		case SQLstuff: 
 			return "An SQL Exception has ocurred"+"\n";
 			
 		

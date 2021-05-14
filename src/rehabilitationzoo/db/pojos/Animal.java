@@ -2,6 +2,7 @@ package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Animal implements Serializable { //Serializable is used to have things exist outside memory (in the computer)
@@ -24,12 +25,46 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	private String name; //for easy access when still do not have a "barcode reader"
 
 	
-	private List<Worker> workers; //as there's its brother List on Worker class, this conforms a many-to-many relationship
+	private List<Worker> workers ; //as there's its brother List on Worker class, this conforms a many-to-many relationship
 	private List<Illness> illnesses; 
 	private List<Drug> drugs; 
     
 	
+	public void addDrug(Drug drug) {
+		
+		if (this.drugs == null) {
+			this.drugs = new ArrayList<Drug>();
+		}
+			this.drugs.add(drug);
+	}
+	
+	
+	public void addIllness(Illness illness) {
+		this.illnesses.add(illness);
+	}
+	
+	
     public Animal(Integer id, Date enterDate, Integer habitat_id, Date lastBath, Date lastFed, Date lastDrug,
+			Date deathDate, Date freedomDate, Integer type_id, String name, List<Worker> workers,
+			List<Illness> illnesses, List<Drug> drugs) {
+		super();
+		this.id = id;
+		this.enterDate = enterDate;
+		this.habitat_id = habitat_id;
+		this.lastBath = lastBath;
+		this.lastFed = lastFed;
+		this.lastDrug = lastDrug;
+		this.deathDate = deathDate;
+		this.freedomDate = freedomDate;
+		this.type_id = type_id;
+		this.name = name;
+		
+		this.workers = new ArrayList<Worker>();
+		this.illnesses = new ArrayList<Illness>();
+		this.drugs = new ArrayList<Drug>();
+	}
+
+	public Animal(Integer id, Date enterDate, Integer habitat_id, Date lastBath, Date lastFed, Date lastDrug,
 			Date deathDate, Date freedomDate, Integer type_id, String name) {
 		super();
 		this.id = id;
@@ -212,12 +247,11 @@ public class Animal implements Serializable { //Serializable is used to have thi
 
 	@Override
 	public String toString() {
-		return "Animal [name=" + name +", enterDate=" + enterDate + ", habitat_id=" + habitat_id
-				+ ", lastBath=" + lastBath
-				+ ", lastFed=" + lastFed + ", deathDate=" + deathDate + ", freedomDate=" + freedomDate + ", illnesses="
-				+ illnesses + ", drugs=" + drugs + "]"; //No workers print so as to avoid stackOverflow Error (loop)
+		return "Animal [id=" + id + ", enterDate=" + enterDate + ", habitat_id=" + habitat_id + ", lastBath=" + lastBath
+				+ ", lastFed=" + lastFed + ", lastDrug=" + lastDrug + ", deathDate=" + deathDate + ", freedomDate="
+				+ freedomDate + ", type_id=" + type_id + ", name=" + name + ", illnesses=" + illnesses + ", drugs="
+				+ drugs + "]"; //No workers print so as to avoid stackOverflow Error (loop)
 	}
-
 
 	public Date getLastDrug() {
 		return lastDrug;

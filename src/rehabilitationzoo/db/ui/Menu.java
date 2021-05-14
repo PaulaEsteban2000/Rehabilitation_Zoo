@@ -31,9 +31,8 @@ import utils.Utils;
 
 public class Menu {
 	
-	private static DBManager dbman = new JDBCManager();			//should be private
+	private static DBManager dbMan = new JDBCManager();			//should be private
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
-	
 	
 	//TODO all methods here should be private if we can
 	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
@@ -41,12 +40,13 @@ public class Menu {
 	
 	public static void main(String[] args) throws Exception, IOException{
 	
-		dbman.connect();
+		dbMan.connect();
 		userMan.Connect();
 		
-		KeyboardInput key = new KeyboardInput();
+		KeyboardInput key = new KeyboardInput(); //TODO Static
 		key.weAddHabitats();
 		key.weAddDrugTypes();
+		key.weAddAnimalTypes();
 	
 		do {
 			//LOGGING IN
@@ -66,7 +66,7 @@ public class Menu {
 	            	break;
 	            	
 	            case 0:
-	            	dbman.disconnect();
+	            	dbMan.disconnect();
 	            	userMan.Disconnect();
 	            	System.exit(0);
 	            	break;
@@ -136,14 +136,29 @@ public class Menu {
 			switch (vetMainChoice) {
 				case 1:
 					System.out.println("ANIMAL DIAGNOSIS");
-					Animal animalToDiagnose = KeyboardInput.askForAnimal();
-					KeyboardInput.firstDiagnosisSubMenu(animalToDiagnose);
-					break;
+					
+					List<Animal> animalsToBeDiagnosed = KeyboardInput.checkIfAnimalsInHabitat("waitZone");
+					
+					if (animalsToBeDiagnosed == null) { //in case no more checking should be done
+						break;
+					} else {
+						Animal animalToDiagnose = KeyboardInput.askForAnimalForDiagnosis(animalsToBeDiagnosed); 
+						KeyboardInput.firstDiagnosisSubMenu(animalToDiagnose);
+						break;
+					}
+					
 				case 2:
 					System.out.println("ANIMAL CHECK");
+					
 					Habitat habitatToCheck = KeyboardInput.askForHabitatToCheckItsAnimals();
-					KeyboardInput.animalCheckSubMenu(habitatToCheck);
+					
+					if (KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName()) == null) {
+						break;
+					} else {
+						KeyboardInput.animalCheckSubMenu(habitatToCheck);
 					break;
+					}
+					
 				case 3:
 					break;
 				default:  
@@ -153,10 +168,6 @@ public class Menu {
 			
 		}while(vetMainChoice != 3);
 	}
- 	
-	
-	//TODO PAULA: Put the method for the diagnosis of the new animal
-	// NATALIAS MENU
 	
  	
 	private static void adminOption2() throws NumberFormatException, IOException, SQLException {
@@ -165,8 +176,6 @@ public class Menu {
  		boolean exito=false;
  		
 
- 		
- 		
 		do {
 			
 			System.out.println("Select an option: "+"\n" 
@@ -208,12 +217,13 @@ public class Menu {
 							    System.out.print("\n"+"Introduce the year");
 							    int year = Utils.readInt();
 							    LocalDate enterLocalDate = LocalDate.of(year, month, day);
-							    Date enterDate = Date.valueOf(enterLocalDate);
+							    Date enterDate =Date.valueOf (enterLocalDate);
+							    
 							    LocalDate now = LocalDate.now();
 							    Date today = Date.valueOf(now); //lastfed + lastbathe
 							    
 							    Animal anAnimal = new Animal(enterDate, today, today,null, null, name);
-							    KeyboardInput.addAnimalInTheZoo(anAnimal); //DIRECTLY WE HAVE TO ADD IT TO THE TABLES IN SQL
+							    KeyboardInput.addAnimalInTheZoo(anAnimal); 
 							    System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							    
 							    KeyboardInput.firstDiagnosisSubMenu(anAnimal); //Paula: first diagnosis of an animal

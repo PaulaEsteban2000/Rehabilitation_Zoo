@@ -46,12 +46,21 @@ public class AdministratorSQL implements AdministratorManager{
 	public void addAnimal(Animal animal) throws SQLException{ //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
 			
-			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed,deathDate,freedomDate,name)";
-			sql+= "VALUES ('" + animal.getEnterDate() + "','"  + animal.getLastBath() + "','" + animal.getLastFed() + "','" 
-							  + animal.getDeathDate() + "','"  + animal.getFreedomDate() + "','" + animal.getName() + ")";
+			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed,deathDate,freedomDate,name)" 
+			 + "VALUES (?,?,?,?,?,?,?)";
 
 			PreparedStatement pstmt = JDBCManager.c.prepareStatement(sql); 
 				
+			
+			pstmt.setString(1, "%" + animal.getEnterDate() + "%" );
+			pstmt.setString(2, "%" + animal.getLastBath()+ "%" );
+			pstmt.setString(3, "%" + animal.getLastFed() + "%" );
+			pstmt.setString(4, "%" + animal.getLastDrug() + "%" );
+			pstmt.setString(5, "%" + animal.getDeathDate() + "%" );
+			pstmt.setString(6, "%" + animal.getFreedomDate() + "%" );
+			pstmt.setString(7, "%" + animal.getName() + "%" );
+			
+			
 			System.out.println(sql);
 			pstmt.executeUpdate(sql);
 			pstmt.close();
@@ -102,7 +111,7 @@ public class AdministratorSQL implements AdministratorManager{
 			int type_id = rs.getInt("type_id");
 			String name = rs.getString("name");
 			
-			Animal animal = new Animal (id, enterDate, habitat_id, lastBath, lastFed,lastDrug, deathDate, freedomDate, type_id , name);
+			//Animal animal = new Animal (id, enterDate, habitat_id, lastBath, lastFed,lastDrug, deathDate, freedomDate, type_id , name);
 			
 			System.out.println(sql);
 			prep.close();
@@ -121,18 +130,30 @@ public class AdministratorSQL implements AdministratorManager{
 	
 	@Override
 	public void introducingAnimalsTypes (AnimalType animalType) throws SQLException{ 
-		//try {
-			Statement stmt = JDBCManager.c.createStatement(); 
+		try {
+			String feeding;
+			if(animalType.getWhatDoYouEat().equals(FeedingType.CARNIVORE)) {
+				feeding = "Carnivore";
+			}else if(animalType.getWhatDoYouEat().equals(FeedingType.HERVIBORE)) {
+				feeding = "Hervibore";
+			}else {
+				feeding = "Omnivore";
+			}
 			String sql = "INSERT INTO animals_characteristics(type,feedingType)";
-			sql+= "VALUES ('" + animalType.getType() + "','" + animalType.getWhatDoYouEat() + ")";
+			sql+= "VALUES (?,?)";
+			
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			
+			prep.setString(1, animalType.getType());
+			prep.setString(2, feeding);
 			
 			System.out.println(sql);
-			stmt.executeUpdate(sql);
-			stmt.close();
-			
-		//} catch(Exception e) {
-		//	e.printStackTrace();
-		//}
+		    prep.executeUpdate();
+			prep.close();
+	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -148,21 +169,12 @@ public class AdministratorSQL implements AdministratorManager{
 			while (rs.next()) { 
 				String type = rs.getString("type");
 				typesOfAnimals.add(type);
-				//FeedingType whatDoYouEat =  FeedingType.valueOf(rs.getString("feedingType")) ;
-				//AnimalType newType = new AnimalType(type, whatDoYouEat);
-				
-				//numberOfIllnesses = Integer.parseInt(rs.getString("xxx")); 
-			
 				System.out.print("In SQL: Se ha guardado"+"\n");
 			}
 			
 			System.out.println(sql);
-			prep.executeUpdate(sql);
-
-				rs.close();
-				System.out.println("Search finished.");// Retrieve data: end
-				
-				prep.close();// Close database connection
+			rs.close();
+			prep.close();// Close database connection
 				
 			}catch(Exception ex) {
 				ex.printStackTrace();
@@ -171,17 +183,10 @@ public class AdministratorSQL implements AdministratorManager{
 	return typesOfAnimals;	
 	}	
 	
-	/*prep.setString(1, "%" + habitatName + "%");						// esta bien??
-	ResultSet rs = prep.executeQuery();
-	
-	while (rs.next()) { //like hasNext
-		id = rs.getInt("id");
-	}*/
-	
 	
 	@Override
-	public List<String> getAnimalTypesById(String name)  {//REVISAR
-		List<String> typesOfAnimals = new ArrayList<String>();
+	public List<Integer> getAnimalTypesById(AnimalType type)  {//REVISAR
+		List<Integer> typesOfAnimals = new ArrayList<Integer>();
 		
 		
 		try {
@@ -189,11 +194,12 @@ public class AdministratorSQL implements AdministratorManager{
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			ResultSet rs = prep.executeQuery();
 			
-			while (rs.next()) { //like hasNext
-				String type = rs.getString("type");
-				typesOfAnimals.add(type); //ESTO??
+			while (rs.next()) { 
+				Integer id = rs.getInt("id");
+				typesOfAnimals.add(id); 
 			}
 			
+				System.out.println(sql);
 				prep.close();
 				rs.close();
 				
@@ -208,35 +214,31 @@ public class AdministratorSQL implements AdministratorManager{
 	@Override
 	public void addHabitat(Habitat habitat) /*throws AdminExceptions*/ {
 		try {
-			String sql = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)"; 
+			String light;
+			if(habitat.getLight().equals(LightType.HIGH)) {
+				light = "High";
+			}else if(habitat.getLight().equals(LightType.MEDIUM)) {
+				light = "Medium";
+			}else {
+				light = "Low";
+			}
+			String sql = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)" +
+					"VALUES (?,?,?,?,?)"; 
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-			ResultSet rs = prep.executeQuery(); // SELECT?? no es solo para consultas?
-			
-			prep.setString(1, "%" + habitat.getName() + "%" );
-			prep.setString(2, "%" + habitat.getLastCleaned( )+ "%" );
-			prep.setString(3, "%" + habitat.getWaterTank() + "%" );
-			prep.setString(4, "%" + habitat.getTemperature() + "%" );
-			prep.setString(5, "%" + habitat.getLight() + "%" );
-			
-			
-				/*Date lastCleaned= rs.getDate("lastCleaned");
-				Date waterTank= rs.getDate("waterTank");
-				Integer temperature = rs.getInt("temperature");
-				String light = rs.getString("light");*/
-			
+				
+				prep.setString(1,habitat.getName());
+				prep.setDate(2,habitat.getLastCleaned( ));
+				prep.setDate(3,habitat.getWaterTank() );
+				prep.setInt(4,habitat.getTemperature());
+				prep.setString(5,light );
+					
+				System.out.println(sql);
 			    prep.executeUpdate();
 				prep.close();
-				rs.close();
 				
 			}catch( Exception ex) {
 				ex.printStackTrace();
-				//if(java.sql.SQLException.) {
-				//	throw new AdminExceptions(AdminExceptions.AdminErrors.SQLEXCEPTION);
-				//}
-				//System.out.println("array containing all of the exceptions that were suppressed, typically by the try-with-resources statement, in order to deliver this exception: ");
-				//ex.getSuppressed();
 				}
-		
 	}
 	
 	
@@ -267,14 +269,22 @@ public class AdministratorSQL implements AdministratorManager{
 
 		try {  			
 			
-			Statement stmt = JDBCManager.c.createStatement(); 
 			String sql = "INSERT INTO workers (name, lastname, hireDate, salary, workerType, whichHabitatDoYouWorkOn )";
-			sql+= "VALUES ('" + aWorker.getName() + "','" + aWorker.getLastName() + "','" +aWorker.getHireDate()+ "','" +aWorker.getSalary()
-			+ aWorker.getType()+ "','" + aWorker.getwhichHabitatDoYouWorkOn() + ")";
+			sql+= "VALUES (?,?,?,?,?,?)";
+			
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			
+			prep.setString(1, "%" + aWorker.getName() + "%" );
+			prep.setString(2, "%" + aWorker.getLastName() + "%" );
+			prep.setString(3, "%" + aWorker.getHireDate() + "%" );
+			prep.setString(4, "%" + aWorker.getSalary() + "%" );
+			prep.setString(5, "%" + aWorker.getName() + "%" );
+			prep.setString(6, "%" + aWorker.getName() + "%" );
 			
 			System.out.println(sql);
-			stmt.executeUpdate(sql);
-			stmt.close();
+			prep.executeUpdate();
+			prep.close();
+			
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -290,7 +300,7 @@ public class AdministratorSQL implements AdministratorManager{
 		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 		ResultSet rs = prep.executeQuery();
 		
-		while (rs.next()) { //like hasNext
+		while (rs.next()) { 
 			String nameAndLastName = rs.getString("name"+" "+"lastname");
 			workersNamesAndLastNames.add (nameAndLastName);
 		}
@@ -343,12 +353,14 @@ public class AdministratorSQL implements AdministratorManager{
 	public void addNewDrugType (String drugName, float dosis) {
 		try {
 			DrugType aDrugType = new DrugType(drugName, dosis);
-		    String sql= "INSERT INTO drugTypes (type,dosis) VALUES ('" + aDrugType.getType() +"','" + aDrugType.getDosis() +"')"; 
+		    String sql= "INSERT INTO drugTypes (type,dosis) VALUES (?,?)"; 
 		    PreparedStatement stmt = JDBCManager.c.prepareStatement(sql); 
 			
 		    listOfDrugTypes.add(aDrugType);
+		    stmt.setString(1, aDrugType.getType());
+		    stmt.setFloat(2, aDrugType.getDosis());
 		    
-			stmt.executeUpdate(sql);
+			stmt.executeUpdate();
 			stmt.close();
 			
 		} catch(Exception e) {
@@ -396,9 +408,7 @@ public void listDrugTypes() {
 		try {
 			//Ids are chosen by the database
 			Statement stmt = JDBCManager.c.createStatement(); 
-			String sql = "INSERT INTO drugs ";
-			sql+= "VALUES ('" + oneDrug.getName() +"','" + oneDrug.getTreatmentDuration() + "','" +oneDrug.getPeriodBetweenDosis()+ "','" 
-			+ oneDrug.getType()+ ")"; 
+			String sql = "INSERT INTO drugs  VALUES (?,?,?,?)"; 
 			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);

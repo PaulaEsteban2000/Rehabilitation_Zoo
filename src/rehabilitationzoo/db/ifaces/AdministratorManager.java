@@ -27,8 +27,7 @@ public interface AdministratorManager {
 		//ANIMALS TYPES
 		public void introducingAnimalsTypes(AnimalType animalType) throws SQLException;
 		public List<String> getAnimalTypesByName();
-		public List<String> getAnimalTypesById(String name);
-		
+		public List<Integer> getAnimalTypesById(AnimalType type);
 		
 		//WORKERS
 		public List<Worker> searchWorkerByName (String name);
@@ -53,6 +52,7 @@ public interface AdministratorManager {
         //HABITATS
 		public List<String> weListHabitats();
 		public void addHabitat(Habitat habitat)throws AdminExceptions;
+		
 
 
 		
