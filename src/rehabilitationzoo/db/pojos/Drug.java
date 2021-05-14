@@ -20,6 +20,14 @@ public class Drug implements Serializable{
 	
 	private List<Animal> animals; 
 	private List<Illness> illnesses; 
+	
+	public void addAnimal(Animal animal) {
+		this.animals.add(animal);
+	}
+	
+	public void addIllness(Illness illness) {
+		this.illnesses.add(illness);
+	}
 		
 
 	public Drug(String name, Integer treatmentDuration, Integer periodBetweenDosis, Integer drugType_id,  List<Animal> animals, int dosis,  List<Illness> illness) {

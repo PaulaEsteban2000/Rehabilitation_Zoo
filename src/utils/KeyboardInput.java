@@ -2,6 +2,7 @@ package utils;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.sql.Date;
 import java.sql.SQLException;
 //>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
@@ -37,77 +38,38 @@ public class KeyboardInput {
 	//
 	//
 	public static VetManager vetMan = new VetSQL();		
-
 	//
 	//
-	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
-		System.out.println("These are our actual habitats.");
-		List<String> habitatNames= vetMan.getAllHabitatsNames();
-		System.out.println(habitatNames);
-		System.out.println("Please input the name of the habitat to check its animals: ");
-		String name = Utils.readLine();
-		Habitat habitatToCheck = null;
+	public static List<Animal> checkIfAnimalsInHabitat(String habitatToCheck) throws SQLException {
 		
-		return habitatToCheck;
+		List<Animal> animalsToBeDiagnosed = vetMan.getAnimalsInHabitat(habitatToCheck);
+		
+		if (animalsToBeDiagnosed.size() == 0) {
+			System.out.println("There are no animals in the habitat.");
+			return null;
+		} else{
+			return animalsToBeDiagnosed;
+		}
+		
 	}
 	//
 	//
-	public static Animal askForAnimal() throws IOException {
-		//TODO solo poder acceder a animales con freedom y death date NULL
+	public static Animal askForAnimalForDiagnosis(List<Animal> animalsToBeDiagnosed) throws IOException {
+		//TODO solo poder acceder a animales con death date NULL
+		//TODO sacar animales en WAITZONE habitat - bucle hasta que no queden mas?
 		
-		//TODO o deberia ser mejor sacarle la lista de animales que tratamos en el zoo?
-		System.out.println("These are the types of animals we take care of in our recovery center. Please choose one:");
-		List<String> types = vetMan.getAnimalTypesInZoo();
-		System.out.println(types);
+		System.out.println("These are the animals waiting to be checked on: ");
+			for (int a = 0; a < animalsToBeDiagnosed.size(); a++) {
+				System.out.println(animalsToBeDiagnosed.get(a));
+			}
+		System.out.println("Please write the type of the animal you are about to diagnose: ");
 		String animalType = Utils.readLine();
-		
-		System.out.println("These are the names of the animals under the given type. Please choose the one:");
-		List<Animal> animalsGivenType = vetMan.getAnimalsGivenType(animalType);
-		printAnimalNames(animalsGivenType);
+		System.out.println("Now, please write its name: ");
 		String animalName = Utils.readLine();
-		
-		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
-		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
-	
-	}
-	//
-	//
-	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
-		//TODO solo poder acceder a animales con freedom y death date NULL
-		
-		System.out.println("These are the types of animals existent in the habitat. Please choose one or enter a new one:");
-		List<String> animalsTypesInHabitat = vetMan.getAnimalTypesInAHabitat(habitat);
-		printAnimalTypesInHabitat(animalsTypesInHabitat);
-		String animalType = Utils.readLine();
-		
-		System.out.println("These are the names of the animals under the given type in the habitat. Please choose the one:");
-		List<Animal> animalsGivenType = vetMan.getAnimalsGivenHabitatAndType(habitat.getName(), animalType);
-		printAnimalNamesInHabitat(animalsGivenType);
-		String animalName = Utils.readLine();
-		
-		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalType, animalName);
-		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
-	}
-	//
-	//
-	public static void printAnimalNames(List<Animal> animalsGivenType) {
-		for (int a = 0; a < animalsGivenType.size(); a++) {
-			System.out.println(animalsGivenType.get(a).getName());
-		}
-	}
-	//
-	//
-	public static void printAnimalTypesInHabitat(List<String> animalsInHabitat) {
-		for (int a = 0; a < animalsInHabitat.size(); a++) {
-			System.out.println(animalsInHabitat.get(a));
-		}
-	}
-	//
-	//
-	public static void printAnimalNamesInHabitat(List<Animal> animalsInHabitat) {
-		for (int a = 0; a < animalsInHabitat.size(); a++) {
-			System.out.println(animalsInHabitat.get(a).getName());
-		}
+			
+		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalName, animalType); 
+			
+		return animalToDiagnose.get(0); //TODO given there's no more animals in the list (there shouldn't be bc of exceptions)
 	}
 	//
 	//
@@ -118,11 +80,12 @@ public class KeyboardInput {
 			System.out.println("Once your diagnosis is completed, please choose if the animal has one of these illnesses or more:" + "\n"
 					+ "	1. Animal is in need of a prothesis" + "\n"
 					+ "	2. Animal has some other illness" + "\n"
-					+ "	3. Go back to main menu" + "\n"); 
+					+ "	3. Done. Go back to main menu" + "\n"); 
 			illnessChoice = Utils.readInt();
 		
 			switch(illnessChoice) {
-			case 1: 
+			
+			case 1: //PROTHESIS
 				System.out.println("Are you sure this animal needs a prothesis?: " + "\n"
 						+ "a. Yes" + "\n"
 						+ "b. No, go back to illnesses menu." + "\n");
@@ -132,32 +95,55 @@ public class KeyboardInput {
 					
 					System.out.println("Where does the animal need a prothesis? "); 
 					String bodyPart = Utils.readLine();
-					String name = bodyPart + "_prothesis";
-					Illness illness = new Illness(name, false, true, null);
+					String name = bodyPart + "Prothesis";
+					
+					List<String> prothesisNames = vetMan.getAllProthesisExistent();
+					
+					Boolean bol = false;
+					
+					for(int a = 0; a < prothesisNames.size(); a++) {
+						System.out.println(prothesisNames.get(a));
+						if (prothesisNames.get(a).contains(bodyPart)) {
+							bol = true;
+							break;
+						}
+					}
+					
+					Illness illness = null;
+					
+					if(bol == false) {
+						illness = new Illness(name, false, true, null);
+						//animalToDiagnose.addIllness(illness); THESE TWO GIVE ME ERRORS: 116, 117
+						illness = vetMan.addIllness(illness);
+						System.out.println("New prothesis created");
+					} else {
+						illness = vetMan.getIllnessByName(name);
+						//animalToDiagnose.addIllness(illness); 	THESE TWO GIVE ME ERRORS: 
+						//illness.addAnimal(animalToDiagnose);		Cannot invoke "java.util.List.add(Object)" because "this.animals" is null
+					}
 
-					//TODO al igual deberia meterlo en la db y volverlo a recibir ya con el id relleno
-					//NATALIA, MARIA: preguntar juntas what if we add an existent illness?? -> exception?
+					if (vetMan.getAnimalIllnesses(animalToDiagnose).contains(illness)) {
+						System.out.println("The animal already has this prothesis on.");
+					}else {
+						vetMan.setIllnessOnAnimal(illness, animalToDiagnose);
+						vetMan.prothesisInstallation(illness, animalToDiagnose); 
+						System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days (unless it has other illnesses or prothesis).");
+					}
 					
-					//TODO Add illness and/or link to patient
-					vetMan.addIllness(illness); //esto aqui bien?
-					vetMan.setIllnessOnAnimal(illness);
-					
-					//Add illness and/or link to patient
-					//TODO: NATALIA, MERI: preguntar juntas what if we add an existent illness?? -> exception? 
-					//Pues que no se almacena como una illness nueva
-					
-					vetMan.prothesisInstallation(true, illness, animalToDiagnose); //here the release date should be changed if parameter true
-					System.out.println("Prothesis was installed. The animal will be released into the wilderness in 30 days.");
 					break;
+					
+					
 				} else if(prothesisChoice.equals("b")) {
 					break;	
+					
 				} else {
 					System.out.println("Error, nonvalid input");
+					
 				}
 		
 				break;
 				
-			case 2:
+			case 2: //OTHER
 				System.out.println("How many illnesses (other than prothesis) does your animal have?:");
 				int numberOfIllnesses = Utils.readInt();
 				
@@ -165,6 +151,13 @@ public class KeyboardInput {
 				break;
 				
 			case 3:
+				System.out.println("Where will the animal you just diagnosed live?");
+				System.out.println("These are our current existing habitats: ");
+				List<String> habitatNames= vetMan.getAllHabitatsNames();
+				System.out.println(habitatNames);
+				System.out.println("Please type in the name of this habitat: ");
+				String habitatName = Utils.readLine();
+				vetMan.changeHabitat(habitatName, animalToDiagnose);
 				break;
 				
 			default:
@@ -172,93 +165,159 @@ public class KeyboardInput {
 				break;
 				
 			}
+			
 		}while(illnessChoice != 3);
 	}
 	//
 	//
 	private static void illnessesInputSubMenu(int numberOfIllnesses, Animal animalToDiagnose) throws IOException{
 		String nameOfIllness = "";
-		int quarantineDays = 0; //set to zero in case no quarantine is needed
-		Boolean prothesis = false;
-		Drug drug = null ;
+		Boolean quarantineBol = false;
+		Boolean needsDrug = false;
+		
+		List<Drug> chosenDrug = null;
+		Integer drug_id = null;
 		
 		for (int a = 0; a < numberOfIllnesses; a++) {
-
-			System.out.println("This is the illness number " + vetMan.getNumberOfIllnessesAnAnimalHas() + " your animal has.");
-			System.out.println("What is the name of the new illness you just diagnosed?: new illness input number" + (a+1));
+			System.out.println("This is the illness number " + (vetMan.getNumberOfIllnessesAnAnimalHas(animalToDiagnose)+1) + " your animal has.");
+			
+			System.out.println("What is the name of the new illness you just diagnosed?: new illness input number " + (a+1));
 			nameOfIllness = Utils.readLine(); //TODO check spelling
 			
-			Illness newIllness = new Illness(nameOfIllness, null);
-			vetMan.addIllness(newIllness);
-			//TODO setIllnessOnAnimal(String name)
 			
 			System.out.println("Will it need quarantine?" + "\n"
 				+ "a. Yes" + "\n"
 				+ "b. No." + "\n");
-				String quarantineChoice = Utils.readLine();
+			String quarantineChoice = Utils.readLine();
 					if (quarantineChoice.equals("a")) {
-						newIllness.setQuarantine(true);
-						vetMan.illnessQuarantine(true, newIllness);
+						quarantineBol = true;
 						System.out.println("The animal will be put int quarantine.");
+						
 					} else if(quarantineChoice.equals("b")) {
-						newIllness.setQuarantine(false);
-						vetMan.illnessQuarantine(false, newIllness);
 						System.out.println("The animal will not be put int quarantine.");
+						
 					} else {
 						System.out.println("Error, nonvalid input");
+						
 					}
-				
+					
+					
 			System.out.println("Will the animal need any medicines to take for this illness?:" + "\n"
 					+ "a. Yes"+ "\n"
 					+ "b. No"+ "\n");
-				String drugsChoice = Utils.readLine();
+			String drugsChoice = Utils.readLine();
 					if (drugsChoice.equals("a") ) {
+						needsDrug = true;
+						
 						System.out.println("These are the types of medicines we have in the center at the moment: ");
 						List<String> drugTypes = vetMan.getDrugTypes();
 						System.out.println(drugTypes);
-						//TODO cambiar relacion de drug y drugType a 1-n
 						
 						System.out.println("What type of drug will the animal need to take?");
 						String drugType = Utils.readLine();
 						//TODO check for correct spelling (in every other case as well)
 						
-						
 						System.out.println("These are the medicines we have for that type: ");
-						List<String> drugNames = vetMan.getDrugNamesGivenType(drugType);
-						System.out.println(drugNames);
-						System.out.println("Please type in the name of the drug to administrate: ");
+						List<Drug> drugs = vetMan.getDrugsGivenType(drugType); 
+						for (int b = 0; b < drugs.size(); b++) {
+							System.out.println(drugs.get(b).getName());
+						}
+						
+						System.out.println("Please type in the name of the drug to administrate: "); 
+						//if the vet does not want any, admin adds others more suitable
 						String nameOfDrug = Utils.readLine();
+						chosenDrug = vetMan.getDrugByNameAndType(nameOfDrug, drugType);
 						
-						System.out.println("How many days will the animal need to take it?");
-						Integer treatmentDuration = Utils.readInt();
 						
-						System.out.println("What will the period between the dosis be? Please type the number of days between each dosis");
-						//TODO this should probably be fixed on each drug?
-						Integer periodBetweenDosis = Utils.readInt();
+						if (animalToDiagnose.getDrugs() != null ) {
+							List<Drug> drugsCopy = animalToDiagnose.getDrugs();
+							animalToDiagnose.setDrugs(null);
+							drugsCopy.add(chosenDrug.get(0));
+							animalToDiagnose.setDrugs(drugsCopy);
+						}
 						
-						System.out.println("How many grams of the medicine will it need to take everyday?");
-						Float dosis = Float.parseFloat(Utils.readLine());
 						
-						drug = new Drug (nameOfDrug, treatmentDuration, periodBetweenDosis, vetMan.getTypeOfDrugId(drugType), dosis);
-						//save drug bbdd
-						
-						//asocias drug al animal
-						//animalToDiagnose.setDrug(drug);
-						
-						//guardar drug del animal en la tabla de la relacion
-						vetMan.drugPrescription(animalToDiagnose); 
-						//TODO drug to illness?? how are they related?
 					} else if(drugsChoice.equals("b") ) {
-						break;	
+						
 					} else {
 						System.out.println("Error, nonvalid input");
 					}
+					
+			if (needsDrug) {
+				drug_id = chosenDrug.get(0).getId();
+			}
+			
+			Illness illness = new Illness(nameOfIllness, quarantineBol, false, drug_id);
+			
+			if (vetMan.getIllness(illness) == null) {
+				illness = vetMan.addIllness(illness);
+				//TODO drug to illness?? how are they related? 1 to many
+				//chosenDrug.get(0).addIllness(illness); no se si esto hace falta
+			} else {
+				illness = vetMan.getIllness(illness);
+			}
+			
+			vetMan.setIllnessOnAnimal(illness, animalToDiagnose);		
 			
 		}
+		
+		if (animalToDiagnose.getDrugs() != null ) {
+			vetMan.drugPrescription(animalToDiagnose);
+		}
+		
+		System.out.println("You have now finished entering all your animal's illnesses (not prothesis).");
 		
 	}
 	//
 	//
+	public static Habitat askForHabitatToCheckItsAnimals() throws IOException {
+		System.out.println("These are our actual habitats.");
+		List<String> habitatNames= vetMan.getAllHabitatsNames();
+		System.out.println(habitatNames);
+		System.out.println("Please input the name of the habitat to check its animals: ");
+		String name = Utils.readLine();
+		List<Habitat> habitats = vetMan.getHabitatByName(name);
+		
+		return habitats.get(0);
+	}
+	//
+	//
+	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
+		//TODO solo poder acceder a animales con death date NULL (freedom no por las protesis)
+		
+		List<String> animalsTypesInHabitat = vetMan.getAnimalTypesInAHabitat(habitat);
+		String animalType = printAnimalTypesInHabitat(animalsTypesInHabitat);
+		
+		List<Animal> animalsGivenType = vetMan.getAnimalsGivenHabitatAndType(habitat.getName(), animalType);
+		String animalName = printAnimalNamesInHabitat(animalsGivenType);
+		
+		List<Animal> animalToDiagnose = vetMan.getAnimalByNameAndType(animalName, animalType);
+		return animalToDiagnose.get(0); //TODO given theres no more animals in the list (there shouldnt be bc of exceptions)
+	}
+			//
+			//
+			public static String printAnimalTypesInHabitat(List<String> animalsInHabitat) throws IOException {
+				System.out.println("These are the types of animals existent in the habitat. Please choose one:");
+				
+				for (int a = 0; a < animalsInHabitat.size(); a++) {
+					System.out.println(animalsInHabitat.get(a));
+				}
+				
+				return Utils.readLine();
+			}
+			//
+			//
+			public static String printAnimalNamesInHabitat(List<Animal> animalsGivenType) throws IOException {
+				System.out.println("These are the names of the animals under the given type in the habitat. Please choose the one:");
+				
+				for (int a = 0; a < animalsGivenType.size(); a++) {
+					System.out.println(animalsGivenType.get(a).getName());
+				}
+				
+				return Utils.readLine();
+			}
+			//
+			//
 	public static void animalCheckSubMenu(Habitat habitatToCheck) throws IOException, SQLException {
 		int stateOption = 0;
 		
@@ -274,12 +333,20 @@ public class KeyboardInput {
 					+ "	4. Go back to main Vet menu" + "\n");
 				stateOption = Utils.readInt();
 				
+				LocalDate localToday = LocalDate.now(); // only way to add dates
+				String stringHealingDay = localToday.toString();
+				Date newDate = Date.valueOf(stringHealingDay);
+				
 			switch (stateOption) {
-			case 1:
+			case 1: //FREED
+				animalToCheck.setFreedomDate(newDate);
 				 vetMan.reportAnimalState(stateOption, animalToCheck);
+				 System.out.println("Animal has been set free, as it was finally cured :)");
 				break;
-			case 2:
+			case 2: //DECEASED
+				animalToCheck.setDeathDate(newDate);
 				vetMan.reportAnimalState(stateOption, animalToCheck);
+				System.out.println("Sadly the animal has been reported as deceased.");
 				break;
 			case 3: 
 				System.out.println("This animal will still stay at the zoo."+ "\n"

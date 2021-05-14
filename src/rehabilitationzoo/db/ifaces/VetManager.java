@@ -12,65 +12,64 @@ public interface VetManager {
 	//PARTE DE PAULA - VET
 	
 	
-	//METODOS QUE HAY QUE PONER
-	//public void markAnimalAsDeceased(Animal animal);
-	//public void FreedomDateOfTheAnimal(Animal animal);
+	//0. SQL HELPER METHODS
+	
+	public Integer getIllnessIdByName(Illness illness) throws SQLException;
+	public Integer getAnimalId(Animal animal);
+	public Integer getHabitatIdByName(String habitatName) throws SQLException;
 	
 	
 	//1. ANIMAL DIAGNOSIS - only on arrival
-	
-		//a. askForAnimal
-			public List<String> getAnimalTypesInZoo ();
-			public List<Animal> getAnimalsGivenType(String animalType);
-			public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch); //in the future this will only need an id read by a barcorde reader
+		
+		//a. checkIfAnimalsInHabitat
+			public List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException;
 			
-		//b. firstDiagnosisSubMenu
-			public void prothesisInstallation(Boolean bol, Illness illness, Animal animal); 
-				public Integer getIllnessIdByName(Illness illness) throws SQLException;
-				//public Integer getNumberOfIllnessesAnAnimalHas(); is used here as well
-				public Integer getAnimalId(Animal animal);
+		//b. askForAnimalForDiagnosis
+			public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch);// future: "barcorde" reader
 			
-		//c. illnessesInputSubMenu
-			public Integer getNumberOfIllnessesAnAnimalHas(Animal animal);
-			void addIllness(Illness illness);
-			public void illnessQuarantine (Boolean bol, Illness illness); 
-			public List<String> getDrugTypes();
-			public List<String> getDrugNamesGivenType(String drugName);
-			public Integer getTypeOfDrugId(String type);
-				//public Integer getIllnessIdByName(Illness illness); is used here as well
-	
-	
+		//c. firstDiagnosisSubMenu
+			
+			//I. PROTHESIS
+				public List<String> getAllProthesisExistent();
+				public Illness addIllness(Illness illness);
+				public Illness getIllnessByName(String name);
+				public List<Illness> getAnimalIllnesses(Animal animal);
+				public void setIllnessOnAnimal(Illness illness, Animal animal); 
+				public void prothesisInstallation(Illness illness, Animal animal);
+			
+			//II. OTHER - illnessesInputSubMenu
+				public Integer getNumberOfIllnessesAnAnimalHas(Animal animal);
+				public List<String> getDrugTypes();
+				public List<Drug> getDrugsGivenType(String drugName);
+				public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
+				public Illness getIllness(Illness illness);
+				//public Illness addIllness(Illness illness); again
+				//public void setIllnessOnAnimal(Illness illness, Animal animal); again
+				public void drugPrescription(Animal animal); 
+
+			//II. BACK
+				public List<String> getAllHabitatsNames();
+				public void changeHabitat(String habitatName, Animal animal);
+			
+				
 	//2. ANIMAL CHECK - daily
 			
-		//a. askForHabitatToCheckItsAnimals	
-			public List<String> getAllHabitatsNames();
+		//a. askForHabitatToCheckItsAnimals
+			//public List<String> getAllHabitatsNames(); again
+			public List<Habitat> getHabitatByName(String name);
 			
-		//b. animalCheckSubMenu
-			public void reportAnimalState(Integer option, Animal animal); //stays, dies, released
+		//b. checkIfAnimalsInHabitat
+			//just like on 1.a (with getAnimalsInHabitat)
+			
+		//c. animalCheckSubMenu
+			
+			//I. askForAnimalFromHabitat: in the future this will only need an id read by a barcorde reader
 				public List<String> getAnimalTypesInAHabitat(Habitat habitat);
 				public List<Animal> getAnimalsGivenHabitatAndType(String habitatName, String animalType);
-				//public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch); is used here as well
-				//in the future this will only need an id read by a barcorde reader
-
-	
+				//public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch); again
 				
-	///////////////////////////////////////////////////////////////////////////////////
+			//II. [rest]
+				public void reportAnimalState(Integer option, Animal animal); //stays, dies, released
 			
-	
-	public List<Illness> getAnimalIllnesses(Animal animal);
-		
-	public void setIllnessOnAnimal(Illness illness, Animal animal); //remember each can have more than one
-	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug);
-		//and now setting the rest of the parameters for the drug (that will be empty until now)...
-		//set treatmentDuration, periodBetweenDosis, dosis 
-	public void drugPrescription(Animal animal); //links drug to animal //animal can be taking many
-			
-	Integer getHabitatIdByName(String habitatName) throws SQLException;
-	List<Animal> getAnimalsInHabitat(String habitatNameToSearch) throws SQLException;
-		
-
-		
-	
-		
 	
 }
