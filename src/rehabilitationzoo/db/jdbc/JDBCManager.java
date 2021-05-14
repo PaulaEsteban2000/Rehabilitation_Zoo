@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import rehabilitationzoo.db.ifaces.VetManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.FeedingType;

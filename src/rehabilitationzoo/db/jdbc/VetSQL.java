@@ -93,196 +93,8 @@ public class VetSQL implements VetManager {
 		return id;
 	}
 
-
-<<<<<<< HEAD
 	
 	//1. ANIMAL DIAGNOSIS - only on arrival
-=======
-		try {
-			String sql = "SELECT * FROM animals WHERE habitat_id = ?"; // esta bien??
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-			prep.setString(1, "%" + getHabitatIdByName(habitatNameToSearch) + "%"); // esta bien??
-			ResultSet rs = prep.executeQuery();
-
-			while (rs.next()) { // like hasNext
-				int id = rs.getInt("id");
-				Date enterDate = rs.getDate("enterDate");
-				Integer habitat_id = rs.getInt("habitat_id");
-				// FeedingType feedingType = FeedingType.valueOf(rs.getString("feedingType"));
-				Date waterTank = rs.getDate("waterTank");
-				Date lastBath = rs.getDate("lastBath");
-				Date lastFed = rs.getDate("lastFed");
-				Date deathDate = rs.getDate("deathDate");
-				Date freedomDate = rs.getDate("freedomDate");
-				// String type = rs.getString("type");
-				String name = rs.getString("name");
-
-				System.out.println(name);// esto por favor me lo quitas despues ;)
-				Animal animal = new Animal(id, enterDate, habitat_id, /* feedingType, */ lastBath, lastFed, deathDate,
-						freedomDate, /* type, */ name);
-
-				animals.add(animal);
-			}
-
-			prep.close();
-			rs.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return animals;
-	}
-
-	@Override
-	public List<String> getDrugTypes() {
-		List<String> drugTypes = new ArrayList<String>();
-
-		try {
-			String sql = "SELECT type DISTINCT FROM drugTypes"; // DISTINCT esta bien??
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql); // esta bien??
-			ResultSet rs = prep.executeQuery();
-
-			while (rs.next()) { // like hasNext
-				String type = rs.getString("type");
-
-				System.out.println(type);// esto por favor me lo quitas despues ;)
-				drugTypes.add(type);
-			}
-
-			prep.close();
-			rs.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return drugTypes;
-
-	}
-
-	@Override
-	public List<Drug> getDrugByNameAndType(String nameOfDrug, String typeOfDrug) {
-		List<Drug> drugs = new ArrayList<Drug>();
-
-		try {
-			String sql = "SELECT * FROM drugs WHERE name LIKE ? AND WHERE type LIKE ?";
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-			prep.setString(1, "%" + nameOfDrug + "%");
-			prep.setString(2, "%" + getTypeOfDrugId(typeOfDrug) + "%");
-			ResultSet rs = prep.executeQuery();
-
-			while (rs.next()) { // like hasNext
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				Integer treatmentDuration = rs.getInt("treatmentDuration");
-				Integer periodBetweenDosis = rs.getInt("periodBetweenDosis");
-				Integer drugType_id = rs.getInt("drugType_id");
-				Float dosis = rs.getFloat("dosis");
-
-				System.out.println(name);// esto por favor me lo quitas despues ;)
-				Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id);
-
-				drugs.add(drug);
-			}
-
-			prep.close();
-			rs.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return drugs;
-	}
-
-	// TODO al ser una n-n no se muy bien como hacer estos metodos:
-	// animal con su lista de illness
-
-	@Override
-	public List<Illness> getAnimalIllnesses(Animal animal) {
-		List<Illness> illnesses = new ArrayList<Illness>();
-
-		try {
-			String sql = "SELECT * FROM illnesses AS i JOIN animals AS a ON i.id=a.id WHERE a.id LIKE ?";
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-			prep.setString(1, "%" + animal.getId() + "%");
-			ResultSet rs = prep.executeQuery();
-
-			while (rs.next()) {
-				int drugId = rs.getInt("id");
-				String name = rs.getString("name");
-				Boolean quarantine = rs.getBoolean("quaratine");
-				Boolean prothesis = rs.getBoolean("prothesis");
-
-				Illness illness = new Illness(drugId, name, quarantine, prothesis);
-				illnesses.add(illness);
-			}
-			prep.close();
-			rs.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return illnesses;
-
-	}
-
-	@Override
-	public Integer getNumberOfIllnessesAnAnimalHas(Animal animal) {
-		Integer numberOfIllnesses = null;
-
-		try {
-			String sql = "SELECT id COUNT FROM illnesses AS i JOIN animals AS a ON i.id=a.id WHERE a.id LIKE ?"; // COUNT
-																													// esta
-																													// bien??
-			PreparedStatement prep = JDBCManager.c.prepareStatement(sql); // esta bien??
-			ResultSet rs = prep.executeQuery();
-
-			while (rs.next()) { // like hasNext
-				numberOfIllnesses = Integer.parseInt(rs.getString("xxx"));
-			}
-
-			prep.close();
-			rs.close();
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return numberOfIllnesses;
-
-	}
-
-	public List<String> getDrugNamesGivenType(String drugName) {
-		return null;
-	}
-
-	@Override
-	public void setIllnessOnAnimal(Illness illness, Animal animal) {
-		// Cuando se le diagnostica una enfermedad a un animal, conectar una cosa con la
-		// otra
-
-		try {
-			String sql = "UPDATE illnesses WH";
-			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
-			s.setString(1, "%" + illness.getName() + "%");
-			s.setString(2, "%" + animal.getId() + "%");
-			s.executeUpdate();
-			s.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	@Override
-	public void drugPrescription(Animal animal) {
-		// Cuando se le receta una medicina a un animal, conectar una cosa con la otra
-
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		
 		//a. checkIfAnimalsInHabitat
 	
@@ -668,9 +480,8 @@ public class VetSQL implements VetManager {
 							Integer treatmentDuration = rs.getInt("treatmentDuration");
 							Integer periodBetweenDosis = rs.getInt("periodBetweenDosis");
 							Integer drugType_id = rs.getInt("drugType_id");
-							Integer dosis = rs.getInt("dosis");
 
-							Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id, dosis);
+							Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id);
 							drugs.add(drug);
 						}
 
@@ -702,9 +513,8 @@ public class VetSQL implements VetManager {
 							Integer treatmentDuration = rs.getInt("treatmentDuration");
 							Integer periodBetweenDosis = rs.getInt("periodBetweenDosis");
 							Integer drugType_id = rs.getInt("drugType_id");
-							Float dosis = rs.getFloat("dosis");
 
-							Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id, dosis);
+							Drug drug = new Drug(id, name, treatmentDuration, periodBetweenDosis, drugType_id);
 
 							drugs.add(drug);
 						}
