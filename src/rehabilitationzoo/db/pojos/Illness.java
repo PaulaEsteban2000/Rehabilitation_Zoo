@@ -1,7 +1,6 @@
 package rehabilitationzoo.db.pojos;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 

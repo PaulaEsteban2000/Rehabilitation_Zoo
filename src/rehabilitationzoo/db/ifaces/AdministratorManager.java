@@ -3,6 +3,7 @@ package rehabilitationzoo.db.ifaces;
 import java.sql.SQLException;
 import java.util.List;
 
+import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
@@ -13,39 +14,45 @@ public interface AdministratorManager {
 	//PARTE DE NATI
 	
 	//ADMINISTRATOR
-		public List<Worker> searchWorkerByName (String name);
+		
 		//public List<Drug> searchDrugsByName (String name); //cast??
 		
 	
-	//1. MANAGE ANIMALS
+		//ANIMALS
+		public void listAnimals ();
+		public void updateAnimal(Animal animal);
 		public void addAnimal(Animal animal) throws SQLException;
+		
+		
+		//ANIMALS TYPES
 		public void introducingAnimalsTypes(AnimalType animalType) throws SQLException;
 		public List<String> getAnimalTypesByName();
-		public List<String> getAnimalTypesById(String name);
+		public List<Integer> getAnimalTypesById(AnimalType type);
 		
-		
-	//2. MANAGE WORKERS
+		//WORKERS
+		public List<Worker> searchWorkerByName (String name);
 		public void introducingWorkers(Worker aWorker);
 		public List<String> getAllWorkersNamesAndLastNames();
 		public void deleteThisWorker(String name,String lastname);
 		public void modifyWorker(String name, String lastname, Integer salary);
+	
 		
-		
-	//3. MANAGE DRUGS
-		public void addNewDrugType(String drugType);
-		public void addNewDrug(Drug drug);
+	    //DRUGS TYPES
+		public void addNewDrugType(String drugType, float dosis);
+		public void listDrugTypes() ;
 		public List <String> getDrugTypes();
+		
+		//DRUG
+		public void addNewDrug(Drug drug);
 		public Integer getIdsFromDrugs(String drugName);
 		public Drug searchDrugByName(String name);  
 		public void deleteDrug(Drug drug);
 		// public void modifyDrug(Drug drug); //needed?
-
-
-
-
 		
-
-		public void addHabitat(Habitat habitat);
+        //HABITATS
+		public List<String> weListHabitats();
+		public void addHabitat(Habitat habitat)throws AdminExceptions;
+		
 
 
 		

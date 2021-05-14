@@ -3,10 +3,12 @@ package utils;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
+//import java.util.Date;
+
 import java.sql.SQLException;
-//>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 import java.util.*;
 
+import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
@@ -22,8 +24,10 @@ import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
+import rehabilitationzoo.db.pojos.FeedingType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
 import rehabilitationzoo.db.pojos.WorkerType;
 import rehabilitationzoo.db.ui.Menu;
@@ -389,7 +393,6 @@ public class KeyboardInput {
 			 
 			 if(unAnimal.compareTo(typesOfAnimalsInTheZoo.get(i))==0) {
 				 realAnimal=true;
-				   
 			 }
 		 }
 
@@ -404,7 +407,7 @@ public class KeyboardInput {
 	}	 
 		 
 
-	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException {
+	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException, AdminExceptions {
 		adminMan.addHabitat(habitat);
 	}	
 		 
@@ -475,10 +478,12 @@ public class KeyboardInput {
 		return changes;
 		
 	}
-	
+	public static void listAllDrugTypes() {
+		adminMan.listDrugTypes(); //MIRAR EN EL MENU POR FAVOR
+	}
 
-	public static void addDrugType(String drugName) {
-		adminMan.addNewDrugType(drugName);	
+	public static void addDrugType(String drugName, float dosis) {
+		adminMan.addNewDrugType(drugName, dosis);	
 	}
 	
 	public static void addDrug(Drug oneDrug) {
@@ -489,8 +494,97 @@ public class KeyboardInput {
 		adminMan.addNewDrug(oneDrug);	
 	}
 
-
-
+	public void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
+		LocalDate localToday = LocalDate.now(); //only way to add dates
+		Date newDate =java.sql.Date.valueOf(localToday);
+		
+		Habitat northPole = new Habitat("Pole zone",newDate, newDate, -19, LightType.LOW );  
+		Habitat desert = new Habitat("Desert",newDate, newDate, 50, LightType.HIGH );
+		Habitat sabana = new Habitat("Sabana",newDate, newDate, 30, LightType.HIGH );
+		Habitat jungle = new Habitat("Jungle",newDate, newDate, 27, LightType.MEDIUM );
+		Habitat saltWater = new Habitat("Salt water",newDate, newDate, 15, LightType.MEDIUM );
+		Habitat freshWater = new Habitat("Fresh water",newDate, newDate, 13, LightType.MEDIUM );
+		Habitat montainous = new Habitat("Montanous",newDate, newDate, 7, LightType.MEDIUM );
+		Habitat tropical = new Habitat("Tropical",newDate, newDate, 33, LightType.MEDIUM );
+		Habitat forest = new Habitat("Forest",newDate, newDate, 5, LightType.MEDIUM );
+		Habitat cliffst = new Habitat("Cliffst",newDate, newDate, 4, LightType.MEDIUM );
+		Habitat reef = new Habitat("Reef",newDate, newDate, 15, LightType.MEDIUM );
+		Habitat beach = new Habitat("Beach",newDate, newDate, 28, LightType.MEDIUM );
+		Habitat steppe = new Habitat("Steppe",newDate, newDate, 22, LightType.HIGH );
+		Habitat quarantine = new Habitat("Quarantine",newDate, newDate, 25, LightType.MEDIUM );
+		Habitat waitZone = new Habitat("Wait Zone",newDate, newDate, 25, LightType.HIGH );
+		
+		adminMan.addHabitat(northPole);
+		adminMan.addHabitat(desert);
+		adminMan.addHabitat(sabana);
+		adminMan.addHabitat(jungle);
+		adminMan.addHabitat(saltWater);
+		adminMan.addHabitat(freshWater);
+		adminMan.addHabitat(montainous);
+		adminMan.addHabitat(tropical);
+		adminMan.addHabitat(forest);
+		adminMan.addHabitat(cliffst);
+		adminMan.addHabitat(reef);
+		adminMan.addHabitat(beach);
+		adminMan.addHabitat(steppe);
+		adminMan.addHabitat(quarantine);
+		adminMan.addHabitat(waitZone);
+	}
+	
+	public void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
+		
+		Float half = (float) 0.5;
+		Float one = (float) 1.0;
+		
+		adminMan.addNewDrugType("Ointment", half);
+		adminMan.addNewDrugType("Ointment", one);
+		adminMan.addNewDrugType("Analgesic", half);
+		adminMan.addNewDrugType("Analgesic", one);
+		adminMan.addNewDrugType("Antibiotic", half);
+		adminMan.addNewDrugType("Antibiotic", one);
+		adminMan.addNewDrugType("Antibody Serum", half);
+		adminMan.addNewDrugType("Antibody Serum", one);
+		adminMan.addNewDrugType("Bandage", half);
+		adminMan.addNewDrugType("Bandage", one);
+		
+	}
+	
+	public void weAddAnimalTypes() throws SQLException, AdminExceptions{
+		
+		AnimalType lion = new AnimalType("Lion", FeedingType.CARNIVORE);
+		AnimalType tiger = new AnimalType("Tiger", FeedingType.CARNIVORE);
+		AnimalType jaguar = new AnimalType("Jaguar", FeedingType.CARNIVORE);
+		AnimalType hiena = new AnimalType("Hiena", FeedingType.CARNIVORE);
+		AnimalType giraffe = new AnimalType("Giraffe", FeedingType.HERVIBORE);
+		AnimalType elephant = new AnimalType("Elephant", FeedingType.HERVIBORE);
+		AnimalType bear = new AnimalType("Bear", FeedingType.OMNIVORE);
+		AnimalType panda = new AnimalType("Giant Panda", FeedingType.HERVIBORE);
+		AnimalType wolf = new AnimalType("Wolf", FeedingType.CARNIVORE);
+		AnimalType cocodrile = new AnimalType("Cocodrile", FeedingType.CARNIVORE);
+		AnimalType blueWhale = new AnimalType("Blue Whale", FeedingType.CARNIVORE);
+		AnimalType dolphin = new AnimalType("Dolphin", FeedingType.CARNIVORE);
+		AnimalType polarBear = new AnimalType("Polar Bear", FeedingType.CARNIVORE);
+		AnimalType penguin = new AnimalType ("Penguin", FeedingType.CARNIVORE);
+		AnimalType shelby = new AnimalType("Shelby", FeedingType.CARNIVORE);
+		
+		
+		adminMan.introducingAnimalsTypes(lion);
+		adminMan.introducingAnimalsTypes(tiger);
+		adminMan.introducingAnimalsTypes(jaguar);
+		adminMan.introducingAnimalsTypes(hiena);
+		adminMan.introducingAnimalsTypes(giraffe);
+		adminMan.introducingAnimalsTypes(elephant);
+		adminMan.introducingAnimalsTypes(bear);
+		adminMan.introducingAnimalsTypes(panda);
+		adminMan.introducingAnimalsTypes(wolf);
+		adminMan.introducingAnimalsTypes(cocodrile);
+		adminMan.introducingAnimalsTypes(blueWhale);
+		adminMan.introducingAnimalsTypes(dolphin);
+		adminMan.introducingAnimalsTypes(polarBear);
+		adminMan.introducingAnimalsTypes(penguin);
+		adminMan.introducingAnimalsTypes(shelby);
+	}
+	
 /////////////////////////MARIA////////////////////////////////////////////////////////////////////////////
 	
 	

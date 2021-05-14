@@ -8,7 +8,7 @@ public class DrugType {
 
 	private Integer id; 
 	private String type;
-	//private Drug drug; //fk that references to the drug whose type this is
+	private float dosis;
 	
 	private List<Drug> drugs; 
 	
@@ -16,6 +16,19 @@ public class DrugType {
 		super();
 		this.type = type;
 		//this.drug = drug;
+	}
+	
+	public DrugType(String type, Float dosis) {
+		super();
+		this.type = type;
+		this.dosis = dosis;
+	}
+	
+	public DrugType(Integer id, String type, Float dosis) {
+		super();
+		this.id= id;
+		this.type = type;
+		this.dosis = dosis;
 	}
 
 	public Integer getId() {
@@ -38,13 +51,13 @@ public class DrugType {
 		this.drugs = drugs;
 	}
 
-	/**public Drug getDrug() {
-		return drug;
+	public Float getDosis() {
+		return dosis;
 	}
 
-	public void setDrug(Drug drug) {
-		this.drug = drug;
-	}*/
+	public void setDosis(Float dosis) {
+		this.dosis = dosis;
+	}
 	
 	
 }

@@ -2,9 +2,16 @@ package rehabilitationzoo.db.jdbc;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-import rehabilitationzoo.db.ifaces.VetManager;
+import rehabilitationzoo.db.pojos.Animal;
+import rehabilitationzoo.db.pojos.Drug;
+import rehabilitationzoo.db.pojos.FeedingType;
+import rehabilitationzoo.db.pojos.Habitat;
+import rehabilitationzoo.db.pojos.Illness;
+import rehabilitationzoo.db.pojos.LightType;
+import rehabilitationzoo.db.pojos.Worker;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
@@ -136,7 +143,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " name			TEXT	NOT NULL	UNIQUE, " 
 					   + " lastCleaned	DATE	NOT NULL, "
 					   + " waterTank	DATE	NOT NULL, "
-					   + " temperature	INTEGER	NOT NULL, "
+					   + " temperature	FLOAT	NOT NULL, "
 					   + " light		ENUM	NOT NULL )";
 			stmt1.executeUpdate(sql1);
 			stmt1.close();
@@ -179,7 +186,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastName 	TEXT	NOT NULL, "
 					   + " hireDate		DATE	NOT NULL, "
 					   + " salary		FLOAT	NOT NULL, "
-					   + " workerType	ENUM	NOT NULL ,"
+					   + " workerType	ENUM	NOT NULL, "
 					   + " inWhichHabitatDoYouWork TEXT NULL)";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
@@ -187,7 +194,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			Statement stmt6 = c.createStatement();
 			String sql6 = "CREATE TABLE drugTypes "
 					   + "(id	INTEGER	PRIMARY KEY	AUTOINCREMENT, "
-					   + " type	TEXT	NOT NULL )"; 
+					   + " type	TEXT	NOT NULL, " 
+					   + " dosis FLOAT NOT NULL)";
+			
 			stmt6.executeUpdate(sql6);
 			stmt6.close();
 			
@@ -197,8 +206,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " name					TEXT	NOT NULL	UNIQUE,"
 					   + " treatmentDuration	INTEGER	NOT NULL, "
 					   + " periodBetweenDosis	INTEGER	NOT NULL, "
-					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id), "
-					   + " dosis 				FLOAT	NOT NULL)";					   
+					   + " drugType_id 			INTEGER NOT NULL	REFERENCES drugTypes(id) )";			   
 			stmt5.executeUpdate(sql5);
 			stmt5.close();
 			
