@@ -6,22 +6,57 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+
+import rehabilitationzoo.xml.utils.*;
+
+
+
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Habitat")
+@XmlType(propOrder = { "name", "lastCleaned", "waterTank", "temperature", "light" })
+
 public class Habitat implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1947022899735841747L;
-
+private static final long serialVersionUID = 1947022899735841747L;
+	
+	
+	@XmlAttribute
 	private Integer id; //No need to be in constructor
+	
+	@XmlAttribute
 	private String name;
+	
+	@XmlElement
+	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date lastCleaned;
+	
+	@XmlElement
+	@XmlJavaTypeAdapter(SQLDateAdapter.class)
 	private Date waterTank;
+	@XmlElement
 	private Integer temperature;
+	@XmlElement
+	@XmlJavaTypeAdapter(SQLLightTypeAdapter.class)
 	private LightType light;
 	
+	// This @XmlTransient is here to avoid infinite loops
+	@XmlTransient
 	private List<Animal> animals; 
+	
+	// This @XmlTransient is here to avoid infinite loops
+	@XmlTransient
 	private List<GroundType> grounds; //cambio post presentacion dado por rodrigo
+	
 	
 	public Habitat(String name, Date lastCleaned, Date waterTank, Integer temperature,
 			LightType light, List<Animal> animals, List<GroundType> grounds) {

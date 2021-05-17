@@ -602,9 +602,11 @@ public class KeyboardInput {
 			
 			if(stateOption == 4) {
 				zooKMan.cleanHabitat(habitatToChange);
+				System.out.println(habitatToChange.getName() + " has been cleaned: "+habitatToChange.getLastCleaned());
 			}
 			else {
 				zooKMan.fillUpWaterTank(habitatToChange);
+				System.out.println("The tanks of the " + habitatToChange.getName() + " has been filled: "+habitatToChange.getLastCleaned());
 			}
 			
 	}
@@ -614,15 +616,21 @@ public class KeyboardInput {
 	
 		switch (stateOption) {
 			case 1:
-				zooKMan.feedAnimals(habitat);
+				Date newDate;
+				newDate = zooKMan.feedAnimals(habitat);
+				System.out.println("Amimals have been fed:" + newDate);
 				break;
 				
-			case 2:
-				zooKMan.batheAnimals(habitat);
+			case 2: 
+				Date newDate2;
+				newDate2 = zooKMan.batheAnimals(habitat);
+				System.out.println("Amimals have been bathed: " + newDate2);
 				break;
 				
 			case 3: 
-				zooKMan.drugAdministrationToAnimals(habitat);
+				Date newDate3;
+				newDate3 = zooKMan.drugAdministrationToAnimals(habitat);
+				System.out.println("Animals have been administered the medication: " + newDate3);
 				break;
 				
 			default: 

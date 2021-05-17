@@ -19,14 +19,14 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 	
 
 	@Override
-	public void drugAdministrationToAnimals(Habitat habitat) { 
+	public Date drugAdministrationToAnimals(Habitat habitat) { 
 			LocalDate localToday = LocalDate.now(); 
 			LocalDate localDrugDay = localToday.plusDays(1);
 			String stringDrugDay = localDrugDay.toString();
 			Date newDate = Date.valueOf(stringDrugDay);
 				
 			try {
-				String sql = "UPDATE animals AS a JOIN habitats AS hab ON a.habitat_id=hab.id SET lastDrug=? WHERE hab.id=?";
+				String sql = "UPDATE animals SET lastDrug=? WHERE habitat_id=?";
 				PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 				s.setString(1, "%" + newDate + "%");
 				s.setString(2, "%" + habitat.getId() + "%");
@@ -37,6 +37,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 					e.printStackTrace();
 				}	
 			
+			return newDate;
 	}
 
 	
@@ -153,7 +154,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 	
 
 	@Override
-	public void feedAnimals(Habitat habitat) { 
+	public Date feedAnimals(Habitat habitat) { 
 		LocalDate localToday = LocalDate.now(); 
 		LocalDate localFeedDay = localToday.plusDays(1);
 		String stringFeedDay = localFeedDay.toString();
@@ -170,17 +171,18 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		return newDate;
 	}
 
 	@Override
-	public void batheAnimals(Habitat habitat) {
+	public Date batheAnimals(Habitat habitat) {
 		LocalDate localToday = LocalDate.now(); 
 		LocalDate localBathingDay = localToday.plusDays(7);
 		String stringBathingDay = localBathingDay.toString();
 		Date newDate = Date.valueOf(stringBathingDay);
 		
 		try {
-			String sql = "UPDATE animals AS a JOIN habitats AS hab ON a.habitat_id=hab.id SET lastBath=? WHERE hab.id=?";
+			String sql = "UPDATE animals SET lastBath=? WHERE habitat_id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
 			s.setString(2, "%" + habitat.getId() + "%");
@@ -190,7 +192,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+		return newDate;
 	}
 
 	@Override
