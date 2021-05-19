@@ -39,8 +39,7 @@ public interface AdministratorManager {
 		public void modifyWorker(String name, String lastname, Integer salary);
 	
 		
-	@Override
-	    //DRUGS TYPES
+		//DRUGS TYPES
 		public void addNewDrugType(String drugType, float dosis);
 		public void listDrugTypes() ;
 		public List <String> getDrugTypes();

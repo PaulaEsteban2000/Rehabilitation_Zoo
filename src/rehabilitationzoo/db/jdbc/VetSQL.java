@@ -105,7 +105,7 @@ public class VetSQL implements VetManager {
 				try {
 					String sql = "SELECT * FROM animals WHERE habitat_id = ?";
 					PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-					prep.setInt(1,getHabitatIdByName(habitatNameToSearch)); 
+					prep.setInt(1, getHabitatIdByName(habitatNameToSearch)); 
 					ResultSet rs = prep.executeQuery();
 
 					while (rs.next()) { 

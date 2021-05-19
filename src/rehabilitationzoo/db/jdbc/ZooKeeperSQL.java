@@ -19,14 +19,14 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 	
 
 	@Override
-	public void drugAdministrationToAnimals(Habitat habitat) { 
+	public Date drugAdministrationToAnimals(Habitat habitat) { 
 			LocalDate localToday = LocalDate.now(); 
 			LocalDate localDrugDay = localToday.plusDays(1);
 			String stringDrugDay = localDrugDay.toString();
 			Date newDate = Date.valueOf(stringDrugDay);
 				
 			try {
-				String sql = "UPDATE animal AS a JOIN habitat AS hab ON a.habitat_id=hab.id SET lastDrug=?, WHERE hab.id=?";
+				String sql = "UPDATE animals SET lastDrug=? WHERE habitat_id=?";
 				PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 				s.setString(1, "%" + newDate + "%");
 				s.setString(2, "%" + habitat.getId() + "%");
@@ -37,6 +37,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 					e.printStackTrace();
 				}	
 			
+			return newDate;
 	}
 
 	
@@ -71,8 +72,8 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 		List<String> habitatsNames = new ArrayList<String>();
 		
 		try {
-		String sql = "SELECT name DISTINCT FROM habitat"; 				//TODO DISTINCT esta bien??
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	//TODO esta bien??
+		String sql = "SELECT DISTINCT name FROM habitats"; 				
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 		ResultSet rs = prep.executeQuery();
 		
 		while (rs.next()) { //like hasNext
@@ -95,22 +96,42 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 	
 	
 	public List<Habitat> getHabitatById (Integer habitatId){
+		
 		List<Habitat> habitats = new ArrayList<Habitat>();
 		
 		try {
-			String sql = "SELECT * FROM habitat WHERE id LIKE ? ";
+			
+			String sql = "SELECT * FROM habitats WHERE id LIKE ? ";
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
 			prep.setString(1, "%" + habitatId + "%");
 			ResultSet rs = prep.executeQuery();
-		
+
+			
 			while (rs.next()) { //like hasNext
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
 				Date lastCleaned = rs.getDate("lastCleaned");
 				Date waterTank = rs.getDate("waterTank");
 				Integer temperature = rs.getInt("temperature");
-				LightType light = LightType.valueOf(rs.getString("light"));
+				LightType light = LightType.valueOf(rs.getString("light").toUpperCase());
 				
+		
+			/*while (rs.next()) { //like hasNext
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				Date lastCleaned = rs.getDate("lastCleaned");
+				Date waterTank = rs.getDate("waterTank");
+				Integer temperature = rs.getInt("temperature");
+				String lightString = rs.getString("light");
+				
+				LightType light = null;
+			if(lightString.equals(LightType.HIGH)) {
+				light = LightType.valueOf("High");
+			}else if(lightString.equals(LightType.MEDIUM)) {
+				light = LightType.valueOf("Medium");
+			}else {
+				light = LightType.valueOf("Low");
+			}*/
 				
 				System.out.println(name);//esto por favor me lo quitas despues ;)
 				Habitat habitat = new Habitat (id, name, lastCleaned, waterTank, temperature, light);
@@ -133,34 +154,35 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 	
 
 	@Override
-	public void feedAnimals(Habitat habitat) { 
+	public Date feedAnimals(Habitat habitat) { 
 		LocalDate localToday = LocalDate.now(); 
 		LocalDate localFeedDay = localToday.plusDays(1);
 		String stringFeedDay = localFeedDay.toString();
 		Date newDate = Date.valueOf(stringFeedDay);
 			
 		try {
-			String sql = "UPDATE animal AS a JOIN habitat AS hab ON a.habitat_id=hab.id SET lastFed=?, WHERE hab.id=?";
+			String sql = "UPDATE animals SET lastFed=? WHERE habitat_id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
-			s.setString(1, "%" + newDate + "%");
-			s.setString(2, "%" + habitat.getId() + "%");
+			s.setDate(1, newDate);
+			s.setInt(2, habitat.getId());
 			s.executeUpdate();
 			s.close();
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		return newDate;
 	}
 
 	@Override
-	public void batheAnimals(Habitat habitat) {
+	public Date batheAnimals(Habitat habitat) {
 		LocalDate localToday = LocalDate.now(); 
 		LocalDate localBathingDay = localToday.plusDays(7);
 		String stringBathingDay = localBathingDay.toString();
 		Date newDate = Date.valueOf(stringBathingDay);
 		
 		try {
-			String sql = "UPDATE animal AS a JOIN habitat AS hab ON a.habitat_id=hab.id SET lastBath=?, WHERE hab.id=?";
+			String sql = "UPDATE animals SET lastBath=? WHERE habitat_id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
 			s.setString(2, "%" + habitat.getId() + "%");
@@ -170,7 +192,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+		return newDate;
 	}
 
 	@Override
@@ -181,7 +203,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 		Date newDate = Date.valueOf(stringCleaningDay);
 		
 		try {
-			String sql = "UPDATE habitat SET lastCleaned=?, WHERE id=?";
+			String sql = "UPDATE habitats SET lastCleaned=? WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
 			s.setString(2, "%" + habitat.getId() + "%");
@@ -202,7 +224,7 @@ public class ZooKeeperSQL implements ZooKeeperManager{
 		Date newDate = Date.valueOf(stringFillingDay);
 		
 		try {
-			String sql = "UPDATE habitat SET waterTank=?, WHERE id=?";
+			String sql = "UPDATE habitats SET waterTank=? WHERE id=?";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
 			s.setString(1, "%" + newDate + "%");
 			s.setString(2, "%" + habitat.getId() + "%");

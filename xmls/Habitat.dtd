@@ -1,0 +1,11 @@
+<!DOCTYPE Habitat [
+
+	<!ELEMENT Habitat (name, lastCleaned, waterTank, temperature, light)>
+	<!ELEMENT name (#PCDATA)>
+	<!ELEMENT lastCleaned (#PCDATA)>
+	<!ELEMENT waterTank (#PCDATA)>
+	<!ELEMENT temperature (#PCDATA)>
+	<!ELEMENT light (#PCDATA)>
+	
+	
+]>

@@ -79,8 +79,10 @@ public class Menu {
 		//We can ask for it twice, for checking, but Rodrigo does not like it much
 		
 		Boolean bol = KeyboardInput.adminMan.checkForUsers(email);
+		System.out.println(bol + " debe ser false");
+		
 		do {
-			if(bol) {
+			if(bol == true) {
 				System.out.println("This email is already used. Please pick another one: ");
 				email = Utils.readLine();
 				
@@ -88,7 +90,7 @@ public class Menu {
 					bol = false;
 				}
 			}
-		}while (bol = true);
+		}while (bol == true);
 		
 		System.out.println("Now write your password:");
 		String password = Utils.readLine();
@@ -253,13 +255,31 @@ public class Menu {
 							String readAnimal1 = Utils.readLine();//WE CHECK IF THE ANIMAL EXITS OR NOT IN THE ZOO
 							boolean weHaveThisType = KeyboardInput.isThisAnAnimal(readAnimal1);
 							if(weHaveThisType == true) {
-								System.out.print("\n"+"We already have this type of animal in the zoo.");
+								System.out.print("\n"+"We already have this type of animal in the zoo."+"\n");
 								break;
 							}
 							else {
 								System.out.print("\n"+ "Introduce the feeding type of the "+readAnimal1 +"\n"+"Remember they could be CARNIVORE, HERVIBORE or OMNIVORE"+"\n");
 								String foodType = Utils.readLine();
-								FeedingType aType =FeedingType.valueOf(foodType);
+								FeedingType aType = null;
+								
+								if ((foodType.compareTo("C")==0) || (foodType.compareTo("c")==0)) {
+									aType = FeedingType.CARNIVORE;
+								}
+								else {
+									if ((foodType.compareTo("H")==0) || (foodType.compareTo("h")==0)) {
+										aType = FeedingType.HERVIBORE;
+									}
+									else {
+										if ((foodType.compareTo("O")==0) || (foodType.compareTo("o")==0)) {
+											aType = FeedingType.OMNIVORE;
+										}
+										else {
+											//Exception not a feeding type
+										}
+									}
+								}
+								
 									
 								AnimalType animalType= new AnimalType (readAnimal1, aType);
 								//KeyboardInput.typesOfAnimalsInTheZoo(readAnimal1);
@@ -273,8 +293,9 @@ public class Menu {
 							
 							List <String>allTheAnimals = KeyboardInput.adminMan.getAnimalTypesByName();
 							for(int i=0; i<allTheAnimals.size(); i++) {
-								System.out.print((i+1)+allTheAnimals.get(i)+"\n");
+								System.out.print((i+1)+". "+allTheAnimals.get(i)+"\n");
 							}
+							System.out.print("\n");
 							break;
 							 
 						default :	
@@ -302,22 +323,11 @@ public class Menu {
 							String workerName= Utils.readLine();
 							System.out.print("\n"+ "Introduce the lastname"+"\n");
 							String workerLastName= Utils.readLine();
-							System.out.print("\n"+"Select the job that the worker is going to have"+"\n" );
 							
-							 System.out.print("\n"+"Introduce the date of the worker we just hired"+"\n");
-							    
-							    System.out.print("\n"+"Introduce the day");
-							    int day = Utils.readInt();
-
-							    System.out.print("\n"+"Introduce the month");
-							    int month = Utils.readInt();
-
-							    System.out.print("\n"+"Introduce the year");
-							    int year = Utils.readInt();
-							    
-							    LocalDate workerLocalDate = LocalDate.of(year, month, day);
-							    Date workerDate = Date.valueOf(workerLocalDate);
-							    
+							LocalDate workerLocalDate = LocalDate.now();
+							Date workerDate = Date.valueOf(workerLocalDate);
+							System.out.print("\n"+"The date that you added the worker is "+workerDate+"\n");
+							
 							
 							System.out.print("\n"+ "Introduce the salary of "+workerName+ " " +workerLastName+"\n");
 							String salary=  Utils.readLine();
@@ -325,42 +335,35 @@ public class Menu {
 							
 							System.out.print("\n"+ "Introduce the job of the new worker"+"\n"+"Remember, the posibilities are:ZOO_KEEPER, VETERINARY ,ADMINISTRATOR "+"\n");
 							String aWork= Utils.readLine();
-							WorkerType job= WorkerType.valueOf(aWork);
+							WorkerType job=null; //WorkerType.valueOf(aWork);
 							
 							
-							
-							
-							if( WorkerType.ZOO_KEEPER.equals(job)) {
-							System.out.print("\n"+ "Introduce the habitat where "+workerName+" is going to work "+"\n");
-							System.out.print("Remember that the habitats that we have are "+ KeyboardInput.adminMan.weListHabitats());
-							
-							String whichType= Utils.readLine();
-							
-							boolean realHabitat =KeyboardInput.isThisAnHabitat(whichType);
-							
-								if(realHabitat==true) {
-								
-								Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job, whichType);
-								KeyboardInput.addWorker(workerInfo);
-								break;
-								//Mostramos todos los animales con los que va a trabajar esta persona
-								//no falta ver que habitats tenemos??
-									}
-								else {
-									System.out.print("\n"+"Thats not an existent habitat"+"\n");
-									break;
-								}
-								
-							}//if zoo keeper
-							
-							
+							if ((aWork.compareTo("Z")==0) || (aWork.compareTo("z")==0)) {
+								job = WorkerType.ZOO_KEEPER;
+							}
 							else {
-								Worker workerInfo2 = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
-								KeyboardInput.addWorker(workerInfo2);
+								if ((aWork.compareTo("V")==0) || (aWork.compareTo("v")==0)) {
+									job = WorkerType.VETERINARY;
+								}
+								else {
+									if ((aWork.compareTo("A")==0) || (aWork.compareTo("a")==0)) {
+										job = WorkerType.ADMINISTRATOR;
+									}
+									else {
+										//Exception not a worker type
+									}
+								}
 							}
 							
+							
+								
+								Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
+								KeyboardInput.addWorker(workerInfo);
+								
+								//Mostramos todos los animales con los que va a trabajar esta persona
+								
 									
-							break;
+								
 						
 						case 2:
 							System.out.print("\n"+ "This are the workers that we have in the zoo"+"\n");

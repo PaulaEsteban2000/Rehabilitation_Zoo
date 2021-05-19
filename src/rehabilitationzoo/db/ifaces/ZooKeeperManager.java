@@ -1,5 +1,6 @@
 package rehabilitationzoo.db.ifaces;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,9 +15,9 @@ public interface ZooKeeperManager {
 	public List<Habitat> getHabitatById (Integer habitatId);
 	
 	//1.  ANIMALS
-		public void drugAdministrationToAnimals(Habitat habitat);
-		public void feedAnimals(Habitat habitat);
-		public void batheAnimals(Habitat habitat); 
+		public Date drugAdministrationToAnimals(Habitat habitat);
+		public Date feedAnimals(Habitat habitat);
+		public Date batheAnimals(Habitat habitat); 
 	//2.  HABITAT
 		public Integer getHabitatIdByName(String habitatName) throws SQLException;  //yo tengo hecho ya un metodo asi en VetManager, por si lo quieres ;) - Paula
 		public void cleanHabitat(Habitat habitat); //boolean?
