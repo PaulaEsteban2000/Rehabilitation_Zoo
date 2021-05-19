@@ -391,7 +391,7 @@ public class KeyboardInput {
 		
 		 for( int i=0; i<typesOfAnimalsInTheZoo.size(); i++) {
 			 
-			 if(unAnimal.compareTo(typesOfAnimalsInTheZoo.get(i))==0) {
+			 if(unAnimal.equalsIgnoreCase(typesOfAnimalsInTheZoo.get(i))) {
 				 realAnimal=true;
 			 }
 		 }
@@ -413,6 +413,7 @@ public class KeyboardInput {
 		 
 	
 	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
+		
 		adminMan.introducingAnimalsTypes(anAnimalType);
 	}	 
 		
@@ -422,7 +423,7 @@ public class KeyboardInput {
 		 List<String> weSeeTheHabitats= vetMan.getAllHabitatsNames();
 		 
 			 for(int i = 0; i<weSeeTheHabitats.size(); i++){
-				 if( nameHabitat.equals(weSeeTheHabitats.get(i)) ) {
+				 if( nameHabitat.equalsIgnoreCase(weSeeTheHabitats.get(i)) ) {
 					 success=true;
 				 }  
 		 }
@@ -444,7 +445,7 @@ public class KeyboardInput {
 		List<String> allWorkersName = adminMan.getAllWorkersNamesAndLastNames();
 		
 		for(int i = 0; i<allWorkersName.size(); i++){
-			 if(totalName.equals(allWorkersName.get(i)) ) {
+			 if(totalName.equalsIgnoreCase(allWorkersName.get(i)) ) {
 				 	String[] parts = totalName.split(" ");
 					String part1Name = parts[0];
 					String part2Lastname = parts[1];
@@ -494,7 +495,7 @@ public class KeyboardInput {
 		adminMan.addNewDrug(oneDrug);	
 	}
 
-	public void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
+	public static void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		LocalDate localToday = LocalDate.now(); //only way to add dates
 		Date newDate =java.sql.Date.valueOf(localToday);
 		
@@ -531,7 +532,7 @@ public class KeyboardInput {
 		adminMan.addHabitat(waitZone);
 	}
 	
-	public void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
+	public static void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		
 		Float half = (float) 0.5;
 		Float one = (float) 1.0;
@@ -549,7 +550,7 @@ public class KeyboardInput {
 		
 	}
 	
-	public void weAddAnimalTypes() throws SQLException, AdminExceptions{
+	public static void weAddAnimalTypes() throws SQLException, AdminExceptions{
 		
 		AnimalType lion = new AnimalType("Lion", FeedingType.CARNIVORE);
 		AnimalType tiger = new AnimalType("Tiger", FeedingType.CARNIVORE);

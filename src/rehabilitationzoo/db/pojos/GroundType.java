@@ -6,7 +6,8 @@ public class GroundType {
 
 	private Integer id;
 	private String type; 
-	private Integer habitat_id; //fk to habitat id where the groundType is //cambio tras presentacion
+	private Integer habitat_id; //fk to habitat id where the groundType is 
+	//n ground tyes 1 habitat
 
 	public GroundType(String type, Integer habitat) {
 		super();

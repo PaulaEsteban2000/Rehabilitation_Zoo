@@ -23,6 +23,7 @@ import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
+import rehabilitationzoo.db.pojos.WorkerType;
 //import sample.db.pojos.Department;
 import utils.KeyboardInput;
 
@@ -147,7 +148,7 @@ public class AdministratorSQL implements AdministratorManager{
 			prep.setString(1, animalType.getType());
 			prep.setString(2, feeding);
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 		    prep.executeUpdate();
 			prep.close();
 	
@@ -169,10 +170,10 @@ public class AdministratorSQL implements AdministratorManager{
 			while (rs.next()) { 
 				String type = rs.getString("type");
 				typesOfAnimals.add(type);
-				System.out.print("In SQL: Se ha guardado"+"\n");
+				//System.out.print("In SQL: Se ha guardado"+"\n");
 			}
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 			rs.close();
 			prep.close();// Close database connection
 				
@@ -199,7 +200,7 @@ public class AdministratorSQL implements AdministratorManager{
 				typesOfAnimals.add(id); 
 			}
 			
-				System.out.println(sql);
+				//System.out.println(sql);
 				prep.close();
 				rs.close();
 				
@@ -232,7 +233,7 @@ public class AdministratorSQL implements AdministratorManager{
 				prep.setInt(4,habitat.getTemperature());
 				prep.setString(5,light );
 					
-				System.out.println(sql);
+				//System.out.println(sql);
 			    prep.executeUpdate();
 				prep.close();
 				
@@ -268,20 +269,28 @@ public class AdministratorSQL implements AdministratorManager{
 	public void introducingWorkers (Worker aWorker) {//Id is chosen by the database
 
 		try {  			
+			String stringWorker= null;
+			if(aWorker.equals(WorkerType.ADMINISTRATOR)) {
+				stringWorker = "Administrator";
+			}else if(aWorker.equals(WorkerType.ZOO_KEEPER)) {
+				stringWorker = "Zoo Keeper";
+			}else {
+				stringWorker = "Vet";
+			}
 			
-			String sql = "INSERT INTO workers (name, lastname, hireDate, salary, workerType, whichHabitatDoYouWorkOn )";
+			String sql = "INSERT INTO workers (name, lastname, hireDate, salary, workerType, whichHabitatDoYouWork )";
 			sql+= "VALUES (?,?,?,?,?,?)";
 			
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			
-			prep.setString(1, "%" + aWorker.getName() + "%" );
-			prep.setString(2, "%" + aWorker.getLastName() + "%" );
-			prep.setString(3, "%" + aWorker.getHireDate() + "%" );
-			prep.setString(4, "%" + aWorker.getSalary() + "%" );
-			prep.setString(5, "%" + aWorker.getName() + "%" );
-			prep.setString(6, "%" + aWorker.getName() + "%" );
+			prep.setString(1, aWorker.getName());
+			prep.setString(2,aWorker.getLastName() );
+			prep.setDate(3,aWorker.getHireDate() );
+			prep.setFloat(4,aWorker.getSalary() );
+			prep.setString(5,stringWorker ); //workerType
+			prep.setString(6, aWorker.getwhichHabitatDoYouWorkOn());//habitat
 			
-			System.out.println(sql);
+			//System.out.println(sql);
 			prep.executeUpdate();
 			prep.close();
 			

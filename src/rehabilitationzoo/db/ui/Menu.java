@@ -43,11 +43,7 @@ public class Menu {
 		dbMan.connect();
 		userMan.Connect();
 		
-		KeyboardInput key = new KeyboardInput(); //TODO Static
-		key.weAddHabitats();
-		key.weAddDrugTypes();
-		key.weAddAnimalTypes();
-	
+
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");
@@ -240,15 +236,34 @@ public class Menu {
 					
 							System.out.print("\n"+"Which animal would you like to add to the zoo?"+"\n");
 							String readAnimal1 = Utils.readLine();//WE CHECK IF THE ANIMAL EXITS OR NOT IN THE ZOO
+							
 							boolean weHaveThisType = KeyboardInput.isThisAnAnimal(readAnimal1);
 							if(weHaveThisType == true) {
-								System.out.print("\n"+"We already have this type of animal in the zoo.");
+								System.out.print("\n"+"We already have this type of animal in the zoo."+"\n");
 								break;
 							}
 							else {
 								System.out.print("\n"+ "Introduce the feeding type of the "+readAnimal1 +"\n"+"Remember they could be CARNIVORE, HERVIBORE or OMNIVORE"+"\n");
 								String foodType = Utils.readLine();
-								FeedingType aType =FeedingType.valueOf(foodType);
+								FeedingType aType = null;
+								
+								if ((foodType.compareTo("C")==0) || (foodType.compareTo("c")==0)) {
+									aType = FeedingType.CARNIVORE;
+								}
+								else {
+									if ((foodType.compareTo("H")==0) || (foodType.compareTo("h")==0)) {
+										aType = FeedingType.HERVIBORE;
+									}
+									else {
+										if ((foodType.compareTo("O")==0) || (foodType.compareTo("o")==0)) {
+											aType = FeedingType.OMNIVORE;
+										}
+										else {
+											//Exception not a feeding type
+										}
+									}
+								}
+								
 									
 								AnimalType animalType= new AnimalType (readAnimal1, aType);
 								//KeyboardInput.typesOfAnimalsInTheZoo(readAnimal1);
@@ -262,8 +277,9 @@ public class Menu {
 							
 							List <String>allTheAnimals = KeyboardInput.adminMan.getAnimalTypesByName();
 							for(int i=0; i<allTheAnimals.size(); i++) {
-								System.out.print((i+1)+allTheAnimals.get(i)+"\n");
+								System.out.print((i+1)+". "+allTheAnimals.get(i)+"\n");
 							}
+							System.out.print("\n");
 							break;
 							 
 						default :	
@@ -291,22 +307,11 @@ public class Menu {
 							String workerName= Utils.readLine();
 							System.out.print("\n"+ "Introduce the lastname"+"\n");
 							String workerLastName= Utils.readLine();
-							System.out.print("\n"+"Select the job that the worker is going to have"+"\n" );
 							
-							 System.out.print("\n"+"Introduce the date of the worker we just hired"+"\n");
-							    
-							    System.out.print("\n"+"Introduce the day");
-							    int day = Utils.readInt();
-
-							    System.out.print("\n"+"Introduce the month");
-							    int month = Utils.readInt();
-
-							    System.out.print("\n"+"Introduce the year");
-							    int year = Utils.readInt();
-							    
-							    LocalDate workerLocalDate = LocalDate.of(year, month, day);
-							    Date workerDate = Date.valueOf(workerLocalDate);
-							    
+							LocalDate workerLocalDate = LocalDate.now();
+							Date workerDate = Date.valueOf(workerLocalDate);
+							System.out.print("\n"+"The date that you added the worker is "+workerDate+"\n");
+							
 							
 							System.out.print("\n"+ "Introduce the salary of "+workerName+ " " +workerLastName+"\n");
 							String salary=  Utils.readLine();
@@ -314,9 +319,25 @@ public class Menu {
 							
 							System.out.print("\n"+ "Introduce the job of the new worker"+"\n"+"Remember, the posibilities are:ZOO_KEEPER, VETERINARY ,ADMINISTRATOR "+"\n");
 							String aWork= Utils.readLine();
-							WorkerType job= WorkerType.valueOf(aWork);
+							WorkerType job=null; //WorkerType.valueOf(aWork);
 							
 							
+							if ((aWork.compareTo("Z")==0) || (aWork.compareTo("z")==0)) {
+								job = WorkerType.ZOO_KEEPER;
+							}
+							else {
+								if ((aWork.compareTo("V")==0) || (aWork.compareTo("v")==0)) {
+									job = WorkerType.VETERINARY;
+								}
+								else {
+									if ((aWork.compareTo("A")==0) || (aWork.compareTo("a")==0)) {
+										job = WorkerType.ADMINISTRATOR;
+									}
+									else {
+										//Exception not a worker type
+									}
+								}
+							}
 							
 							
 							if( WorkerType.ZOO_KEEPER.equals(job)) {

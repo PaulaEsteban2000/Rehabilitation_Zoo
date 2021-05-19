@@ -4,6 +4,7 @@ public enum FeedingType {
 	
 	CARNIVORE, HERVIBORE, OMNIVORE;  
 
+	
 	public FeedingType pase(String dato) {
 		if(dato.equalsIgnoreCase("carnivore")) {
 			return FeedingType.CARNIVORE;
@@ -13,5 +14,9 @@ public enum FeedingType {
 			return FeedingType.OMNIVORE;
 		}
 	}
+	
+
 }
+
+
 
