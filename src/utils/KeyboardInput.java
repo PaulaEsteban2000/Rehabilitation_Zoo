@@ -41,7 +41,7 @@ public class KeyboardInput {
 	//Ademas asi podeis ver lo que he hecho por si alguno os sirve (pero no los toqueis sin preguntarme u os corto las manos:) )
 	//
 	//
-	public static VetManager vetMan = new VetSQL();		
+	private static VetManager vetMan = new VetSQL();		
 	//
 	//
 	public static List<Animal> checkIfAnimalsInHabitat(String habitatToCheck) throws SQLException {
@@ -286,7 +286,7 @@ public class KeyboardInput {
 	}
 	//
 	//
-	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
+	private static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
 		//TODO solo poder acceder a animales con death date NULL (freedom no por las protesis)
 		
 		List<String> animalsTypesInHabitat = vetMan.getAnimalTypesInAHabitat(habitat);
@@ -494,11 +494,11 @@ public class KeyboardInput {
 		adminMan.addNewDrug(oneDrug);	
 	}
 
-	public void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
+	public static void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		LocalDate localToday = LocalDate.now(); //only way to add dates
 		Date newDate =java.sql.Date.valueOf(localToday);
 		
-		Habitat northPole = new Habitat("Pole zone",newDate, newDate, -19, LightType.LOW );  
+		Habitat northPole = new Habitat("Polar zone",newDate, newDate, -19, LightType.LOW );  
 		Habitat desert = new Habitat("Desert",newDate, newDate, 50, LightType.HIGH );
 		Habitat sabana = new Habitat("Sabana",newDate, newDate, 30, LightType.HIGH );
 		Habitat jungle = new Habitat("Jungle",newDate, newDate, 27, LightType.MEDIUM );
@@ -531,7 +531,7 @@ public class KeyboardInput {
 		adminMan.addHabitat(waitZone);
 	}
 	
-	public void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
+	public static void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		
 		Float half = (float) 0.5;
 		Float one = (float) 1.0;
@@ -549,7 +549,7 @@ public class KeyboardInput {
 		
 	}
 	
-	public void weAddAnimalTypes() throws SQLException, AdminExceptions{
+	public static void weAddAnimalTypes() throws SQLException, AdminExceptions{
 		
 		AnimalType lion = new AnimalType("Lion", FeedingType.CARNIVORE);
 		AnimalType tiger = new AnimalType("Tiger", FeedingType.CARNIVORE);

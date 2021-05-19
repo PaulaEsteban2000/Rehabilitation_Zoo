@@ -35,18 +35,11 @@ public class Menu {
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
 	//TODO all methods here should be private if we can
-	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
-	
 	public static void main(String[] args) throws Exception, IOException{
 	
 		dbMan.connect();
 		userMan.Connect();
-		
-		KeyboardInput key = new KeyboardInput(); //TODO Static
-		key.weAddHabitats();
-		key.weAddDrugTypes();
-		key.weAddAnimalTypes();
 	
 		do {
 			//LOGGING IN
@@ -84,6 +77,18 @@ public class Menu {
 		System.out.println("Please type in your email address:");
 		String email = Utils.readLine();
 		//We can ask for it twice, for checking, but Rodrigo does not like it much
+		
+		Boolean bol = KeyboardInput.adminMan.checkForUsers(email);
+		do {
+			if(bol) {
+				System.out.println("This email is already used. Please pick another one: ");
+				email = Utils.readLine();
+				
+				if(KeyboardInput.adminMan.checkForUsers(email) == false) {
+					bol = false;
+				}
+			}
+		}while (bol = true);
 		
 		System.out.println("Now write your password:");
 		String password = Utils.readLine();
@@ -137,7 +142,7 @@ public class Menu {
 				case 1:
 					System.out.println("ANIMAL DIAGNOSIS");
 					
-					List<Animal> animalsToBeDiagnosed = KeyboardInput.checkIfAnimalsInHabitat("waitZone");
+					List<Animal> animalsToBeDiagnosed = KeyboardInput.checkIfAnimalsInHabitat("Wait zone");
 					
 					if (animalsToBeDiagnosed == null) { //in case no more checking should be done
 						break;
@@ -149,13 +154,19 @@ public class Menu {
 					
 				case 2:
 					System.out.println("ANIMAL CHECK");
-					
 					Habitat habitatToCheck = KeyboardInput.askForHabitatToCheckItsAnimals();
+					List<Animal> animalsToCheck = KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName());
 					
-					if (KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName()) == null) {
+					if (animalsToCheck == null) {
 						break;
 					} else {
-						KeyboardInput.animalCheckSubMenu(habitatToCheck);
+						Integer cont = animalsToCheck.size();
+						
+						do {
+							KeyboardInput.animalCheckSubMenu(habitatToCheck);
+							cont --;
+						} while (cont >0);
+						
 					break;
 					}
 					

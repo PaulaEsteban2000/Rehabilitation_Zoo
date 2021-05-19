@@ -13,6 +13,8 @@ import rehabilitationzoo.db.pojos.Worker;
 public interface AdministratorManager {
 	//PARTE DE NATI
 	
+	public Boolean checkForUsers(String userEmail); //method for login susbystem
+	
 	//ADMINISTRATOR
 		
 		//public List<Drug> searchDrugsByName (String name); //cast??
@@ -37,6 +39,7 @@ public interface AdministratorManager {
 		public void modifyWorker(String name, String lastname, Integer salary);
 	
 		
+	@Override
 	    //DRUGS TYPES
 		public void addNewDrugType(String drugType, float dosis);
 		public void listDrugTypes() ;
@@ -52,6 +55,7 @@ public interface AdministratorManager {
         //HABITATS
 		public List<String> weListHabitats();
 		public void addHabitat(Habitat habitat)throws AdminExceptions;
+		
 		
 
 

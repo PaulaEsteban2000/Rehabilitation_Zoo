@@ -13,6 +13,7 @@ import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
+import utils.KeyboardInput;
 
 public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 	
@@ -34,17 +35,19 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			for (int a = 0; a < habitatNames.size(); a++) {
 				name = habitatNames.get(a);
 				
-				if(name.equals("northPole")) {
+				if(name.equals("Polar zone")) {
 					break;
 				} 
 				
 			}
 			
 			
-			if(name.equals("northPole")) { //to avoid creation of initalData more than once
+			if(name.equals("Polar zone")) { //to avoid creation of initalData more than once
 				
 			} else {
-				this.loadInitialData();
+				KeyboardInput.weAddHabitats();
+				KeyboardInput.weAddDrugTypes();
+				KeyboardInput.weAddAnimalTypes();
 			}
 			
 			
@@ -65,72 +68,6 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void loadInitialData() {
-		
-		PreparedStatement prep = null; //evita la SQL injection
-		
-		try {
-			//Id is chosen by the database
-			LocalDate localToday = LocalDate.now();
-			Date newDate = Date.valueOf(localToday);
-			
-//			Statement stmt1 = JDBCManager.c.createStatement(); 
-//			String sql1 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)"
-//					+ " VALUES ('northPole', '" + newDate + "', '" + newDate + "', '-15', '" + LightType.MEDIUM + "')";
-//			stmt1.executeUpdate(sql1);
-//			stmt1.close();
-//			
-//			Statement stmt5 = JDBCManager.c.createStatement(); 
-//			String sql5 = "INSERT INTO habitats (name, lastCleaned, waterTank, temperature, light)"
-//					+ " VALUES ('waitZone', '" + newDate + "', '" + newDate + "', '25', '" + LightType.MEDIUM + "')";
-//			stmt5.executeUpdate(sql5);
-//			stmt5.close();
-//			
-//			Statement stmt2 = JDBCManager.c.createStatement(); 
-//			String sql2 = "INSERT INTO animals_characteristics (feedingType, type) "
-//					+ "VALUES ('" + FeedingType.CARNIVORE + "', 'lion')";
-//			stmt2.executeUpdate(sql2);
-//			stmt2.close();
-//			
-//			
-//			Statement stmt3 = JDBCManager.c.createStatement(); 
-//			String sql3 = "INSERT INTO illnesses (name, quarantine, prothesis, drug_id ) "
-//					+ "VALUES ('legProthesis', 'false', 'true', null)";
-//			stmt3.executeUpdate(sql3);
-//			stmt3.close();
-//			
-//			
-//			Statement stmt4 = JDBCManager.c.createStatement(); 
-//			String sql4 = "INSERT INTO animals (enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, type_id, name) "
-//					+ "VALUES ('" + newDate + "', '2', '" + newDate + "', '" + newDate + "', '" + newDate + "', null, null, '1', 'Alex')";
-//			stmt4.executeUpdate(sql4);
-//			stmt4.close();
-//			
-//			Statement stmt6 = JDBCManager.c.createStatement(); 
-//			String sql6 = "INSERT INTO drugTypes (id, type) "
-//					+ "VALUES ('1', 'ointment')";
-//			stmt6.executeUpdate(sql6);
-//			stmt6.close();
-//			
-//			Statement stmt7 = JDBCManager.c.createStatement(); 
-//			String sql7 = "INSERT INTO drugs (id, name, treatmentDuration, periodBetweenDosis, drugType_id, dosis) "
-//					+ "VALUES ('1', 'cream', '10', '1', '1', '500')";
-//			stmt7.executeUpdate(sql7);
-//			stmt7.close();
-			
-			//... ESTOS SERIAN LOS DATOS QUE TENDRIA LA DB AL INICIARSE
-			//y seria anhadir el resto de habitats y tipos de animales que queramos tener en el zoo de momento 
-			//(contando con las opciones de anhadir mas de cada uno en el menu del admin, claro) - Paula
-			
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-			
-		}
-	}
-	
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface
 		
