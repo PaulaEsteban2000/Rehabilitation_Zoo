@@ -21,7 +21,6 @@ public class Worker implements Serializable {
 	private  Date hireDate;
 	private  Float salary;
 	private WorkerType type;
-	private String whichHabitatDoYouWorkOn;
 	
 	public static List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
 	
@@ -37,7 +36,7 @@ public class Worker implements Serializable {
 												//cannot have a List, but an ArrayList (or any other class that implements list)
 	}
 	
-	public Worker (String name, String lastname, Date hireDate, Float salary, WorkerType type) { //VET O ADMINISTRATOR
+	public Worker(String name, String lastname, Date hireDate, Float salary, WorkerType type) { //VET O ADMINISTRATOR
 		super();
 		this.name = name;
 		this.lastname= lastname;
@@ -47,16 +46,6 @@ public class Worker implements Serializable {
 		
 	}
 	
-	public Worker (String name, String lastname, Date hireDate, Float salary, WorkerType type,String whichHabitatDoYouWorkOn) { //ESTE ES PARA EL ZOO KEEPER
-		super();
-		this.name = name;
-		this.lastname= lastname;
-		this.hireDate = hireDate;
-		this.salary = salary;
-		this.type = type; 
-		this.whichHabitatDoYouWorkOn =whichHabitatDoYouWorkOn;
-		
-	}
 	
 	/**public Worker(Integer id, String name, Date hireDate) {
 		super();
@@ -174,16 +163,6 @@ public class Worker implements Serializable {
 		this.type = type;
 	}
 
-
-	public String getwhichHabitatDoYouWorkOn(){
-		return whichHabitatDoYouWorkOn;
-	}
-
-
-	public void setwhichHabitatDoYouWorkOn(String whichHabitatDoYouWorkOn) {
-		this.whichHabitatDoYouWorkOn = whichHabitatDoYouWorkOn;
-	}
-	
 	
 	public List<Animal> getAnimals() {
 		return animals;

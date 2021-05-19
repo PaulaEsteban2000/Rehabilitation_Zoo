@@ -43,10 +43,7 @@ public class Menu {
 		dbMan.connect();
 		userMan.Connect();
 		
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");
@@ -343,37 +340,14 @@ public class Menu {
 							}
 							
 							
-							if( WorkerType.ZOO_KEEPER.equals(job)) {
-							System.out.print("\n"+ "Introduce the habitat where "+workerName+" is going to work "+"\n");
-							System.out.print("Remember that the habitats that we have are "+ KeyboardInput.adminMan.weListHabitats());
-							
-							String whichType= Utils.readLine();
-							
-							boolean realHabitat =KeyboardInput.isThisAnHabitat(whichType);
-							
-								if(realHabitat==true) {
 								
-								Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job, whichType);
+								Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
 								KeyboardInput.addWorker(workerInfo);
-								break;
-								//Mostramos todos los animales con los que va a trabajar esta persona
-								//no falta ver que habitats tenemos??
-									}
-								else {
-									System.out.print("\n"+"Thats not an existent habitat"+"\n");
-									break;
-								}
 								
-							}//if zoo keeper
-							
-							
-							else {
-								Worker workerInfo2 = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
-								KeyboardInput.addWorker(workerInfo2);
-							}
-							
+								//Mostramos todos los animales con los que va a trabajar esta persona
+								
 									
-							break;
+								
 						
 						case 2:
 							System.out.print("\n"+ "This are the workers that we have in the zoo"+"\n");

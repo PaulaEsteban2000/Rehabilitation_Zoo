@@ -275,7 +275,7 @@ public class AdministratorSQL implements AdministratorManager{
 				stringWorker = "Vet";
 			}
 			
-			String sql = "INSERT INTO workers (name, lastname, hireDate, salary, workerType, whichHabitatDoYouWork )";
+			String sql = "INSERT INTO workers (name, lastname, hireDate, salary, workerType )";
 			sql+= "VALUES (?,?,?,?,?,?)";
 			
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
@@ -285,7 +285,6 @@ public class AdministratorSQL implements AdministratorManager{
 			prep.setDate(3,aWorker.getHireDate() );
 			prep.setFloat(4,aWorker.getSalary() );
 			prep.setString(5,stringWorker ); //workerType
-			prep.setString(6, aWorker.getwhichHabitatDoYouWorkOn());//habitat
 			
 			//System.out.println(sql);
 			prep.executeUpdate();
