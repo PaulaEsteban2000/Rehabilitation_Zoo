@@ -1,0 +1,7 @@
+<!DOCTYPE GroundType [
+
+	<!ELEMENT GroundType (type, habitat_id)>
+	<!ELEMENT type (#PCDATA)>
+	<!ELEMENT habitat_id (#PCDATA)>
+	
+]>

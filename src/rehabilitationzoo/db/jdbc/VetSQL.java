@@ -106,7 +106,7 @@ public class VetSQL implements VetManager {
 				try {
 					String sql = "SELECT * FROM animals WHERE habitat_id = ?"; // esta bien??
 					PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-					prep.setInt(1,getHabitatIdByName(habitatNameToSearch)); // esta bien??
+					prep.setInt(1, getHabitatIdByName(habitatNameToSearch)); // esta bien??
 					ResultSet rs = prep.executeQuery();
 
 					while (rs.next()) { // like hasNext
@@ -659,10 +659,10 @@ public class VetSQL implements VetManager {
 						while (rs.next()) { // like hasNext
 							int id = rs.getInt("id");
 							String hName = rs.getString("name");
-							Date lastCleaned = Date.valueOf(rs.getString("lastCleaned"));
-							Date waterTank = Date.valueOf(rs.getString("waterTank"));
+							Date lastCleaned = rs.getDate("lastCleaned");
+							Date waterTank = rs.getDate("waterTank");
 							Integer temperature = rs.getInt("temperature");
-							LightType light = LightType.valueOf(rs.getString("light"));
+							LightType light = LightType.valueOf(rs.getString("light").toUpperCase());
 
 							Habitat habitat = new Habitat(id, hName, lastCleaned, waterTank, temperature, light);
 							habitats.add(habitat);

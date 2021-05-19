@@ -30,15 +30,37 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			VetManager vetMan = new VetSQL();	
 			List<String> habitatNames = vetMan.getAllHabitatsNames();
+<<<<<<< HEAD
 			if (habitatNames.size() >= 5) {
 				return;
+=======
+			String name = "";
+			
+			for (int a = 0; a < habitatNames.size(); a++) {
+				name = habitatNames.get(a);
+				
+				if(name.equals("Polar zone")) {
+					break;
+				} 
+				
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 			}
 			
 			
+<<<<<<< HEAD
 				KeyboardInput.weAddHabitats();
 				KeyboardInput.weAddDrugTypes();
 				KeyboardInput.weAddAnimalTypes();
 			
+=======
+			if(name.equals("Polar zone")) { //to avoid creation of initalData more than once
+				
+			} else {
+				KeyboardInput.weAddHabitats();
+				KeyboardInput.weAddDrugTypes();
+				KeyboardInput.weAddAnimalTypes();
+			}
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 			
 			
 		} catch (SQLException sqlE) {

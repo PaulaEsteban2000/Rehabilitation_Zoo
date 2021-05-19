@@ -3,7 +3,6 @@ package utils;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
-//import java.util.Date;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -497,9 +496,9 @@ public class KeyboardInput {
 
 	public static void weAddHabitats()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		LocalDate localToday = LocalDate.now(); //only way to add dates
-		Date newDate =java.sql.Date.valueOf(localToday);
+		Date newDate = Date.valueOf(localToday);
 		
-		Habitat northPole = new Habitat("Pole zone",newDate, newDate, -19, LightType.LOW );  
+		Habitat northPole = new Habitat("Polar zone",newDate, newDate, -19, LightType.LOW );  
 		Habitat desert = new Habitat("Desert",newDate, newDate, 50, LightType.HIGH );
 		Habitat sabana = new Habitat("Sabana",newDate, newDate, 30, LightType.HIGH );
 		Habitat jungle = new Habitat("Jungle",newDate, newDate, 27, LightType.MEDIUM );
@@ -516,6 +515,7 @@ public class KeyboardInput {
 		Habitat waitZone = new Habitat("Wait Zone",newDate, newDate, 25, LightType.HIGH );
 		
 		adminMan.addHabitat(northPole);
+		System.out.println(vetMan.getHabitatByName("Polar zone").toString());
 		adminMan.addHabitat(desert);
 		adminMan.addHabitat(sabana);
 		adminMan.addHabitat(jungle);
@@ -593,18 +593,9 @@ public class KeyboardInput {
 		
 	
 	public static Habitat askForHabitat() throws IOException, SQLException {
-			System.out.println("These are the habitats existent in our recovery center. Please choose the name of one:");
-			List<String> habitatsnames = zooKMan.getHabitats();
-			System.out.println(habitatsnames);
+			Habitat habitat = KeyboardInput.askForHabitatToCheckItsAnimals();
 			
-			String habitatName = Utils.readLine();
-			
-			Integer habId = zooKMan.getHabitatIdByName(habitatName);
-				
-			List<Habitat> habitat = zooKMan.getHabitatById(habId);
-			
-			return habitat.get(0);
-			
+			return habitat;
 	}
 	
 
@@ -612,9 +603,11 @@ public class KeyboardInput {
 			
 			if(stateOption == 4) {
 				zooKMan.cleanHabitat(habitatToChange);
+				System.out.println(habitatToChange.getName() + " has been cleaned: "+habitatToChange.getLastCleaned());
 			}
 			else {
 				zooKMan.fillUpWaterTank(habitatToChange);
+				System.out.println("The tanks of the " + habitatToChange.getName() + " has been filled: "+habitatToChange.getLastCleaned());
 			}
 			
 	}
@@ -624,15 +617,21 @@ public class KeyboardInput {
 	
 		switch (stateOption) {
 			case 1:
-				zooKMan.feedAnimals(habitat);
+				Date newDate;
+				newDate = zooKMan.feedAnimals(habitat);
+				System.out.println("Amimals have been fed:" + newDate);
 				break;
 				
-			case 2:
-				zooKMan.batheAnimals(habitat);
+			case 2: 
+				Date newDate2;
+				newDate2 = zooKMan.batheAnimals(habitat);
+				System.out.println("Amimals have been bathed: " + newDate2);
 				break;
 				
 			case 3: 
-				zooKMan.drugAdministrationToAnimals(habitat);
+				Date newDate3;
+				newDate3 = zooKMan.drugAdministrationToAnimals(habitat);
+				System.out.println("Animals have been administered the medication: " + newDate3);
 				break;
 				
 			default: 

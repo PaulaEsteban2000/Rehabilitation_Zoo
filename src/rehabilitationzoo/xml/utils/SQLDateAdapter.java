@@ -1,5 +1,3 @@
-
-
 package rehabilitationzoo.xml.utils;
 
 import java.time.LocalDate;

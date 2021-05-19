@@ -43,7 +43,10 @@ public class Menu {
 		dbMan.connect();
 		userMan.Connect();
 		
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");
