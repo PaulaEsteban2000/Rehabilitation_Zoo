@@ -1,11 +1,15 @@
 package utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
 
 import java.sql.SQLException;
 import java.util.*;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
@@ -40,7 +44,7 @@ public class KeyboardInput {
 	//Ademas asi podeis ver lo que he hecho por si alguno os sirve (pero no los toqueis sin preguntarme u os corto las manos:) )
 	//
 	//
-	public static VetManager vetMan = new VetSQL();		
+	private static VetManager vetMan = new VetSQL();		
 	//
 	//
 	public static List<Animal> checkIfAnimalsInHabitat(String habitatToCheck) throws SQLException {
@@ -285,7 +289,7 @@ public class KeyboardInput {
 	}
 	//
 	//
-	public static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
+	private static Animal askForAnimalFromHabitat(Habitat habitat) throws IOException, SQLException {  //Tambien lo utiliza zoo keeper
 		//TODO solo poder acceder a animales con death date NULL (freedom no por las protesis)
 		
 		List<String> animalsTypesInHabitat = vetMan.getAnimalTypesInAHabitat(habitat);
@@ -585,6 +589,31 @@ public class KeyboardInput {
 		adminMan.introducingAnimalsTypes(penguin);
 		adminMan.introducingAnimalsTypes(shelby);
 	}
+	
+	public static void generateHabitatXML(Habitat habitat) throws Exception {
+
+		// Throw into an XML, so we start...
+		// Create a JAXBContext
+		JAXBContext context = JAXBContext.newInstance(Habitat.class);
+		// Get the marshaller
+		Marshaller marshall = context.createMarshaller();
+		// Formatting
+		marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		// Write the marshall to a file, but first we need to create the file
+		File file = new File("./xmls/Output-Habitat.xml");
+		marshall.marshal(habitat, file);
+		// Printout
+		marshall.marshal(habitat, System.out);
+		
+		
+		
+	
+
+	}
+	
+	
+	
+	
 	
 /////////////////////////MARIA////////////////////////////////////////////////////////////////////////////
 	

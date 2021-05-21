@@ -31,33 +31,24 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			VetManager vetMan = new VetSQL();	
 			List<String> habitatNames = vetMan.getAllHabitatsNames();
 
-			if (habitatNames.size() >= 5) {
-				return;
 
 			String name = "";
-			
-			for (int a = 0; a < habitatNames.size(); a++) {
-				name = habitatNames.get(a);
-				
-				if(name.equals("Polar zone")) {
-					break;
-				} 
-				
-
-				KeyboardInput.weAddHabitats();
-				KeyboardInput.weAddDrugTypes();
-				KeyboardInput.weAddAnimalTypes();
-			
-
-			if(name.equals("Polar zone")) { //to avoid creation of initalData more than once
-				
+					
+			if (habitatNames.size() >= 5) {
+				return;
+	
+		
 			} else {
 				KeyboardInput.weAddHabitats();
 				KeyboardInput.weAddDrugTypes();
 				KeyboardInput.weAddAnimalTypes();
+
+
 			}
-			
-			
+			KeyboardInput.weAddHabitats();
+			KeyboardInput.weAddDrugTypes();
+			KeyboardInput.weAddAnimalTypes();
+		
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
 			
@@ -77,6 +68,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		}
 	}
 	
+
 	
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface

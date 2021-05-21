@@ -35,15 +35,12 @@ public class Menu {
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
 	//TODO all methods here should be private if we can
-	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
-	
 	public static void main(String[] args) throws Exception, IOException{
 	
 		dbMan.connect();
 		userMan.Connect();
-		
-
+	
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");
@@ -81,6 +78,20 @@ public class Menu {
 		String email = Utils.readLine();
 		//We can ask for it twice, for checking, but Rodrigo does not like it much
 		
+		Boolean bol = KeyboardInput.adminMan.checkForUsers(email);
+		System.out.println(bol + " debe ser false");
+		
+		do {
+			if(bol == true) {
+				System.out.println("This email is already used. Please pick another one: ");
+				email = Utils.readLine();
+				
+				if(KeyboardInput.adminMan.checkForUsers(email) == false) {
+					bol = false;
+				}
+			}
+		}while (bol == true);
+		
 		System.out.println("Now write your password:");
 		String password = Utils.readLine();
 		
@@ -97,7 +108,7 @@ public class Menu {
 		userMan.newUser(user);
 	}
 	
-	private static void login() throws IOException, SQLException {
+	private static void login() throws Exception {
 		System.out.println("Please type in your email address:");
 		String email = Utils.readLine();
 		
@@ -133,7 +144,7 @@ public class Menu {
 				case 1:
 					System.out.println("ANIMAL DIAGNOSIS");
 					
-					List<Animal> animalsToBeDiagnosed = KeyboardInput.checkIfAnimalsInHabitat("waitZone");
+					List<Animal> animalsToBeDiagnosed = KeyboardInput.checkIfAnimalsInHabitat("Wait zone");
 					
 					if (animalsToBeDiagnosed == null) { //in case no more checking should be done
 						break;
@@ -145,13 +156,19 @@ public class Menu {
 					
 				case 2:
 					System.out.println("ANIMAL CHECK");
-					
 					Habitat habitatToCheck = KeyboardInput.askForHabitatToCheckItsAnimals();
+					List<Animal> animalsToCheck = KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName());
 					
-					if (KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName()) == null) {
+					if (animalsToCheck == null) {
 						break;
 					} else {
-						KeyboardInput.animalCheckSubMenu(habitatToCheck);
+						Integer cont = animalsToCheck.size();
+						
+						do {
+							KeyboardInput.animalCheckSubMenu(habitatToCheck);
+							cont --;
+						} while (cont >0);
+						
 					break;
 					}
 					
@@ -166,7 +183,7 @@ public class Menu {
 	}
 	
  	
-	private static void adminOption2() throws NumberFormatException, IOException, SQLException {
+	private static void adminOption2() throws Exception {
  
  		int adminChoice;
  		boolean exito=false;
@@ -178,7 +195,8 @@ public class Menu {
         	+	"1.Manage animals"+"\n"
         	+	"2.Manage workers"+"\n"
         	+	"3.Manage drugs"+"\n"
-        	+ 	"4.Go back"+ "\n");
+        	+	"4.Manage xml"+"\n"
+        	+ 	"5.Go back"+ "\n");
 		
 			adminChoice = Utils.readInt();
 		
@@ -236,7 +254,6 @@ public class Menu {
 					
 							System.out.print("\n"+"Which animal would you like to add to the zoo?"+"\n");
 							String readAnimal1 = Utils.readLine();//WE CHECK IF THE ANIMAL EXITS OR NOT IN THE ZOO
-							
 							boolean weHaveThisType = KeyboardInput.isThisAnAnimal(readAnimal1);
 							if(weHaveThisType == true) {
 								System.out.print("\n"+"We already have this type of animal in the zoo."+"\n");
@@ -506,9 +523,18 @@ public class Menu {
 	                    break;//case 3 del menu principal
 
 
-	 case 4:
+	 case 4:       		System.out.println("Search an habitat");
+	 					Habitat habitatToSearch = KeyboardInput.askForHabitat();
+						KeyboardInput.generateHabitatXML(habitatToSearch);
+						
+						break;
+	 					
+		 
+		 				
+	 case 5:
+		 
 		 				//GO BACK
-	                	//exit(0); //EXIT FOR THE WHILE(TRUE) METHOD
+     					//exit(0); //EXIT FOR THE WHILE(TRUE) METHOD
 		 				break;
 	                
 	 default:

@@ -31,17 +31,8 @@ public class AdministratorSQL implements AdministratorManager{
 
 
     List<DrugType> listOfDrugTypes = new ArrayList<DrugType>();
-    
-	
-	 private Connection c;
-	    //in all classes that uses a connection 
-	    
-		public void AdministratorSQLConnection (Connection c) {
-			this.c=c;
-		}
-
 		
-		//ANIMALS METHODS 
+	//ANIMALS METHODS 
 		
 	@Override
 	public void addAnimal(Animal animal) throws SQLException{ //do we need a prepared Statement better to avoid injection? I think so bc it is insert
@@ -512,6 +503,36 @@ public void listDrugTypes() {
 	public List<String> getDrugTypes() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public Boolean checkForUsers(String userEmail) {
+		Boolean bol = false;
+
+		try {
+			String sql = "SELECT email FROM users WHERE email LIKE ?"; 
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
+			prep.setString(1, "%" + userEmail + "%"); 
+			ResultSet rs = prep.executeQuery();
+
+			while (rs.next()) { 
+				String email = rs.getString("email");
+				
+				if (email != null) {
+					bol = true;
+				}
+				
+			}
+
+			prep.close();
+			rs.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return bol;
 	}
 
 
