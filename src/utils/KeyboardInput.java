@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
@@ -10,6 +11,13 @@ import java.util.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
@@ -28,12 +36,17 @@ import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.FeedingType;
+import rehabilitationzoo.db.pojos.GroundType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
 import rehabilitationzoo.db.pojos.WorkerType;
 import rehabilitationzoo.db.ui.Menu;
+import rehabilitationzoo.xml.utils.*;
+
+
+
 
 public class KeyboardInput {
 	
@@ -609,6 +622,77 @@ public class KeyboardInput {
 		
 	
 
+	}
+	
+	
+	public static void addHabitatXML() throws Exception {
+	       boolean incorrectHabitat = true;
+			// Create a JAXBContext
+			JAXBContext context = JAXBContext.newInstance(Habitat.class);
+			// Get the unmarshaller
+			Unmarshaller unmarshall = context.createUnmarshaller();
+			while(incorrectHabitat){
+				
+			//  unmarshall the habitat(object) -> read from a file
+			System.out.println("Type the filename for the XML document(expected in the XMLS folder)");
+			String fileName = Utils.readLine();
+			File file = new File("./xmls/" + fileName);
+			
+			 try {
+		        	// Create a DocumentBuilderFactory
+		            DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
+		            // Set it up so it validates XML documents
+		            dBF.setValidating(true);
+		            // Create a DocumentBuilder and an ErrorHandler (to check validity)
+		            DocumentBuilder builder = dBF.newDocumentBuilder();
+		            CustomErrorHandler customErrorHandler = new CustomErrorHandler();
+		            builder.setErrorHandler(customErrorHandler);
+		            // Parse the XML file and print the result
+		            Document doc = builder.parse(file);
+		            incorrectHabitat = false;
+		           
+		        } catch (ParserConfigurationException ex) {
+		            System.out.println(file + " error while parsing!");
+		           
+		        } catch (SAXException ex) {
+		            System.out.println(file + " was not well-formed!");
+		            
+		        } catch (IOException ex) {
+		            System.out.println(file + " was not accesible!");
+		            
+		        }
+			// Create the object by reading from a file
+			Habitat habitat = (Habitat) unmarshall.unmarshal(file);
+			// Printout
+			System.out.println("Added to the database: " + habitat);
+			
+			adminMan.addHabitat(habitat);
+			
+
+			
+
+		}
+	}
+			
+			
+	
+	public static void CreateAHabitatXML() throws Exception{
+		//Create a JAXBContext
+		JAXBContext context = JAXBContext.newInstance(Habitat.class);//We specify the class we want for the XML
+		//Get the unmarshaller
+		Unmarshaller unmarshal = context.createUnmarshaller(); // we call the create a marshaller method from the context class
+		//Unmarshal the Habitat from a file
+		System.out.println("Type the filename for the XML document (expected in the xmls folder): ");
+		String fileName= Utils.readLine();
+		File file= new File("_/xmls/"+ fileName);
+		Habitat habitat = (Habitat) unmarshal.unmarshal(file); //we do a cast to habitat
+		//Print the habitat
+		System.out.println("Added to the data base: "+ habitat); //to see what It's added to the data base
+		//Insert it
+		adminMan.addHabitat(habitat);
+		//We have the habitat created
+		
+	
 	}
 	
 	

@@ -531,9 +531,12 @@ public class Menu {
 	 					
 		 
 		 				
-	 case 5:
-		 
-		 				//GO BACK
+	 case 5:		
+		 		KeyboardInput.addHabitatXML();
+		 				
+		 				
+	 case 6: //TODO CAMBIAR
+		 //GO BACK
      					//exit(0); //EXIT FOR THE WHILE(TRUE) METHOD
 		 				break;
 	                
