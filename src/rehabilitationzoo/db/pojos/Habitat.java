@@ -30,7 +30,7 @@ public class Habitat implements Serializable {
 private static final long serialVersionUID = 1947022899735841747L;
 	
 	
-	@XmlAttribute
+	@XmlTransient
 	private Integer id; //No need to be in constructor
 	
 	@XmlAttribute
@@ -58,6 +58,11 @@ private static final long serialVersionUID = 1947022899735841747L;
 	private List<GroundType> grounds; //cambio post presentacion dado por rodrigo
 	
 	
+	
+	public Habitat() {
+		super();
+	}
+
 	public Habitat(String name, Date lastCleaned, Date waterTank, Integer temperature,
 			LightType light, List<Animal> animals, List<GroundType> grounds) {
 		super();

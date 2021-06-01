@@ -745,6 +745,36 @@ public void listDrugTypes(){
 
 
 
+	@Override
+	public Boolean checkForUsers(String userEmail) {
+		Boolean bol = false;
+
+		try {
+			String sql = "SELECT email FROM users WHERE email LIKE ?"; 
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
+			prep.setString(1, "%" + userEmail + "%"); 
+			ResultSet rs = prep.executeQuery();
+
+			while (rs.next()) { 
+				String email = rs.getString("email");
+				
+				if (email != null) {
+					bol = true;
+				}
+				
+			}
+
+			prep.close();
+			rs.close();
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return bol;
+	}
+
+
 
 
 

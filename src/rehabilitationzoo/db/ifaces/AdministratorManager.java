@@ -14,6 +14,8 @@ import rehabilitationzoo.db.pojos.Worker;
 public interface AdministratorManager {
 	//PARTE DE NATI
 	
+	public Boolean checkForUsers(String userEmail); //method for login susbystem
+	
 	//ADMINISTRATOR
 		
 		//public List<Drug> searchDrugsByName (String name); //cast??

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Habitat name="Polar zone" id="1">
+    <lastCleaned>2021-05-19</lastCleaned>
+    <waterTank>2021-05-19</waterTank>
+    <temperature>-19</temperature>
+    <light>LOW</light>
+</Habitat>

@@ -31,18 +31,25 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			VetManager vetMan = new VetSQL();	
 			List<String> habitatNames = vetMan.getAllHabitatsNames();
 
+
 			String name = "";
-			
+					
 			if (habitatNames.size() >= 5) {
 				return;
-			
-			}else {
+	
+		
+			} else {
 				KeyboardInput.weAddHabitats();
 				KeyboardInput.weAddDrugTypes();
 				KeyboardInput.weAddAnimalTypes();
+
+
 			}
-			
-		}catch (SQLException sqlE) {
+			KeyboardInput.weAddHabitats();
+			KeyboardInput.weAddDrugTypes();
+			KeyboardInput.weAddAnimalTypes();
+		
+		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
 			
 		} catch (Exception e) {
@@ -50,6 +57,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 		}
 	}
+			
 	
 
 	public void disconnect(){
@@ -60,6 +68,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 		}
 	}
 	
+
 	
 	
 	private void createTables() { //we shouldn't have a main here -> build an interface
@@ -117,8 +126,8 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastName 	TEXT	NOT NULL, "
 					   + " hireDate		DATE	NOT NULL, "
 					   + " salary		FLOAT	NOT NULL, "
-					   + " workerType	ENUM	NOT NULL)";
-			
+					   + " workerType	ENUM	NOT NULL, "
+					   + " inWhichHabitatDoYouWork TEXT NULL)";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
 			
