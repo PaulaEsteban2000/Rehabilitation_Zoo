@@ -20,6 +20,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import Exceptions.AdminExceptions;
+import Exceptions.ExceptionMethods;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
@@ -413,26 +414,11 @@ public class KeyboardInput {
 		 }
 
 		return realAnimal;	
-	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
-	// ya que estamos, marcamos el tipo de animal que es
+	}
 	
-	
-
-	
-	//public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
-	//	adminMan.addAnimal(anAnimal);		
-	//}	 
-		 
-
 	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException, AdminExceptions {
 		adminMan.addHabitat(habitat);
 	}	
-		 
-	
-	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
-		
-		adminMan.introducingAnimalsTypes(anAnimalType);
-	}	 
 		
 	
 	public static boolean isThisAnHabitat(String nameHabitat) {
@@ -445,13 +431,6 @@ public class KeyboardInput {
 				 }  
 		 }
 		return success;		
-	}
-	
-	
-	
-	public static void addWorker (Worker worker) {
-		adminMan.introducingWorkers(worker);
-		
 	}
 	
 	

@@ -24,23 +24,26 @@ public class AdminExceptions  extends Exception{
 		switch(getErrors()) {
 		
 		case NOTAWORKERTYPE: 
-			return "That is not a worker type available for the zoo"+"\n";
-			
+			return "Error: That is not a worker type available for the zoo"+"\n";
 			
 		case NULL: 
-			return "We don´t have any information about this person/animal/drug in the database";
-		
+			return "Error: We don't have any information about this person/animal/drug in the database"+"\n";
+
 		case NOTANANIMALTYPE:
-			return "That is not an animal type available for the zoo"+"\n";
+			return "Error: That is not an animal type available for the zoo" + "\n";
 			
 		case NOTADRUGTYPE:
-			return "That is not a drug type available in the zoo"+"\n";
+			return "Error: That is not a drug type available in the zoo"+"\n";
 			
 		case NOTADRUG:
-			return "That is not a drug available in the zoo"+"\n";
+			return "Error: That is not a drug available in the zoo"+"\n";
 			
-	}
+		case NOTAFEEDINGTYPE:
+			return "Error: Please do remember it can only be a CARNIVORE, HERVIBORE or OMNIVORE"+"\n";
+			
+		}
 		return null;
 
 	}
+	
 }

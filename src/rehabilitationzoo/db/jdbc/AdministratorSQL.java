@@ -42,11 +42,10 @@ public class AdministratorSQL implements AdministratorManager{
 		try {
 			VetManager unVet = new VetSQL(); 
 			
-			String sql = "INSERT INTO animals (enterDate,habitat_id,lastBath,lastFed,lastDrug,deathDate,freedomDate,type_id,name)"+
-			"VALUES (?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO animals (enterDate,habitat_id,lastBath,lastFed,lastDrug,deathDate,freedomDate,type_id,name)";
+			sql+= " VALUES (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement pstmt = JDBCManager.c.prepareStatement(sql); 
 				
-			
 			pstmt.setDate(1, animal.getEnterDate());
 			pstmt.setInt(2,unVet.getHabitatIdByName("Wait Zone"));
 			
@@ -95,10 +94,7 @@ public class AdministratorSQL implements AdministratorManager{
 			pstmt.setInt(8, animal.getType_id());
 			pstmt.setString(9, animal.getName());
 		
-			
-			
-			System.out.println(sql);
-			//pstmt.executeUpdate(sql);
+			pstmt.executeUpdate(sql);
 			pstmt.close();
 			
 		} catch(Exception e) {
@@ -167,7 +163,7 @@ public class AdministratorSQL implements AdministratorManager{
 	@Override
 	public void introducingAnimalsTypes (AnimalType animalType) { 
 		try {
-			String feeding;
+			String feeding = null;
 			if(animalType.getWhatDoYouEat().equals(FeedingType.CARNIVORE)) {
 				feeding = "Carnivore";
 			}else if(animalType.getWhatDoYouEat().equals(FeedingType.HERVIBORE)) {
@@ -182,8 +178,6 @@ public class AdministratorSQL implements AdministratorManager{
 			
 			prep.setString(1, animalType.getType());
 			prep.setString(2, feeding);
-			System.out.println("Animal types:"+"/n");
-			//System.out.print(sql);
 		    prep.executeUpdate();
 			prep.close();
 	
@@ -399,10 +393,10 @@ public class AdministratorSQL implements AdministratorManager{
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			
 			prep.setString(1, aWorker.getName());
-			prep.setString(2,aWorker.getLastName() );
-			prep.setDate(3,aWorker.getHireDate() );
-			prep.setFloat(4,aWorker.getSalary() );
-			prep.setString(5,stringWorker ); //workerType
+			prep.setString(2, aWorker.getLastName() );
+			prep.setDate(3, aWorker.getHireDate() );
+			prep.setFloat(4, aWorker.getSalary() );
+			prep.setString(5, stringWorker); //workerType
 			
 			prep.executeUpdate();
 			prep.close();
@@ -532,7 +526,6 @@ public class AdministratorSQL implements AdministratorManager{
 			
 			try {
 				
-				
 			String sql = "SELECT * FROM workers "; 			    
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 			ResultSet rs = prep.executeQuery();
@@ -546,13 +539,11 @@ public class AdministratorSQL implements AdministratorManager{
 				WorkerType job;
 				if (rs.getString("workerType").equalsIgnoreCase("Administrator") ){
 						job = WorkerType.ADMINISTRATOR;
-				}else {
-					if (rs.getString("workerType").equalsIgnoreCase("Zoo Keeper")) {
-						job = WorkerType.ZOO_KEEPER;
-					}else {
-						job = WorkerType.VETERINARY;
-							}
-						}	
+				}else if (rs.getString("workerType").equalsIgnoreCase("Zoo Keeper")) {
+					job = WorkerType.ZOO_KEEPER;
+				} else {
+					job = WorkerType.VETERINARY;
+				}
 					
 			Worker oneWorker = new Worker(id, name, lastname, hireDate, salary, job );
 			workersinfo.add(oneWorker);
