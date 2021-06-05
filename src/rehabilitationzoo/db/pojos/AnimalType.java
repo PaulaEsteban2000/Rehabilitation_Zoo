@@ -32,17 +32,18 @@ public class AnimalType implements Serializable {
 		   this.whatDoYouEat= whatDoYouEat;
 	   }
 
-	   
+	   public AnimalType (Integer id, String type, FeedingType whatDoYouEat) {
+		   super();
+		   this.id = id;
+		   this.type= type;
+		   this.whatDoYouEat= whatDoYouEat;
+	   }
 	   
 	   public AnimalType (String type) {
 		   this.setType(type);
 	   }
 
-	public AnimalType(Integer ac_id, FeedingType ac_food, String ac_type) {
-		this.id = ac_id;
-		this.type = ac_type;
-		this.whatDoYouEat = ac_food;
-	}
+	
 
 	public String getType() {
 		return type;

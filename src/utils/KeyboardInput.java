@@ -416,11 +416,12 @@ public class KeyboardInput {
 	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
 	// ya que estamos, marcamos el tipo de animal que es
 	
+	
 
 	
-	public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
-		adminMan.addAnimal(anAnimal);		
-	}	 
+	//public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
+	//	adminMan.addAnimal(anAnimal);		
+	//}	 
 		 
 
 	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException, AdminExceptions {
@@ -453,51 +454,34 @@ public class KeyboardInput {
 		
 	}
 	
-	public static boolean firingWorkers(String workerName, String workerLastName) {
+	
+	/*public static boolean firingWorkers(Worker workerToDelete) {
 		
-      String totalName= workerName+ " "+ workerLastName;
       boolean deleted= false;
 		
-		List<String> allWorkersName = adminMan.getAllWorkersNamesAndLastNames();
+		List<Worker> allWorkersName = adminMan.getWorkersInfo();
 		
 		for(int i = 0; i<allWorkersName.size(); i++){
-			 if(totalName.equalsIgnoreCase(allWorkersName.get(i)) ) {
-				 	String[] parts = totalName.split(" ");
-					String part1Name = parts[0];
-					String part2Lastname = parts[1];
-					
-				 adminMan.deleteThisWorker(part1Name, part2Lastname);
-				 deleted=true;
+			
+			 if(workerToDelete.equals(allWorkersName.get(i)) ) {
 				 
+				 adminMan.deleteThisWorker(workerToDelete.getName(),workerToDelete.getLastName());
+				 deleted=true;
 			 }
-				
-			 } 
+		} 
 		return deleted;
 		
-	}
+	}*/
 
 	
-	public static boolean modificationsSalary(String name1, String lastname1, Float salary) {
-	boolean changes=false;
-	String anotherTotalName= name1 +" "+ lastname1;
-	List<String> anotherAllWorkersName= adminMan.getAllWorkersNamesAndLastNames();
-
 	
-		
-		for(int i = 0; i<anotherAllWorkersName.size(); i++){
-			 if(anotherTotalName.equals(anotherAllWorkersName.get(i)) ) {
-				 
-				adminMan.modifyWorker(name1, lastname1, null);
-				changes=true;
-				break;
-			 	} 
-			 }
-		return changes;
-		
-	}
-	public static void listAllDrugTypes() {
+	/*public static void listAllDrugTypes() {
 		adminMan.listDrugTypes(); //MIRAR EN EL MENU POR FAVOR
 	}
+	
+	public static void listAllDrugs() {
+		adminMan.listDrugs(); //MIRAR EN EL MENU POR FAVOR
+	}*/
 
 	public static void addDrugType(String drugName, float dosis) {
 		adminMan.addNewDrugType(drugName, dosis);	

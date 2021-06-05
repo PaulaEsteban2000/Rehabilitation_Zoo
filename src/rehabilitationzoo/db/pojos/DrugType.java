@@ -59,5 +59,10 @@ public class DrugType {
 		this.dosis = dosis;
 	}
 	
+
+	@Override
+	public String toString() {
+		return "DrugTypes [id=" + id + ", type=" + type + ", dosis=" + dosis + "]"; 
+	}
 	
 }

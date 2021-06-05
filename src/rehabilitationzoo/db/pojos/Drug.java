@@ -165,6 +165,10 @@ public class Drug implements Serializable{
 	}
 
 
-	
+	@Override
+	public String toString() {
+		return "Drug [id=" + id + ", name=" + name + ", treatment duration=" + treatmentDuration + ", periodBetweenDosis=" + periodBetweenDosis
+				+ ", drugType_id=" + drugType_id +  "]"; 
+	}
 	
 }

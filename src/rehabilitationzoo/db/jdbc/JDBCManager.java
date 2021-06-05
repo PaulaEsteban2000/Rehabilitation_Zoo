@@ -115,7 +115,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
 					   + " type_id		INTEGER	NOT NULL	REFERENCES animals_characteristics(id), "
-					   + " name			STRING	NOT NULL	UNIQUE)";
+					   + " name			STRING	NOT NULL	)";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
@@ -127,6 +127,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " hireDate		DATE	NOT NULL, "
 					   + " salary		FLOAT	NOT NULL, "
 					   + " workerType	ENUM	NOT NULL, "
+					   + " photo 		BLOB, "
 					   + " inWhichHabitatDoYouWork TEXT NULL)";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();

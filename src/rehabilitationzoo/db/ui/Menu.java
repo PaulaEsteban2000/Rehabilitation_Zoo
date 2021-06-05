@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
+import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.UserManager;
 import rehabilitationzoo.db.jdbc.JDBCManager;
@@ -34,13 +35,17 @@ public class Menu {
 	private static DBManager dbMan = new JDBCManager();			//should be private
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
+	
 	//TODO all methods here should be private if we can
+	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
-	public static void main(String[] args) throws Exception, IOException{
+	
+	public static void main(String[] args) throws Exception, IOException,AdminExceptions {
 	
 		dbMan.connect();
 		userMan.Connect();
-	
+		
+
 		do {
 			//LOGGING IN
 			System.out.println("Choose an option: ");
@@ -108,7 +113,7 @@ public class Menu {
 		userMan.newUser(user);
 	}
 	
-	private static void login() throws Exception {
+	private static void login() throws Exception, AdminExceptions {
 		System.out.println("Please type in your email address:");
 		String email = Utils.readLine();
 		
@@ -183,7 +188,7 @@ public class Menu {
 	}
 	
  	
-	private static void adminOption2() throws Exception {
+	private static void adminOption2() throws Exception,AdminExceptions  {
  
  		int adminChoice;
  		boolean exito = false;
@@ -196,7 +201,8 @@ public class Menu {
         	+	"2.Manage workers"+"\n"
         	+	"3.Manage drugs"+"\n"
         	+	"4.Manage xml"+"\n"
-        	+ 	"5.Go back"+ "\n");
+        	+ 	"5.Create habitats in xml"+ "\n"
+        	+ 	"6.Go back"+ "\n");
 		
 			adminChoice = Utils.readInt();
 		
@@ -218,33 +224,35 @@ public class Menu {
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = Utils.readLine();
 							
-							boolean exito1 = KeyboardInput.isThisAnAnimal(readAnimal);//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
+							boolean exito1 = KeyboardInput.isThisAnAnimal(readAnimal);
 							if(exito1==true) {
-							    
+								
+								int animalTypeId=0;
+								
+								List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
+								for(int i=0; i<allAnimalTypes.size(); i++) {
+									if(readAnimal.equals(allAnimalTypes.get(i).getType())) {
+										animalTypeId = allAnimalTypes.get(i).getId();
+									}
+								}
+								
 							    System.out.print("\n"+"Put a name to the animal");
-							    String name = Utils.readLine();
-							    System.out.print("\n"+"Introduce the enter date of the "+ readAnimal +" "+ name +"\n");
-							    System.out.print("\n"+"Introduce the day");
-							    int day = Utils.readInt();
-							    System.out.print("\n"+"Introduce the month");
-							    int month = Utils.readInt();
-							    System.out.print("\n"+"Introduce the year");
-							    int year = Utils.readInt();
-							    LocalDate enterLocalDate = LocalDate.of(year, month, day);
-							    Date enterDate =Date.valueOf (enterLocalDate);
+							    String animal = Utils.readLine();
+							    LocalDate now1 = LocalDate.now();
+							    Date today1 = Date.valueOf(now1); //lastfed + lastbathe
+							    System.out.println(today1);
 							    
-							    LocalDate now = LocalDate.now();
-							    Date today = Date.valueOf(now); //lastfed + lastbathe
+							    Animal anAnimal = new Animal(today1, today1, today1, today1 , null, null,animalTypeId,animal);
+							    KeyboardInput.adminMan.addAnimal(anAnimal);
 							    
-							    Animal anAnimal = new Animal(enterDate, today, today,null, null, name);
-							    KeyboardInput.addAnimalInTheZoo(anAnimal); 
+							   
 							    System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							    
 							    KeyboardInput.firstDiagnosisSubMenu(anAnimal); //Paula: first diagnosis of an animal
 							    
 								}
 								else {
-									System.out.print("\n"+" That is not a type of animal present on the zoo"+"\n");
+									throw new AdminExceptions (AdminExceptions.AdminErrors.NOTANANIMALTYPE);
 								}
 							    break;
 							
@@ -276,7 +284,7 @@ public class Menu {
 											aType = FeedingType.OMNIVORE;
 										}
 										else {
-											//Exception not a feeding type
+											throw new AdminExceptions (AdminExceptions.AdminErrors.NOTAFEEDINGTYPE);
 										}
 									}
 								}
@@ -293,6 +301,9 @@ public class Menu {
 						case 3: 
 							
 							List <String>allTheAnimals = KeyboardInput.adminMan.getAnimalTypesByName();
+							if (allTheAnimals ==null) {
+								throw new AdminExceptions(AdminExceptions.AdminErrors.NULL);
+							}
 							for(int i=0; i<allTheAnimals.size(); i++) {
 								System.out.print((i+1)+". "+allTheAnimals.get(i)+"\n");
 							}
@@ -313,7 +324,8 @@ public class Menu {
 								+	"1.Hire workers"+"\n"
 					        	+	"2.Fire workers"+"\n"
 					        	+	"3.Modify worker´s salary"+ "\n"
-	                			+   "4.Go back"+ "\n");
+					        	+	"4.Show all the workers that work in the zoo"+ "\n"
+	                			+   "5.Go back"+ "\n");
 						
 						int manageOfWorkers= Utils.readInt();
 						
@@ -327,6 +339,7 @@ public class Menu {
 							
 							LocalDate workerLocalDate = LocalDate.now();
 							Date workerDate = Date.valueOf(workerLocalDate);
+							System.out.println(workerDate);
 							System.out.print("\n"+"The date that you added the worker is "+workerDate+"\n");
 							
 							
@@ -334,45 +347,40 @@ public class Menu {
 							String salary=  Utils.readLine();
 							float workerSalary= Float.parseFloat(salary);
 							
-							System.out.print("\n"+ "Introduce the job of the new worker"+"\n"+"Remember, the posibilities are:ZOO_KEEPER, VETERINARY ,ADMINISTRATOR "+"\n");
+							System.out.print("\n"+ "Introduce the job of the new worker"+"\n"+"Remember, the posibilities are: ZOO_KEEPER, VETERINARY ,ADMINISTRATOR "+"\n");
 							String aWork= Utils.readLine();
-							WorkerType job=null; //WorkerType.valueOf(aWork);
+							WorkerType job = null; //WorkerType.valueOf(aWork);
 							
 							
-							if ((aWork.compareTo("Z")==0) || (aWork.compareTo("z")==0)) {
+							if (aWork.equalsIgnoreCase("Zoo Keeper")) {
 								job = WorkerType.ZOO_KEEPER;
 							}
 							else {
-								if ((aWork.compareTo("V")==0) || (aWork.compareTo("v")==0)) {
+								if (aWork.equalsIgnoreCase("Vet") || aWork.equalsIgnoreCase("Veterinary")) {
 									job = WorkerType.VETERINARY;
 								}
 								else {
-									if ((aWork.compareTo("A")==0) || (aWork.compareTo("a")==0)) {
+									if (aWork.equalsIgnoreCase("Administrator")) {
 										job = WorkerType.ADMINISTRATOR;
 									}
 									else {
-										//Exception not a worker type
+										throw new AdminExceptions (AdminExceptions.AdminErrors.NOTAWORKERTYPE);
 									}
 								}
 							}
 							
-							
-								
 								Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
 								KeyboardInput.addWorker(workerInfo);
-								
-								//Mostramos todos los animales con los que va a trabajar esta persona
-								
-									
+								KeyboardInput.adminMan.getWorkersInfo();
+								break;
 								
 						
 						case 2:
 							System.out.print("\n"+ "This are the workers that we have in the zoo"+"\n");
-							List <String> workersInfo = KeyboardInput.adminMan.getAllWorkersNamesAndLastNames();
+							List<Worker> workersInfo = KeyboardInput.adminMan.getWorkersInfo();
 							
 							for(int i = 0; i<workersInfo.size(); i++){
-								System.out.print(workersInfo.get(i)+"\n");
-									 
+								System.out.print((i+1)+"."+workersInfo.get(i)+"\n");
 								 }
 							
 							System.out.print("\n"+ "Introduce the name of the worker you want to fire"+"\n");
@@ -380,38 +388,68 @@ public class Menu {
 							System.out.print("\n"+ "Introduce the lastname"+"\n");
 							String workerLastNameToDelete= Utils.readLine();
 							
-							boolean deleted= KeyboardInput.firingWorkers(workerNameToDelete, workerLastNameToDelete);
-							if( deleted==true) {
-								System.out.print("\n"+"Worker deleted"+"\n");
-							}
-							else {
-								System.out.print("\n"+"The worker hasn´t been deleted"+"\n");}
-							
+							Worker workerToDelete=KeyboardInput.adminMan.getAWorkerFromNameAndLastname(workerNameToDelete, workerLastNameToDelete)	;						
+							KeyboardInput.adminMan.deleteThisWorker(workerToDelete.getId());
+							System.out.print("\n"+"The worker "+workerNameToDelete+" "+workerLastNameToDelete+" has been fired"+"\n");
 							
 							break;
 							
 						case 3: 
 
-							System.out.print("\n"+ "Introduce the name of the worker that you want to change the salary"+"\n");
-							String workerNameChanges= Utils.readLine();
-							System.out.print("\n"+ "Introduce the lastname"+"\n");
-							String workerLastNameChanges= Utils.readLine();
-							System.out.print("\n"+"Which salary would you like that "+workerNameChanges+" has now?"+"\n");
+							System.out.print("\n"+ "Introduce the id of the worker that you want to change the salary"+"\n");
+							List<Worker> workersInformation = KeyboardInput.adminMan.getWorkersInfo();
+							
+							for(int i = 0; i<workersInformation.size(); i++){
+								System.out.print((i+1)+"."+workersInformation.get(i)+"\n");
+								}
+							
+							int idWorker= Utils.readInt();
+							System.out.println(idWorker);
+							
+							Worker oneWorker = KeyboardInput.adminMan.getAWorkerFromId(idWorker);
+							boolean workerExist;
+							
+							for(int i = 0; i<workersInformation.size(); i++){
+							
+									 if(oneWorker.equals(workersInformation)) {
+										 System.out.println(oneWorker);
+										 System.out.println(workersInformation);
+										 workerExist = true;
+									 }
+									 else {
+										 workerExist=false;
+									 }
+								 }
+							
+							if(workerExist=true) {
+							System.out.print("\n"+"Which salary would you like that the person selected has now?"+"\n");
 							String changeSalary = Utils.readLine();
 							Float aSalary = Float.parseFloat(changeSalary);
 							
-							boolean changes=KeyboardInput.modificationsSalary(workerNameChanges, workerLastNameChanges, aSalary);
-							
-							if (changes==true){
-								System.out.print("\n"+"Salary updated"+"\n");
+							KeyboardInput.adminMan.modifyWorker(idWorker, aSalary);
+							System.out.println("Salary changed"+"\n");
 							}
 							else {
-								System.out.print("\n"+"The salary hasn´t been changed"+"\n");
+								throw new AdminExceptions(AdminExceptions.AdminErrors.NULL);
 							}
+
 							break;
 							
-							
 						case 4: 
+							List<Worker> showAllWorkers = new ArrayList<Worker>();
+							showAllWorkers = KeyboardInput.adminMan.getWorkersInfo();
+							
+							for(int i=0; i< showAllWorkers.size(); i++) {
+								System.out.println(showAllWorkers.get(i));
+							}
+							System.out.println("\n");
+							
+							
+							break;
+						
+										
+						case 5: 
+							
 							break;
 							 
 						default :	
@@ -419,22 +457,17 @@ public class Menu {
 							break;
 	                	
 						}
+						break;
 						
-	                	//HIRE WORKER (INSERT, UPDATE)
-	                	//Add worker to the database
-	                	
-	                	//FIRE WORKER(DELETE)
-	                	//Eliminate worker from the database and the arraylist
-	                	//MODIFY WORKER´S SALARY
-			
-			
+	    
 	  case 3:
 	                	System.out.println("\n"+"MANAGEMENT OF DRUGS"+"\n");
 	                	System.out.println("Select the option that fits you the best"+"\n"
 								+	"1.Add new drugs types"+"\n"
 								+	"2.Add new drugs "+"\n"
 					        	+	"3.Deletes drugs"+"\n"
-					        	+	"4.Go back"+ "\n");
+					        	+	"4.Show all the drugs kept in the zoo"+"\n"
+					        	+	"5.Go back"+ "\n");
 						
 						int manageOfDrugs= Utils.readInt();
 						
@@ -449,9 +482,7 @@ public class Menu {
 							
 							DrugType aDrugType = new DrugType (drugType, dosis);
 							KeyboardInput.addDrugType(drugType,dosis );
-							
-							//KeyboardInput.adminMan.listDrugTypes();
-		
+							System.out.println("Drug type added to the data base");
 							break;
 							
 						case 2:
@@ -466,61 +497,90 @@ public class Menu {
 							String stringDays = Utils.readLine();
 							int days= Integer.parseInt(stringDays);
 							
-							System.out.print("\n"+"Introduce the type of drug that the new drug is"+"\n");
-							String drugType1 = Utils.readLine();
+							System.out.print("\n"+"Introduce the id of type of drug that the new drug is"+"\n");
+							System.out.println("Remember that we have this types of drugs: ");				
+							List<DrugType> drugsInformation = KeyboardInput.adminMan.getDrugTypes();
 							
-							List <String> differentDrugTypes = KeyboardInput.adminMan.getDrugTypes();
-							boolean realDrug= false;
-							
-							for(int i = 0; i<differentDrugTypes.size(); i++){
-								 if(drugType1.equals(differentDrugTypes.get(i)) ) {
-									 realDrug = true;
-									 break;
-								 	} 
+							for(int i = 0; i<drugsInformation.size(); i++){
+								System.out.print((i+1)+"."+drugsInformation.get(i)+"\n");
+									 
 								 }
+							Integer drugType1 = Utils.readInt();
 							
+							System.out.print(drugType1);
+							boolean realDrug=false;
+							
+							for(int i = 0; i<drugsInformation.size(); i++){
+								
+								 if(drugType1.equals(drugsInformation.get(i).getId()) ) {
+									 realDrug = true;
+									 break; 
+								 }
+							}
 							if(realDrug==true) {
-								int idDrug= KeyboardInput.adminMan.getIdsFromDrugs(drugType1);
-								Drug createADrug = new Drug(drugName, duration, days, idDrug);
-								KeyboardInput.addDrug(createADrug); //static
+								Drug createADrug = new Drug(drugName, duration, days, drugType1);
+								KeyboardInput.addDrug(createADrug); 
+								System.out.println("\n"+"Drug created"+"\n");
 								}
 							
 							else {
-								System.out.print("\n"+"Thats not a valid type of drug"+"\n");
+								throw new AdminExceptions(AdminExceptions.AdminErrors.NOTADRUGTYPE);
 							}
 							
-							break;
+							break; 
 							
 						case 3:
+							
+							List<Drug> differentDrugs= KeyboardInput.adminMan.getDrugs();
+							
+							for(int i = 0; i<differentDrugs.size(); i++){
+								System.out.print((i+1)+"."+differentDrugs.get(i)+"\n");
+							}
+								
 							System.out.print("\n"+"Introduce the name of the drug you want to delete"+"\n");
 							String drugToDelete = Utils.readLine();
 							
-							List <String> differentDrugTypes1 = KeyboardInput.adminMan.getDrugTypes();
-							boolean realDrug1= false;
 							
-							for(int i = 0; i<differentDrugTypes1.size(); i++){
-								 if(drugToDelete.equals(differentDrugTypes1.get(i)) ) {
-									 realDrug1 = true;
-									 break;
-								 	} 
-								 }
-							
-							if(realDrug1==true) {
-								Drug drug2= (Drug) KeyboardInput.adminMan.searchDrugByName(drugToDelete);
-								 KeyboardInput.deleteDrug(drug2);//static
+							for(int i =0; i< differentDrugs.size(); i++) {
+							if (drugToDelete.equalsIgnoreCase(differentDrugs.get(i).getName())) {
 								
+								//Integer drugId = KeyboardInput.adminMan.getIdsFromDrugs(differentDrugs.get(i).getId());
+								 KeyboardInput.adminMan.deleteDrug(differentDrugs.get(i).getId());
+								 System.out.println("Drug deleted with success");
+								 
+								}
+							else {
+								throw new AdminExceptions(AdminExceptions.AdminErrors.NOTADRUG);
+								}
 							}
 							
 							break;
 							
-						case 4: break;
+						case 4: 
+							List<Drug> differentDrugs1= KeyboardInput.adminMan.getDrugs();
+							
+							if (differentDrugs1 ==null) {
+								throw new AdminExceptions(AdminExceptions.AdminErrors.NULL);
+							}
+							for(int i = 0; i<differentDrugs1.size(); i++){
+								System.out.println(differentDrugs1.get(i)+"\n");
+								}
+							System.out.println("\n");
+							
+							break;
+							
+						case 5: break;
 							
 						default: 
 							System.out.print("\nThat is not an  valid option\n");
 							break;
+
 						}
 			
 	                    break; //case 3 del menu principal
+
+							
+						}break;//case 3 del menu principal
 
 
 	 case 4:    
@@ -577,10 +637,12 @@ public class Menu {
 	                    System.out.print("\nThat is not an option\n");
 	        }
 			
-			//}//while
+			//}while
 	
 		}while(adminChoice != 5);
 	}
+
+}
  	
  	
 	private static void zooKeeperOption3() throws IOException, SQLException{

@@ -412,7 +412,7 @@ public class VetSQL implements VetManager {
 						String sql = "SELECT illness_id FROM animal_illness WHERE animal_id LIKE ?"; //OR COUNT
 
 						PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-						prep.setInt(1, animal.getId());
+						prep.setInt(1, animal.getId()); 
 						ResultSet rs = prep.executeQuery();
 
 						while (rs.next()) { 
