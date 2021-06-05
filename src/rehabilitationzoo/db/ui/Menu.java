@@ -186,7 +186,7 @@ public class Menu {
 	private static void adminOption2() throws Exception {
  
  		int adminChoice;
- 		boolean exito=false;
+ 		boolean exito = false;
  		
 
 		do {
@@ -520,22 +520,55 @@ public class Menu {
 							break;
 						}
 			
-	                    break;//case 3 del menu principal
+	                    break; //case 3 del menu principal
 
 
-	 case 4:       		System.out.println("Search an habitat");
+	 case 4:    
+		 
+		 				System.out.println("\n"+"MANAGEMENT OF XML"+"\n");
+		 				System.out.println("Select the option that fits you the best"+"\n"
+		 						+	"1.Generate Habitat xml"+"\n"
+		 						+	"2.Generate Ground type xml "+"\n"
+		 						+	"3.Add Habitat to the base with an XML"+"\n"
+		 						+	"4.Add Ground type to the base with an XML"+"\n"
+		 						+	"5.Go back"+ "\n");
+		 				
+		 				int manageOfXML= Utils.readInt();
+		 				
+		 				System.out.println("Search an habitat");
 	 					Habitat habitatToSearch = KeyboardInput.askForHabitat();
-						KeyboardInput.generateHabitatXML(habitatToSearch);
+						
+						switch(manageOfXML) {
+						
+						case 1: 
+							KeyboardInput.generateHabitatXML(habitatToSearch);
+							break;
+						
+						case 2:
+							KeyboardInput.generateGroundTypeXML(habitatToSearch);
+							break;
+							
+						case 3:
+							KeyboardInput.addHabitatXML();
+							break;
+							
+						case 4:
+							KeyboardInput.addGroundTypeXML();
+							break;
+							
+						case 5:
+							break;
+							
+						}
+		 
+		 			
 						
 						break;
 	 					
-		 
-		 				
-	 case 5:		
-		 		KeyboardInput.addHabitatXML();
+		 			
 		 				
 		 				
-	 case 6: //TODO CAMBIAR
+	 case 5: 
 		 //GO BACK
      					//exit(0); //EXIT FOR THE WHILE(TRUE) METHOD
 		 				break;
@@ -546,7 +579,7 @@ public class Menu {
 			
 			//}//while
 	
-		}while(adminChoice != 4);
+		}while(adminChoice != 5);
 	}
  	
  	

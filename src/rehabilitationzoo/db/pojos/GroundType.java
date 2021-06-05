@@ -25,6 +25,10 @@ public class GroundType {
 	@XmlElement
 	private Integer habitat_id; //fk to habitat id where the groundType is //cambio tras presentacion
 		
+	
+	public GroundType() {
+		super();
+	}
 
 	public GroundType(String type, Integer habitat) {
 		super();

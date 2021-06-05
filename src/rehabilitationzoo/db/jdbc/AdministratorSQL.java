@@ -19,6 +19,7 @@ import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.FeedingType;
+import rehabilitationzoo.db.pojos.GroundType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
@@ -222,6 +223,24 @@ public class AdministratorSQL implements AdministratorManager{
 				prep.setDate(3,habitat.getWaterTank() );
 				prep.setInt(4,habitat.getTemperature());
 				prep.setString(5,light );
+					
+			    prep.executeUpdate();
+				prep.close();
+				
+			}catch( Exception ex) {
+				ex.printStackTrace();
+				}
+	}
+	
+	public void addGroundType(GroundType ground) /*throws AdminExceptions*/ {
+		try {
+			
+			String sql = "INSERT INTO groundTypes (habitat_id, type)" +
+					"VALUES (?,?)"; 
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+				
+				prep.setInt(1,ground.getHabitat());
+				prep.setString(2,ground.getType());
 					
 			    prep.executeUpdate();
 				prep.close();

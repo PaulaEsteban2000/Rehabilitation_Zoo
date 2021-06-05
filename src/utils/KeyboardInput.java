@@ -549,6 +549,18 @@ public class KeyboardInput {
 		adminMan.addHabitat(waitZone);
 	}
 	
+	public static void weAddGroundType()throws SQLException, AdminExceptions { //THROW EXCEPTION
+		
+		GroundType northPole = new GroundType("ice", 1);  
+		GroundType desert = new GroundType("sand", 2);
+		
+		
+		adminMan.addGroundType(northPole);
+		adminMan.addGroundType(desert);
+		
+
+	}
+	
 	public static void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		
 		Float half = (float) 0.5;
@@ -617,12 +629,29 @@ public class KeyboardInput {
 		marshall.marshal(habitat, file);
 		// Printout
 		marshall.marshal(habitat, System.out);
-		
-		
-		
-	
+
 
 	}
+	
+	public static void generateGroundTypeXML(Habitat habitat) throws Exception {
+
+		List<GroundType> grounds = habitat.getGrounds();
+		// Throw into an XML, so we start...
+		// Create a JAXBContext
+		JAXBContext context = JAXBContext.newInstance(GroundType.class);
+		// Get the marshaller
+		Marshaller marshall = context.createMarshaller();
+		// Formatting
+		marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		// Write the marshall to a file, but first we need to create the file
+		File file = new File("./xmls/Output-GroundType.xml");
+		marshall.marshal(grounds, file);
+		// Printout
+		marshall.marshal(grounds, System.out);
+
+
+	}
+	
 	
 	
 	public static void addHabitatXML() throws Exception {
@@ -667,13 +696,63 @@ public class KeyboardInput {
 			System.out.println("Added to the database: " + habitat);
 			
 			adminMan.addHabitat(habitat);
+
+		}
+	}
+		
+	
+	
+	public static void addGroundTypeXML() throws Exception {
+	       boolean incorrectHabitat = true;
+			// Create a JAXBContext
+			JAXBContext context = JAXBContext.newInstance(GroundType.class);
+			// Get the unmarshaller
+			Unmarshaller unmarshall = context.createUnmarshaller();
+			
+			while(incorrectHabitat){
+				
+			//  unmarshall the habitat(object) -> read from a file
+			System.out.println("Type the filename for the XML document(expected in the XMLS folder)");
+			String fileName = Utils.readLine();
+			File file = new File("./xmls/" + fileName);
+			
+			 try {
+		        	// Create a DocumentBuilderFactory
+		            DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
+		            // Set it up so it validates XML documents
+		            dBF.setValidating(true);
+		            // Create a DocumentBuilder and an ErrorHandler (to check validity)
+		            DocumentBuilder builder = dBF.newDocumentBuilder();
+		            CustomErrorHandler customErrorHandler = new CustomErrorHandler();
+		            builder.setErrorHandler(customErrorHandler);
+		            // Parse the XML file and print the result
+		            Document doc = builder.parse(file);
+		            incorrectHabitat = false;
+		           
+		        } catch (ParserConfigurationException ex) {
+		            System.out.println(file + " error while parsing!");
+		           
+		        } catch (SAXException ex) {
+		            System.out.println(file + " was not well-formed!");
+		            
+		        } catch (IOException ex) {
+		            System.out.println(file + " was not accesible!");
+		            
+		        }
+			// Create the object by reading from a file
+		//	Habitat habitat = (Habitat) unmarshall.unmarshal(file);
+			GroundType ground = (GroundType) unmarshall.unmarshal(file);
+			// Printout
+			System.out.println("Added to the database: " + ground);
+			
+			
+			adminMan.addGroundType(ground);
 			
 
 			
 
 		}
 	}
-			
 			
 	
 	public static void CreateAHabitatXML() throws Exception{

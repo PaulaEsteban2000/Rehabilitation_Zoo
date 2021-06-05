@@ -7,6 +7,7 @@ import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
+import rehabilitationzoo.db.pojos.GroundType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Worker;
 
@@ -55,7 +56,7 @@ public interface AdministratorManager {
 		
 		public List<String> weListHabitats();
 		public void addHabitat(Habitat habitat)throws AdminExceptions;
-		
+		public void addGroundType(GroundType ground)throws AdminExceptions;
 		
 
 

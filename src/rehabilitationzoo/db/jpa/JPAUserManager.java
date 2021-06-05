@@ -80,6 +80,7 @@ public class JPAUserManager implements UserManager{
 			q.setParameter(2, hash);
 			
 			return (User)q.getSingleResult();
+			
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (NoResultException e) {

@@ -12,8 +12,6 @@ public class Worker implements Serializable {
 	 */
 	private static final long serialVersionUID = 1409279678686881422L;
 
-	
-
 
 	private  Integer id; //No need to be in constructor
 	private  String name;
