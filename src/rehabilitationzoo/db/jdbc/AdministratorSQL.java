@@ -14,6 +14,7 @@ import java.util.List;
 
 import Exceptions.AdminExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
+import rehabilitationzoo.db.ifaces.VetManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
@@ -38,24 +39,65 @@ public class AdministratorSQL implements AdministratorManager{
 	@Override
 	public void addAnimal(Animal animal) { //do we need a prepared Statement better to avoid injection? I think so bc it is insert
 		try {
+			VetManager unVet = new VetSQL(); 
 			
-			String sql = "INSERT INTO animals (enterDate,lastBath,lastFed, lastDrug, deathDate,freedomDate,name)" 
-			 + "VALUES (?,?,?,?,?,?,?)";
-
+			String sql = "INSERT INTO animals (enterDate,habitat_id,lastBath,lastFed,lastDrug,deathDate,freedomDate,type_id,name)"+
+			"VALUES (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement pstmt = JDBCManager.c.prepareStatement(sql); 
 				
 			
-			pstmt.setString(1, "%" + animal.getEnterDate() + "%" );
-			pstmt.setString(2, "%" + animal.getLastBath()+ "%" );
-			pstmt.setString(3, "%" + animal.getLastFed() + "%" );
-			pstmt.setString(4, "%" + animal.getLastDrug() + "%" );
-			pstmt.setString(5, "%" + animal.getDeathDate() + "%" );
-			pstmt.setString(6, "%" + animal.getFreedomDate() + "%" );
-			pstmt.setString(7, "%" + animal.getName() + "%" );
+			pstmt.setDate(1, animal.getEnterDate());
+			pstmt.setInt(2,unVet.getHabitatIdByName("Wait Zone"));
 			
 			
-			//System.out.println(sql);
-			pstmt.executeUpdate(sql);
+			if (animal.getLastBath()!= null) {
+				pstmt.setString(3, animal.getLastBath().toString());
+				
+			} else {
+				pstmt.setString(3, null);
+			}
+			
+
+			if (animal.getLastFed()!= null) {
+				pstmt.setString(4, animal.getLastFed().toString());;
+				
+			} else {
+				pstmt.setString(4, null);
+			}
+			
+			if (animal.getLastDrug()!= null) {
+				pstmt.setString(5, animal.getLastDrug().toString());
+				
+			} else {
+				pstmt.setString(5, null);
+			}
+			
+			if (animal.getDeathDate()!= null) {
+				pstmt.setString(6, animal.getDeathDate().toString());
+				
+			} else {
+				pstmt.setString(6, null);
+			}
+			
+			if (animal.getFreedomDate()!= null) {
+				pstmt.setString(7, animal.getFreedomDate().toString());
+				
+			} else {
+				pstmt.setString(7, null);
+			}
+			
+			//pstmt.setString(3, animal.getLastBath().toString());
+			//pstmt.setString(4, animal.getLastFed().toString());
+			//pstmt.setString(5, animal.getLastDrug().toString());
+			//pstmt.setString(6, animal.getDeathDate().toString());
+			//pstmt.setString(7, animal.getFreedomDate().toString());
+			pstmt.setInt(8, animal.getType_id());
+			pstmt.setString(9, animal.getName());
+		
+			
+			
+			System.out.println(sql);
+			//pstmt.executeUpdate(sql);
 			pstmt.close();
 			
 		} catch(Exception e) {
@@ -64,15 +106,16 @@ public class AdministratorSQL implements AdministratorManager{
 	}
 	
 	
+	
 	public void updateAnimal(Animal animal) {
 		try {
 			String sql = "UPDATE animals ";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
-			s.setString(2, "%" + animal.getLastBath() + "%");
-			s.setString(3, "%" + animal.getLastFed() + "%");
-			s.setString(4, "%" + animal.getLastDrug() + "%");
-			s.setString(5, "%" + animal.getDeathDate() + "%");
-			s.setString(6, "%" + animal.getFreedomDate() + "%");
+			s.setDate(2, animal.getLastBath() );
+			s.setDate(3, animal.getLastFed() );
+			s.setDate(4,  animal.getLastDrug());
+			s.setDate(5,  animal.getDeathDate() );
+			s.setDate(6,  animal.getFreedomDate());
 			
 			//System.out.println(sql);
 			s.executeUpdate();
@@ -138,7 +181,8 @@ public class AdministratorSQL implements AdministratorManager{
 			
 			prep.setString(1, animalType.getType());
 			prep.setString(2, feeding);
-			
+			System.out.println("Animal types:"+"/n");
+			//System.out.print(sql);
 		    prep.executeUpdate();
 			prep.close();
 	
@@ -176,9 +220,9 @@ public class AdministratorSQL implements AdministratorManager{
 	
 	
 	@Override
-	public List<Integer> getAnimalTypesById(AnimalType type) {
-		List<Integer> typesOfAnimals = new ArrayList<Integer>();
-		
+	public Integer getAnimalTypesById(AnimalType type) {
+		//List<Integer> typesOfAnimals = new ArrayList<Integer>();
+		Integer id=null;
 		
 		try {
 			String sql = "SELECT id FROM animals_characteristics WHERE type LIKE ? "; 			    
@@ -186,10 +230,9 @@ public class AdministratorSQL implements AdministratorManager{
 			ResultSet rs = prep.executeQuery();
 			
 			while (rs.next()) { 
-				Integer id = rs.getInt("id");
-				typesOfAnimals.add(id); 
+				 id = rs.getInt("id");
+				//typesOfAnimals.add(id); 
 			}
-			
 				//System.out.println(sql);
 				prep.close();
 				rs.close();
@@ -198,8 +241,71 @@ public class AdministratorSQL implements AdministratorManager{
 				ex.printStackTrace();
 			}
 		
-	return typesOfAnimals;	
+	return id;	
 	}
+	
+	
+	public List<AnimalType> listAnimalTypes() {
+		List<AnimalType> typesOfAnimals = new ArrayList<AnimalType>();
+		try {
+			String sql = "SELECT * FROM animals_characteristics"; 			    
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery();
+			
+			while (rs.next()) { 
+				Integer id = rs.getInt("id");
+				String type = rs.getString("type");
+				FeedingType foodType;
+				if (rs.getString("feedingType").equalsIgnoreCase("Carnivore") ){
+						foodType = FeedingType.CARNIVORE;
+				}else {
+					if (rs.getString("feedingType").equalsIgnoreCase("Hervibore")) {
+						foodType = FeedingType.HERVIBORE;
+					}else {
+						foodType =FeedingType.OMNIVORE;
+							}
+						}	
+				AnimalType newAnimalType = new AnimalType (id,type, foodType);	
+				typesOfAnimals.add(newAnimalType);
+				}
+				//System.out.println(sql);
+				prep.close();
+				rs.close();
+			
+		}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		return typesOfAnimals;
+		
+	}
+	
+	
+	/*AnimalType oneAnimalType =null;
+	
+	try {
+		String sql = "SELECT * FROM animals_characteristics WHERE type LIKE ?"; 			    
+		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+		ResultSet rs = prep.executeQuery();
+		
+		while (rs.next()) { 
+			String type = rs.getString("type");
+			
+			FeedingType foodType;
+			if (rs.getString("feedingType").equalsIgnoreCase("Carnivore") ){
+					foodType = FeedingType.CARNIVORE;
+			}else {
+				if (rs.getString("workerType").equalsIgnoreCase("Hervibore")) {
+					foodType = FeedingType.HERVIBORE;
+				}else {
+					foodType =FeedingType.OMNIVORE;
+						}
+					}	
+				
+			oneAnimalType = new AnimalType (type, foodType);
+		}*/
+		
+		
+	
 	//HABITATS
 	
 	@Override
@@ -773,6 +879,8 @@ public void listDrugTypes(){
 
 		return bol;
 	}
+
+
 
 
 

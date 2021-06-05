@@ -416,11 +416,12 @@ public class KeyboardInput {
 	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
 	// ya que estamos, marcamos el tipo de animal que es
 	
+	
 
 	
-	public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
-		adminMan.addAnimal(anAnimal);		
-	}	 
+	//public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
+	//	adminMan.addAnimal(anAnimal);		
+	//}	 
 		 
 
 	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException, AdminExceptions {

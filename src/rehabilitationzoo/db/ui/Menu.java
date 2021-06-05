@@ -35,6 +35,7 @@ public class Menu {
 	private static DBManager dbMan = new JDBCManager();			//should be private
 	private static UserManager userMan = new JPAUserManager(); 	//should be private
 	
+	
 	//TODO all methods here should be private if we can
 	//TODO ask Rodrigo how to make diagnosis from another user once an animal is added
 
@@ -223,26 +224,28 @@ public class Menu {
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
 							String readAnimal = Utils.readLine();
 							
-							boolean exito1 = KeyboardInput.isThisAnAnimal(readAnimal);//esto que quieres hacer... deberia ser una expecion, no? que te parece? - Paula
+							boolean exito1 = KeyboardInput.isThisAnAnimal(readAnimal);
 							if(exito1==true) {
-							    
+								
+								int animalTypeId=0;
+								
+								List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
+								for(int i=0; i<allAnimalTypes.size(); i++) {
+									if(readAnimal.equals(allAnimalTypes.get(i).getType())) {
+										animalTypeId = allAnimalTypes.get(i).getId();
+									}
+								}
+								
 							    System.out.print("\n"+"Put a name to the animal");
-							    String name = Utils.readLine();
-							    System.out.print("\n"+"Introduce the enter date of the "+ readAnimal +" "+ name +"\n");
-							    System.out.print("\n"+"Introduce the day");
-							    int day = Utils.readInt();
-							    System.out.print("\n"+"Introduce the month");
-							    int month = Utils.readInt();
-							    System.out.print("\n"+"Introduce the year");
-							    int year = Utils.readInt();
-							    LocalDate enterLocalDate = LocalDate.of(year, month, day);
-							    Date enterDate =Date.valueOf (enterLocalDate);
+							    String animal = Utils.readLine();
+							    LocalDate now1 = LocalDate.now();
+							    Date today1 = Date.valueOf(now1); //lastfed + lastbathe
+							    System.out.println(today1);
 							    
-							    LocalDate now = LocalDate.now();
-							    Date today = Date.valueOf(now); //lastfed + lastbathe
+							    Animal anAnimal = new Animal(today1, today1, today1, today1 , null, null,animalTypeId,animal);
+							    KeyboardInput.adminMan.addAnimal(anAnimal);
 							    
-							    Animal anAnimal = new Animal(enterDate, today, today,null, null, name);
-							    KeyboardInput.addAnimalInTheZoo(anAnimal); 
+							   
 							    System.out.print("\n"+"Congratulations you added a new animal to the zoo"+"\n");
 							    
 							    KeyboardInput.firstDiagnosisSubMenu(anAnimal); //Paula: first diagnosis of an animal
@@ -336,6 +339,7 @@ public class Menu {
 							
 							LocalDate workerLocalDate = LocalDate.now();
 							Date workerDate = Date.valueOf(workerLocalDate);
+							System.out.println(workerDate);
 							System.out.print("\n"+"The date that you added the worker is "+workerDate+"\n");
 							
 							

@@ -22,15 +22,16 @@ public interface AdministratorManager {
 		
 	
 		//ANIMALS
-		public void listAnimals () ;
-		public void updateAnimal(Animal animal);
 		public void addAnimal(Animal animal) ;
+		public void listAnimals();
+		public void updateAnimal(Animal animal);
 		
 		
 		//ANIMALS TYPES
 		public void introducingAnimalsTypes(AnimalType animalType) ;
 		public List<String> getAnimalTypesByName();
-		public List<Integer> getAnimalTypesById(AnimalType type);
+		public Integer getAnimalTypesById(AnimalType type);
+		public List<AnimalType> listAnimalTypes();
 		
 		//WORKERS
 		public List<Worker> searchWorkerByName (String name);

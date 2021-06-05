@@ -79,7 +79,20 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.name = name;
 	}
 
+	public Animal( Date enterDate, Date lastBath, Date lastFed, Date lastDrug,
+			Date deathDate, Date freedomDate, Integer type_id, String name) {
+		super();
+		this.enterDate = enterDate;
+		this.lastBath = lastBath;
+		this.lastFed = lastFed;
+		this.lastDrug = lastDrug;
+		this.deathDate = deathDate;
+		this.freedomDate = freedomDate;
+		this.type_id = type_id;
+		this.name = name;
+	}
 
+	
 	public Animal(String name, Date enterDate) {
     	this.name= name;
 		this.enterDate = enterDate;
@@ -100,6 +113,18 @@ public class Animal implements Serializable { //Serializable is used to have thi
 	}
 
 	
+	public Animal(Date enterDate, Date lastBath, Date lastFed, Date lastDrug,
+			Date deathDate, Date freedomDate, String name) {
+		super();
+		this.enterDate = enterDate;
+		this.lastBath = lastBath;
+		this.lastFed = lastFed;
+		this.lastDrug = lastDrug;
+		this.deathDate = deathDate;
+		this.freedomDate = freedomDate;
+		this.name = name;
+	}
+	
 	public Animal(Date enterDate, Date lastBath, Date lastFed,
 			Date deathDate, Date freedomDate, String name) {
 		super();
@@ -110,8 +135,6 @@ public class Animal implements Serializable { //Serializable is used to have thi
 		this.freedomDate = freedomDate;
 		this.name = name;
 	}
-	
-	
 
 
 	@Override //To compare ids
