@@ -46,6 +46,7 @@ public class Menu {
 			System.out.println("Choose an option: ");
 			System.out.println("1. Register ");
 			System.out.println("2. Login ");
+			System.out.println("3. Change my email address ");
 			System.out.println("0. Exit the program ");
 			int choice = Utils.readInt();
 			
@@ -56,6 +57,10 @@ public class Menu {
 	                
 	            case 2: 
 	            	login();
+	            	break;
+	            	
+	            case 3:
+	            	changeEmail();
 	            	break;
 	            	
 	            case 0:
@@ -73,13 +78,43 @@ public class Menu {
 		
 	}
 	
+	private static void changeEmail() throws IOException {
+		System.out.println("Please type in your email address:");
+		String emailOld = Utils.readLine();
+		System.out.println("Now write your password:");
+		String password = Utils.readLine();
+		User user = userMan.checkPassword(emailOld, password);
+		
+		if (user == null) {
+			System.out.println("Wrong email of password");
+		} else {
+			System.out.println("Now write your new email: ");
+			String emailNew = Utils.readLine();
+			
+			Boolean bol = KeyboardInput.adminMan.checkForUsers(emailNew);
+			
+			do {
+				if(bol == true) {
+					System.out.println("This email is already used. Please pick another one: ");
+					emailNew = Utils.readLine();
+					
+					if(KeyboardInput.adminMan.checkForUsers(emailNew) == false) {
+						bol = false;
+					}
+				}
+			}while (bol == true);
+			
+			userMan.updateEmail(emailNew, emailOld);
+			System.out.println("Your email has been changed.");
+		}
+	}
+	
 	private static void register() throws IOException, Exception {
 		System.out.println("Please type in your email address:");
 		String email = Utils.readLine();
 		//We can ask for it twice, for checking, but Rodrigo does not like it much
 		
 		Boolean bol = KeyboardInput.adminMan.checkForUsers(email);
-		System.out.println(bol + " debe ser false");
 		
 		do {
 			if(bol == true) {

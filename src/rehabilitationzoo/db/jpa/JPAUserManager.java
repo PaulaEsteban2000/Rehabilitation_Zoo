@@ -67,6 +67,13 @@ public class JPAUserManager implements UserManager{
 		Query q = em.createNativeQuery("SELECT * FROM roles", Role.class);
 		return (List<Role>) q.getResultList();	
 	}
+	
+	@Override
+	public void updateEmail(String email, String old) {
+		Query q = em.createNativeQuery("UPDATE users SET email = ? WHERE email = ?", User.class);
+		q.setParameter(1, email);
+		q.setParameter(2, old);
+	}
 
 	@Override
 	public User checkPassword(String email, String password) {
