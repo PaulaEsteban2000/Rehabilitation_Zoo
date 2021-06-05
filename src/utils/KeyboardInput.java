@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.File;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.sql.Date;
@@ -7,7 +9,18 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import Exceptions.AdminExceptions;
+import Exceptions.ExceptionMethods;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.VetManager;
@@ -24,12 +37,17 @@ import rehabilitationzoo.db.pojos.AnimalType;
 import rehabilitationzoo.db.pojos.Drug;
 import rehabilitationzoo.db.pojos.DrugType;
 import rehabilitationzoo.db.pojos.FeedingType;
+import rehabilitationzoo.db.pojos.GroundType;
 import rehabilitationzoo.db.pojos.Habitat;
 import rehabilitationzoo.db.pojos.Illness;
 import rehabilitationzoo.db.pojos.LightType;
 import rehabilitationzoo.db.pojos.Worker;
 import rehabilitationzoo.db.pojos.WorkerType;
 import rehabilitationzoo.db.ui.Menu;
+import rehabilitationzoo.xml.utils.*;
+
+
+
 
 public class KeyboardInput {
 	
@@ -396,25 +414,11 @@ public class KeyboardInput {
 		 }
 
 		return realAnimal;	
-	}//Comprobamos que el animal que nos han dicho es realmente un animal existente en el zoo y 
-	// ya que estamos, marcamos el tipo de animal que es
+	}
 	
-
-	
-	public static void addAnimalInTheZoo(Animal anAnimal) throws SQLException {
-		adminMan.addAnimal(anAnimal);		
-	}	 
-		 
-
 	public static void addHabitatInTheZoo(Habitat habitat) throws SQLException, AdminExceptions {
 		adminMan.addHabitat(habitat);
 	}	
-		 
-	
-	public static void addAnimalTypeInTheZoo(AnimalType anAnimalType) throws SQLException {
-		
-		adminMan.introducingAnimalsTypes(anAnimalType);
-	}	 
 		
 	
 	public static boolean isThisAnHabitat(String nameHabitat) {
@@ -430,57 +434,33 @@ public class KeyboardInput {
 	}
 	
 	
-	
-	public static void addWorker (Worker worker) {
-		adminMan.introducingWorkers(worker);
+	/*public static boolean firingWorkers(Worker workerToDelete) {
 		
-	}
-	
-	public static boolean firingWorkers(String workerName, String workerLastName) {
-		
-      String totalName= workerName+ " "+ workerLastName;
       boolean deleted= false;
 		
-		List<String> allWorkersName = adminMan.getAllWorkersNamesAndLastNames();
+		List<Worker> allWorkersName = adminMan.getWorkersInfo();
 		
 		for(int i = 0; i<allWorkersName.size(); i++){
-			 if(totalName.equalsIgnoreCase(allWorkersName.get(i)) ) {
-				 	String[] parts = totalName.split(" ");
-					String part1Name = parts[0];
-					String part2Lastname = parts[1];
-					
-				 adminMan.deleteThisWorker(part1Name, part2Lastname);
-				 deleted=true;
+			
+			 if(workerToDelete.equals(allWorkersName.get(i)) ) {
 				 
+				 adminMan.deleteThisWorker(workerToDelete.getName(),workerToDelete.getLastName());
+				 deleted=true;
 			 }
-				
-			 } 
+		} 
 		return deleted;
 		
-	}
+	}*/
 
 	
-	public static boolean modificationsSalary(String name1, String lastname1, Float salary) {
-	boolean changes=false;
-	String anotherTotalName= name1 +" "+ lastname1;
-	List<String> anotherAllWorkersName= adminMan.getAllWorkersNamesAndLastNames();
-
 	
-		
-		for(int i = 0; i<anotherAllWorkersName.size(); i++){
-			 if(anotherTotalName.equals(anotherAllWorkersName.get(i)) ) {
-				 
-				adminMan.modifyWorker(name1, lastname1, null);
-				changes=true;
-				break;
-			 	} 
-			 }
-		return changes;
-		
-	}
-	public static void listAllDrugTypes() {
+	/*public static void listAllDrugTypes() {
 		adminMan.listDrugTypes(); //MIRAR EN EL MENU POR FAVOR
 	}
+	
+	public static void listAllDrugs() {
+		adminMan.listDrugs(); //MIRAR EN EL MENU POR FAVOR
+	}*/
 
 	public static void addDrugType(String drugName, float dosis) {
 		adminMan.addNewDrugType(drugName, dosis);	
@@ -585,6 +565,102 @@ public class KeyboardInput {
 		adminMan.introducingAnimalsTypes(penguin);
 		adminMan.introducingAnimalsTypes(shelby);
 	}
+	
+	public static void generateHabitatXML(Habitat habitat) throws Exception {
+
+		// Throw into an XML, so we start...
+		// Create a JAXBContext
+		JAXBContext context = JAXBContext.newInstance(Habitat.class);
+		// Get the marshaller
+		Marshaller marshall = context.createMarshaller();
+		// Formatting
+		marshall.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		// Write the marshall to a file, but first we need to create the file
+		File file = new File("./xmls/Output-Habitat.xml");
+		marshall.marshal(habitat, file);
+		// Printout
+		marshall.marshal(habitat, System.out);
+		
+		
+		
+	
+
+	}
+	
+	
+	public static void addHabitatXML() throws Exception {
+	       boolean incorrectHabitat = true;
+			// Create a JAXBContext
+			JAXBContext context = JAXBContext.newInstance(Habitat.class);
+			// Get the unmarshaller
+			Unmarshaller unmarshall = context.createUnmarshaller();
+			while(incorrectHabitat){
+				
+			//  unmarshall the habitat(object) -> read from a file
+			System.out.println("Type the filename for the XML document(expected in the XMLS folder)");
+			String fileName = Utils.readLine();
+			File file = new File("./xmls/" + fileName);
+			
+			 try {
+		        	// Create a DocumentBuilderFactory
+		            DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
+		            // Set it up so it validates XML documents
+		            dBF.setValidating(true);
+		            // Create a DocumentBuilder and an ErrorHandler (to check validity)
+		            DocumentBuilder builder = dBF.newDocumentBuilder();
+		            CustomErrorHandler customErrorHandler = new CustomErrorHandler();
+		            builder.setErrorHandler(customErrorHandler);
+		            // Parse the XML file and print the result
+		            Document doc = builder.parse(file);
+		            incorrectHabitat = false;
+		           
+		        } catch (ParserConfigurationException ex) {
+		            System.out.println(file + " error while parsing!");
+		           
+		        } catch (SAXException ex) {
+		            System.out.println(file + " was not well-formed!");
+		            
+		        } catch (IOException ex) {
+		            System.out.println(file + " was not accesible!");
+		            
+		        }
+			// Create the object by reading from a file
+			Habitat habitat = (Habitat) unmarshall.unmarshal(file);
+			// Printout
+			System.out.println("Added to the database: " + habitat);
+			
+			adminMan.addHabitat(habitat);
+			
+
+			
+
+		}
+	}
+			
+			
+	
+	public static void CreateAHabitatXML() throws Exception{
+		//Create a JAXBContext
+		JAXBContext context = JAXBContext.newInstance(Habitat.class);//We specify the class we want for the XML
+		//Get the unmarshaller
+		Unmarshaller unmarshal = context.createUnmarshaller(); // we call the create a marshaller method from the context class
+		//Unmarshal the Habitat from a file
+		System.out.println("Type the filename for the XML document (expected in the xmls folder): ");
+		String fileName= Utils.readLine();
+		File file= new File("_/xmls/"+ fileName);
+		Habitat habitat = (Habitat) unmarshal.unmarshal(file); //we do a cast to habitat
+		//Print the habitat
+		System.out.println("Added to the data base: "+ habitat); //to see what It's added to the data base
+		//Insert it
+		adminMan.addHabitat(habitat);
+		//We have the habitat created
+		
+	
+	}
+	
+	
+	
+	
 	
 /////////////////////////MARIA////////////////////////////////////////////////////////////////////////////
 	

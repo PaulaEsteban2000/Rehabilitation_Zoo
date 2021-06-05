@@ -31,15 +31,40 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			VetManager vetMan = new VetSQL();	
 			List<String> habitatNames = vetMan.getAllHabitatsNames();
 
+
 			String name = "";
 					
 			if (habitatNames.size() >= 5) {
 				return;
+	
+		
+			} else {
+				
+				KeyboardInput.weAddHabitats();
+				KeyboardInput.weAddDrugTypes();
+				KeyboardInput.weAddAnimalTypes();
+				
+				Statement stmt = JDBCManager.c.createStatement();
+				String sql = "INSERT INTO animals (enterDate,habitat_id,lastBath,lastFed,lastDrug,deathDate,freedomDate,type_id,name)";
+				sql+= " VALUES ('2021-06-05',15,'2021-06-05','2021-06-05','2021-06-05',null,null,1,'Alex')";
+				stmt.executeUpdate(sql);
+				
+				Statement stmt2 = JDBCManager.c.createStatement();
+				String sql2 = "INSERT INTO animals (enterDate,habitat_id,lastBath,lastFed,lastDrug,deathDate,freedomDate,type_id,name)";
+				sql2+= " VALUES ('2021-06-05',3,'2021-06-05','2021-06-05','2021-06-05',null,null,5,'Melman')";
+				stmt2.executeUpdate(sql2);
+				
+				Statement stmt3 = JDBCManager.c.createStatement();
+				String sql3 = "INSERT INTO animals (enterDate,habitat_id,lastBath,lastFed,lastDrug,deathDate,freedomDate,type_id,name)";
+				sql3+= " VALUES ('2021-06-05',1,'2021-06-05','2021-06-05','2021-06-05',null,null,5,'Skipper')";
+				stmt3.executeUpdate(sql3);
+
+
 			}
-			KeyboardInput.weAddHabitats();
-			KeyboardInput.weAddDrugTypes();
-			KeyboardInput.weAddAnimalTypes();
-			
+			//KeyboardInput.weAddHabitats();
+			//KeyboardInput.weAddDrugTypes();
+			//KeyboardInput.weAddAnimalTypes();
+		
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();
 			
@@ -48,6 +73,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 		}
 	}
+			
 	
 
 	public void disconnect(){
@@ -105,7 +131,7 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " deathDate	DATE, "
 					   + " freedomDate	DATE, "
 					   + " type_id		INTEGER	NOT NULL	REFERENCES animals_characteristics(id), "
-					   + " name			STRING	NOT NULL	UNIQUE)";
+					   + " name			STRING	NOT NULL	)";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
 			
@@ -116,8 +142,9 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 					   + " lastName 	TEXT	NOT NULL, "
 					   + " hireDate		DATE	NOT NULL, "
 					   + " salary		FLOAT	NOT NULL, "
-					   + " workerType	ENUM	NOT NULL)";
-			
+					   + " workerType	ENUM	NOT NULL, "
+					   + " photo 		BLOB, "
+					   + " inWhichHabitatDoYouWork TEXT NULL)";
 			stmt4.executeUpdate(sql4);
 			stmt4.close();
 			

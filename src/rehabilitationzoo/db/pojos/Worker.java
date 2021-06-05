@@ -46,6 +46,17 @@ public class Worker implements Serializable {
 		
 	}
 	
+	public Worker(int id,String name, String lastname, Date hireDate, Float salary, WorkerType type) { //VET O ADMINISTRATOR
+		super();
+		this.id= id;
+		this.name = name;
+		this.lastname= lastname;
+		this.hireDate = hireDate;
+		this.salary = salary;
+		this.type = type; 
+		
+	}
+	
 	
 	/**public Worker(Integer id, String name, Date hireDate) {
 		super();
@@ -57,6 +68,10 @@ public class Worker implements Serializable {
 	
 	
 	
+	public Worker() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**public Worker(Integer id, String name, String lastName, Date hireDate, Integer salary, WorkerType type,
 			List<Animal> animals) {
 		super();
@@ -154,7 +169,7 @@ public class Worker implements Serializable {
 	}
 
 
-	 	public WorkerType getType() {
+	public WorkerType getType() {
 		return type;
 	}
 
@@ -177,7 +192,7 @@ public class Worker implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Worker [id=" + id + ", name=" + name + ", hireDate=" + hireDate + ", salary=" + salary + ", type="
+		return "Worker [id=" + id + ", name=" + name + ", lastName=" + lastname +", hireDate=" + hireDate + ", salary=" + salary + ", type="
 				+ type + ", animals=" + animals + "]";
 	}
 	
