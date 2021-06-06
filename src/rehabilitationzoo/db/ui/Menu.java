@@ -259,14 +259,20 @@ public class Menu {
 					switch(manageOfAnimals) {
 						case 1://ADD ANIMAL (INSERT)  
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
+							
+							List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
+							
+							for(int i=0; i<allAnimalTypes.size(); i++) {
+								System.out.println(allAnimalTypes.get(i).getType());
+							}
+							
 							String readAnimal = Utils.readLine();
-								
-							ExceptionMethods.checkForExistingAnimal(readAnimal);
+							ExceptionMethods.checkForExistingAnimal(readAnimal);	
+							
 							
 							int animalTypeId=0;
-							List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
 							for(int i=0; i<allAnimalTypes.size(); i++) {
-								if(readAnimal.equals(allAnimalTypes.get(i).getType())) {
+								if(readAnimal.toLowerCase().equals(allAnimalTypes.get(i).getType().toLowerCase())) {
 									animalTypeId = allAnimalTypes.get(i).getId();
 								}
 							}
@@ -275,7 +281,6 @@ public class Menu {
 							String animal = Utils.readLine();
 							LocalDate now1 = LocalDate.now();
 							Date today1 = Date.valueOf(now1); //lastfed + lastbathe
-							System.out.println(today1);
 								    
 							Animal anAnimal = new Animal(today1, today1, today1, today1 , null, null,animalTypeId,animal);
 							KeyboardInput.adminMan.addAnimal(anAnimal);
@@ -339,8 +344,10 @@ public class Menu {
 								System.out.println("Error, nonvalid input.");
 								break;
 					}
-						break;
-				} while (manageOfAnimals != 4);		
+						
+				} while (manageOfAnimals != 4);	
+				
+				break;
 	                
 			case 2://MANAGE WORKERS
 				System.out.println("\n"+"2.MANAGEMENT OF THE WORKERS"+"\n");
