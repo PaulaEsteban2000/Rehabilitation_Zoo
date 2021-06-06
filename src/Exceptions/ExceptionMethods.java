@@ -53,14 +53,12 @@ public class ExceptionMethods {
 		boolean workerExist = false;
 		
 		for(int i = 0; i<workersInformation.size(); i++){
-			if(oneWorker.equals(workersInformation)) {
-				System.out.println(oneWorker);
-				System.out.println(workersInformation);
+			if(oneWorker.getName().equals(workersInformation.get(i).getName()) && oneWorker.getLastName().equals(workersInformation.get(i).getLastName())) {
 				workerExist = true;
-			} else {
-				workerExist=false;
-			}
+			} 
 		}
+		
+		System.out.println("Booleano should be true: " + workerExist);
 		
 		if(workerExist == false) {
 			throw new AdminExceptions(AdminExceptions.AdminErrors.NULL);

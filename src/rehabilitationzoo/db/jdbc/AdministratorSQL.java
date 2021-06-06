@@ -123,61 +123,57 @@ public class AdministratorSQL implements AdministratorManager{
 	public List<Animal> listAnimals() { //we show all the animals in the database
 		List<Animal> theAnimals = new ArrayList<Animal>();
 		int contador = 0;
+		
 		try {	
-		String sql = "SELECT * FROM animals "; 			
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-		ResultSet rs = prep.executeQuery();
+			String sql = "SELECT * FROM animals "; 			
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery();
 		
-		while (rs.next()) { 
-			int id = rs.getInt("id");
-			
-			Date enterDate = Date.valueOf(rs.getString("enterDate"));
-			Integer habitat_id = rs.getInt("habitat_id");
-			
-			Date lastBath = null;
-			if (rs.getString("lastBath") == null) {
-			} else {
-				String lastBathString = rs.getString("lastBath");
-				lastBath = Date.valueOf(lastBathString);
+			while (rs.next()) { 
+				int id = rs.getInt("id");
+				
+				Date enterDate = Date.valueOf(rs.getString("enterDate"));
+				Integer habitat_id = rs.getInt("habitat_id");
+				
+				Date lastBath = null;
+				if (rs.getString("lastBath") == null) {
+				} else {
+					String lastBathString = rs.getString("lastBath");
+					lastBath = Date.valueOf(lastBathString);
+				}
+				
+				Date lastFed = Date.valueOf(rs.getString("lastFed"));
+				
+				Date lastDrug = null;
+				if (rs.getString("lastDrug") == null) {
+				} else {
+					String lastDrugString = rs.getString("lastDrug");
+					lastDrug = Date.valueOf(lastDrugString);
+				}
+				
+				Date deathDate = null;
+				if (rs.getString("deathDate") == null) {
+				} else {
+					String deathDateString = rs.getString("deathDate");
+					deathDate = Date.valueOf(deathDateString);
+				}
+				
+				Date freedomDate = null;
+				if (rs.getString("freedomDate") == null) {
+				} else {
+					String freedomDateString = rs.getString("freedomDate");
+					freedomDate = Date.valueOf(freedomDateString);
+				}
+				
+				int type_id = rs.getInt("type_id");
+				String name = rs.getString("name");
+				
+				Animal unAnimal = new Animal(id,enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, type_id, name);
+				theAnimals.add(unAnimal);
 			}
-			
-			Date lastFed = Date.valueOf(rs.getString("lastFed"));
-			
-			Date lastDrug = null;
-			if (rs.getString("lastDrug") == null) {
-			} else {
-				String lastDrugString = rs.getString("lastDrug");
-				lastDrug = Date.valueOf(lastDrugString);
-			}
-			
-			Date deathDate = null;
-			if (rs.getString("deathDate") == null) {
-			} else {
-				String deathDateString = rs.getString("deathDate");
-				deathDate = Date.valueOf(deathDateString);
-			}
-			
-			Date freedomDate = null;
-			if (rs.getString("freedomDate") == null) {
-			} else {
-				String freedomDateString = rs.getString("freedomDate");
-				freedomDate = Date.valueOf(freedomDateString);
-			}
-			
-			int type_id = rs.getInt("type_id");
-			String name = rs.getString("name");
-			
-			Animal unAnimal = new Animal(id,enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, type_id, name);
-			contador++;
-			System.out.println(unAnimal);
-			theAnimals.add(unAnimal);
-			//System.out.print("tam:"+theAnimals.size());
-		
-			//System.out.println(sql);
 			prep.close();
 			rs.close();
-			
-		}
+		
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -482,53 +478,51 @@ public class AdministratorSQL implements AdministratorManager{
 	
 	public Worker getAWorkerFromNameAndLastname(String name, String lastname) {
 		
-	Worker oneWorker = new Worker();
-		try {
-		String sql = "SELECT * FROM workers WHERE name LIKE ? AND lastName LIKE ?"; 			    
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
-		prep.setString(1, name);
-		prep.setString(2, lastname);
-		ResultSet rs = prep.executeQuery();
-	
-		while (rs.next()) { 
-			int id1 = rs.getInt("id");
-			//System.out.print(id1+"\n");
-			String name1= rs.getString("name");
-			String lastname1 = rs.getString("lastName");
-			
-			Date hireDate = null;
-			if (rs.getString("hireDate") == null) {
-			} else {
-				String hireDateString = rs.getString("hireDate");
-				hireDate = Date.valueOf(hireDateString);
+		Worker oneWorker = new Worker();
+		
+			try {
+			String sql = "SELECT * FROM workers WHERE name LIKE ? AND lastName LIKE ?"; 			    
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
+			prep.setString(1, name);
+			prep.setString(2, lastname);
+			ResultSet rs = prep.executeQuery();
+		
+			while (rs.next()) { 
+					int id1 = rs.getInt("id");
+					String name1= rs.getString("name");
+					String lastname1 = rs.getString("lastName");
+					
+					Date hireDate = null;
+					if (rs.getString("hireDate") == null) {
+					} else {
+						String hireDateString = rs.getString("hireDate");
+						hireDate = Date.valueOf(hireDateString);
+					}
+					
+					Float salary = rs.getFloat("salary");
+					
+					WorkerType job = null;
+					if (rs.getString("workerType").equalsIgnoreCase("Administrator") ){
+						job = WorkerType.ADMINISTRATOR;
+					}else if (rs.getString("workerType").equalsIgnoreCase("Veterinary")) {
+						job = WorkerType.VETERINARY;
+					}else {
+						job = WorkerType.ZOO_KEEPER;
+					}
+						
+				oneWorker = new Worker(id1, name1, lastname1, hireDate, salary, job );
+				
 			}
 			
-			Float salary = rs.getFloat("salary");
-			WorkerType job;
-			if (rs.getString("workerType").equalsIgnoreCase("Administrator") ){
-					job = WorkerType.ADMINISTRATOR;
-			}else {
-				if (rs.getString("workerType").equalsIgnoreCase("Zoo Keeper")) {
-					job = WorkerType.ZOO_KEEPER;
-				}else {
-					job = WorkerType.VETERINARY;
-						}
-					}	
-				
-		oneWorker = new Worker(id1, name1, lastname1, hireDate, salary, job );
-		//System.out.print(oneWorker);
-		
-		
-		}
-		
 			prep.close();
 			rs.close();
-			
+				
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		
 	return oneWorker;	
+	
 	}
 	
 	
@@ -635,7 +629,6 @@ public class AdministratorSQL implements AdministratorManager{
 	@Override
 	public void deleteThisWorker(Integer id) {
 		
-		
 		try {
 			String sql = "DELETE FROM workers WHERE id = ?"; 			    
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
@@ -648,6 +641,7 @@ public class AdministratorSQL implements AdministratorManager{
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		
 	}
 	
 	
