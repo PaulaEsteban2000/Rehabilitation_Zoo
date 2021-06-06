@@ -245,16 +245,17 @@ public class Menu {
 		switch (adminChoice) {
 			 
 			case 1: //MANAGE ANIMALS
+				int manageOfAnimals=0;
+				do{
 				System.out.println("\n"+"1. MANAGE OF ANIMALS"+"\n");
 				System.out.println("Select the option that fits you the best"+"\n"
 					+	"1.Add animals"+"\n"
 				    +	"2.Add new types of animals to the zoo"+"\n"
 				    +	"3.Show all the animals in the zoo"+ "\n"
 				    + 	"4.Go back"+ "\n");
-				int manageOfAnimals= 0;
 				
-				do{
-					manageOfAnimals= Utils.readInt();
+				
+				 manageOfAnimals= Utils.readInt();
 						
 					switch(manageOfAnimals) {
 						case 1://ADD ANIMAL (INSERT)  
@@ -329,13 +330,16 @@ public class Menu {
 							break;
 								
 						case 3: //SHOW ALL ZOO ANIMALS
-							List <String>allTheAnimals = KeyboardInput.adminMan.getAnimalTypesByName();
+							List <Animal>allTheAnimals =new ArrayList<Animal>();
+							allTheAnimals= KeyboardInput.adminMan.listAnimals();
 							if (allTheAnimals ==null) {
 								throw new AdminExceptions(AdminExceptions.AdminErrors.NULL);
 							}
-							
+							else {
+								System.out.println(allTheAnimals.size());
 							for(int i=0; i<allTheAnimals.size(); i++) {
-								System.out.print((i+1)+". "+allTheAnimals.get(i)+"\n");
+								System.out.print(allTheAnimals.get(i)+"\n");
+							}
 							}
 							break;
 							
@@ -346,10 +350,12 @@ public class Menu {
 								System.out.println("Error, nonvalid input.");
 								break;
 					}
-						break;
-				} while (manageOfAnimals != 4);		
+						//break;
+				} while (manageOfAnimals !=4);		
 	                
 			case 2://MANAGE WORKERS
+				int manageOfWorkers=(Integer) null;
+				do {
 				System.out.println("\n"+"2.MANAGEMENT OF THE WORKERS"+"\n");
 	                	
 	            System.out.println("Select the option that fits you the best"+"\n"
@@ -359,7 +365,7 @@ public class Menu {
 					+	"4.Show all the workers that work in the zoo"+ "\n"
 	                +   "5.Go back"+ "\n");
 						
-				int manageOfWorkers= Utils.readInt();
+				manageOfWorkers= Utils.readInt();
 						
 				switch(manageOfWorkers) {
 					case 1: //HIRE WORKERS
@@ -383,16 +389,21 @@ public class Menu {
 							String aWork= Utils.readLine();
 							WorkerType job = null; //WorkerType.valueOf(aWork);
 							
-							ExceptionMethods.checkForExistingWorkerType(aWork);
-							
-							if (aWork.equalsIgnoreCase("Zoo_Keeper")) {
+							if (aWork.equalsIgnoreCase("Zoo_Keeper")|| aWork.equalsIgnoreCase("Zoo Keeper")|| aWork.equalsIgnoreCase("Zoo")) {
 								job = WorkerType.ZOO_KEEPER;
+								System.out.println("You added a new zoo keeper :)");
 							} else if (aWork.equalsIgnoreCase("Vet") || aWork.equalsIgnoreCase("Veterinary")) {
 									job = WorkerType.VETERINARY;
+									System.out.println("You added a new veterinary :)");
 							} else if (aWork.equalsIgnoreCase("Admin") || aWork.equalsIgnoreCase("Administrator")) {
 										job = WorkerType.ADMINISTRATOR;
+										System.out.println("You added a new administrator :)");
+							} else {
+							
+							ExceptionMethods.checkForExistingWorkerType(aWork);
 							}
 							
+								System.out.println("/n");
 								Worker workerInfo = new Worker( workerName, workerLastName, workerDate, workerSalary, job);
 								adminMan.introducingWorkers(workerInfo);
 								adminMan.getWorkersInfo();
@@ -485,9 +496,12 @@ public class Menu {
 						break;
 	                	
 				}
-					break;
+					//break;
+				}while(manageOfWorkers!=5);
 	    
 			case 3: //MANAGEMENT OF DRUGS
+				int manageOfDrugs=(Integer) null;
+				do {
 				System.out.println("\n"+"MANAGEMENT OF DRUGS"+"\n");
 	            System.out.println("Select the option that fits you the best"+"\n"
 					+	"1.Add new drugs types"+"\n"
@@ -496,7 +510,7 @@ public class Menu {
 					+	"4.Show all the drugs kept in the zoo"+"\n"
 					+	"5.Go back"+ "\n");
 						
-				int manageOfDrugs= Utils.readInt();
+				 manageOfDrugs= Utils.readInt();
 						
 				switch(manageOfDrugs) {
 					case 1: //ADD NEW DRUG TYPE
@@ -591,9 +605,13 @@ public class Menu {
 							
 						}
 				
-				break;//case 3 del menu principal
+				//break;//case 3 del menu principal
+				}while(manageOfDrugs!=5);
 				
 			case 4: 
+				int manageOfXML=(Integer) null;
+				do {
+				
 				System.out.println("\n"+"MANAGEMENT OF XML"+"\n");
 				System.out.println("Select the option that fits you the best"+"\n"
  						+	"1.Generate Habitat xml"+"\n"
@@ -602,7 +620,7 @@ public class Menu {
  						+	"4.Add Ground type to the base with an XML"+"\n"
  						+	"5.Go back"+ "\n");
  				
- 				int manageOfXML= Utils.readInt();
+ 				manageOfXML= Utils.readInt();
  				
  				System.out.println("Search an habitat");
 					Habitat habitatToSearch = KeyboardInput.askForHabitat();
@@ -629,6 +647,7 @@ public class Menu {
 					break;
 
 				}
+					}while(manageOfXML!=4);
 				
 			case 5: //GO BACK
 		 		break;
@@ -637,7 +656,7 @@ public class Menu {
 	            System.out.print("\nThat is not an option\n");
 	        }
 	
-		} while(adminChoice != 5);
+		} while(adminChoice != 6);
 	}
  	
  	

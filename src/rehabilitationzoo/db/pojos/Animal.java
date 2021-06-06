@@ -270,9 +270,9 @@ public class Animal implements Serializable { //Serializable is used to have thi
 
 	@Override
 	public String toString() {
-		return "Animal [id=" + id + ", enterDate=" + enterDate + ", habitat_id=" + habitat_id + ", lastBath=" + lastBath
+		return "Animal [id=" + id + ",name=" + name + " enterDate=" + enterDate + ", habitat_id=" + habitat_id + ", lastBath=" + lastBath
 				+ ", lastFed=" + lastFed + ", lastDrug=" + lastDrug + ", deathDate=" + deathDate + ", freedomDate="
-				+ freedomDate + ", type_id=" + type_id + ", name=" + name + ", illnesses=" + illnesses + ", drugs="
+				+ freedomDate + ", type_id=" + type_id + ", illnesses=" + illnesses + ", drugs=drugs"
 				+ drugs + "]"; //No workers print so as to avoid stackOverflow Error (loop)
 	}
 

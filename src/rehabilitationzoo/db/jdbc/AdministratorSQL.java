@@ -120,8 +120,9 @@ public class AdministratorSQL implements AdministratorManager{
 	} 
 	
 	
-	public void listAnimals () { //we show all the animals in the database
-		
+	public List<Animal> listAnimals() { //we show all the animals in the database
+		List<Animal> theAnimals = new ArrayList<Animal>();
+		int contador = 0;
 		try {	
 		String sql = "SELECT * FROM animals "; 			
 		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
@@ -166,6 +167,11 @@ public class AdministratorSQL implements AdministratorManager{
 			int type_id = rs.getInt("type_id");
 			String name = rs.getString("name");
 			
+			Animal unAnimal = new Animal(id,enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, type_id, name);
+			contador++;
+			System.out.println(unAnimal);
+			theAnimals.add(unAnimal);
+			//System.out.print("tam:"+theAnimals.size());
 		
 			//System.out.println(sql);
 			prep.close();
@@ -175,6 +181,7 @@ public class AdministratorSQL implements AdministratorManager{
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		return theAnimals;
 			
 	}
 		
@@ -370,8 +377,7 @@ public class AdministratorSQL implements AdministratorManager{
 	public void addGroundType(GroundType ground) /*throws AdminExceptions*/ {
 		try {
 			
-			String sql = "INSERT INTO groundTypes (habitat_id, type)" +
-					"VALUES (?,?)"; 
+			String sql = "INSERT INTO groundTypes (habitat_id,type) VALUES (?,?)"; 
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 				
 				prep.setInt(1,ground.getHabitat());
@@ -700,12 +706,6 @@ public void listDrugTypes(){
 			//DrugType drugs = new DrugType (id, type, dosis);
 			
 			
-			for(int i=0; i<listOfDrugTypes.size(); i++) {
-				System.out.println(listOfDrugTypes.get(i).getId());
-				System.out.println(listOfDrugTypes.get(i).getType());
-				System.out.println(listOfDrugTypes.get(i).getDosis());
-			}
-			
 			
 			prep.close();
 			rs.close();
@@ -734,7 +734,7 @@ public void listDrugTypes(){
 				while (rs.next()) { //like hasNext
 						id = rs.getInt("id");
 						type=rs.getString("type");
-						dosis= rs.getInt("dosis");
+						dosis= rs.getFloat("dosis");
 						
 					 DrugType oneDrugType= new DrugType(id, type, dosis);
 					 weReturnDrugTypes.add(oneDrugType);

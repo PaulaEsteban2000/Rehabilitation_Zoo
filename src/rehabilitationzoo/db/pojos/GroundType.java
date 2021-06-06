@@ -30,10 +30,11 @@ public class GroundType {
 		super();
 	}
 
-	public GroundType(String type, Integer habitat) {
+	public GroundType(Integer habitat,String type) {
 		super();
-		this.type = type;
 		this.habitat_id = habitat;
+		this.type = type;
+		
 	}
 	
 	public GroundType(String type) {
