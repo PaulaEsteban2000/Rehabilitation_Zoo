@@ -593,24 +593,51 @@ public class Menu {
 				
 				break;//case 3 del menu principal
 				
-			case 4: //MANAGE XML       		
-				System.out.println("Search an habitat");
-				Habitat habitatToSearch = KeyboardInput.askForHabitat();
-				KeyboardInput.generateHabitatXML(habitatToSearch);
-						
-				break;
+			case 4: 
+				System.out.println("\n"+"MANAGEMENT OF XML"+"\n");
+				System.out.println("Select the option that fits you the best"+"\n"
+ 						+	"1.Generate Habitat xml"+"\n"
+ 						+	"2.Generate Ground type xml "+"\n"
+ 						+	"3.Add Habitat to the base with an XML"+"\n"
+ 						+	"4.Add Ground type to the base with an XML"+"\n"
+ 						+	"5.Go back"+ "\n");
+ 				
+ 				int manageOfXML= Utils.readInt();
+ 				
+ 				System.out.println("Search an habitat");
+					Habitat habitatToSearch = KeyboardInput.askForHabitat();
 				
-			case 5: //CREATE HABITATS		
-		 		KeyboardInput.addHabitatXML();
-		 		
-			case 6: //GO BACK
+				switch(manageOfXML) {
+				
+				case 1: 
+					KeyboardInput.generateHabitatXML(habitatToSearch);
+					break;
+				
+				case 2:
+					KeyboardInput.generateGroundTypeXML(habitatToSearch);
+					break;
+					
+				case 3:
+					KeyboardInput.addHabitatXML();
+					break;
+					
+				case 4:
+					KeyboardInput.addGroundTypeXML();
+					break;
+					
+				case 5:
+					break;
+
+				}
+				
+			case 5: //GO BACK
 		 		break;
 	                
 			default:
 	            System.out.print("\nThat is not an option\n");
 	        }
 	
-		} while(adminChoice != 6);
+		} while(adminChoice != 5);
 	}
  	
  	
