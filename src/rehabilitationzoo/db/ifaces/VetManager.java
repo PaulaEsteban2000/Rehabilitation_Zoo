@@ -26,6 +26,7 @@ public interface VetManager {
 			
 		//b. askForAnimalForDiagnosis
 			public List<Animal> getAnimalByNameAndType (String nameToSearch, String typeToSearch);// future: "barcorde" reader
+			public Animal getAnimalById(int id);
 			
 		//c. firstDiagnosisSubMenu
 			
@@ -70,6 +71,6 @@ public interface VetManager {
 				
 			//II. [rest]
 				public void reportAnimalState(Integer option, Animal animal); //stays, dies, released
-			
+				
 	
 }

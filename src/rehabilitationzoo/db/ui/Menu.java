@@ -12,6 +12,7 @@ import java.util.*;
 
 import Exceptions.AdminExceptions;
 import Exceptions.ExceptionMethods;
+import Exceptions.VetExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.UserManager;
@@ -188,33 +189,35 @@ public class Menu {
 				case 1:
 					System.out.println("ANIMAL DIAGNOSIS");
 					
+					try {
+					
 					List<Animal> animalsToBeDiagnosed = KeyboardInput.checkIfAnimalsInHabitat("Wait zone");
 					
-					if (animalsToBeDiagnosed == null) { //in case no more checking should be done
-						break;
-					} else {
-						Animal animalToDiagnose = KeyboardInput.askForAnimalForDiagnosis(animalsToBeDiagnosed); 
-						KeyboardInput.firstDiagnosisSubMenu(animalToDiagnose);
-						break;
+					Animal animalToDiagnose = KeyboardInput.askForAnimalForDiagnosis(animalsToBeDiagnosed); 
+					KeyboardInput.firstDiagnosisSubMenu(animalToDiagnose);
+					
+					} catch (VetExceptions ve) {
+						System.out.println(ve.toString());
 					}
+					break;
 					
 				case 2:
-					System.out.println("ANIMAL CHECK");
-					Habitat habitatToCheck = KeyboardInput.askForHabitatToCheckItsAnimals();
-					List<Animal> animalsToCheck = KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName());
-					
-					if (animalsToCheck == null) {
-						break;
-					} else {
+					try {
+						System.out.println("ANIMAL CHECK");
+						Habitat habitatToCheck = KeyboardInput.askForHabitatToCheckItsAnimals();
+						List<Animal> animalsToCheck = KeyboardInput.checkIfAnimalsInHabitat(habitatToCheck.getName());
+						
 						Integer cont = animalsToCheck.size();
-						
-						do {
-							KeyboardInput.animalCheckSubMenu(habitatToCheck);
-							cont --;
-						} while (cont >0);
-						
-					break;
+							do {
+								KeyboardInput.animalCheckSubMenu(habitatToCheck);
+								cont --;
+							} while (cont >0);
+						 
+					} catch (VetExceptions ve) {
+						System.out.println(ve.toString());
 					}
+					break;
+					
 					
 				case 3:
 					break;
@@ -346,8 +349,10 @@ public class Menu {
 								System.out.println("Error, nonvalid input.");
 								break;
 					}
-						break;
+					
 				} while (manageOfAnimals != 4);		
+				
+				break;
 	                
 			case 2://MANAGE WORKERS
 				System.out.println("\n"+"2.MANAGEMENT OF THE WORKERS"+"\n");

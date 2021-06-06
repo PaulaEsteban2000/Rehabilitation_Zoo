@@ -100,5 +100,12 @@ public class ExceptionMethods {
 		}
 		
 	}
+	
+	public static <E> void checkForEmptyList(List<E> list) throws VetExceptions {
+		if (list.size() == 0) {
+			throw new VetExceptions(VetExceptions.VetErrors.EMPTYLIST);
+		}
+		
+	}
 
 }

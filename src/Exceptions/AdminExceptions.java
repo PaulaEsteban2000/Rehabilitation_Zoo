@@ -41,8 +41,9 @@ public class AdminExceptions  extends Exception{
 		case NOTAFEEDINGTYPE:
 			return "Error: Please do remember it can only be a CARNIVORE, HERVIBORE or OMNIVORE"+"\n";
 			
+		default:
+			return "There was some error.";
 		}
-		return null;
 
 	}
 	

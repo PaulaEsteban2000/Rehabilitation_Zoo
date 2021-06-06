@@ -112,9 +112,27 @@ public class VetSQL implements VetManager {
 						int id = rs.getInt(1);
 						Date enterDate = Date.valueOf(rs.getString("enterDate"));
 						Integer habitat_id = rs.getInt("habitat_id");
-						Date lastBath = Date.valueOf(rs.getString("lastBath"));
-						Date lastFed = Date.valueOf(rs.getString("lastFed"));
-						Date lastDrug = Date.valueOf(rs.getString("lastDrug"));
+						
+						Date lastBath = null;
+						if (rs.getString("lastBath") == null) {
+						} else {
+							String lastBathString = rs.getString("lastBath");
+							lastBath = Date.valueOf(lastBathString);
+						}
+						
+						Date lastFed = null;
+						if (rs.getString("lastFed") == null) {
+						} else {
+							String lastFedString = rs.getString("lastFed");
+							lastFed = Date.valueOf(lastFedString);
+						}
+						
+						Date lastDrug = null;
+						if (rs.getString("lastDrug") == null) {
+						} else {
+							String lastDrugString = rs.getString("lastDrug");
+							lastDrug = Date.valueOf(lastDrugString);
+						}
 						
 						Date deathDate = null;
 						if (rs.getString("deathDate") == null) {
@@ -166,10 +184,28 @@ public class VetSQL implements VetManager {
 						int id = rs.getInt(1);
 						Date enterDate = Date.valueOf(rs.getString("enterDate"));
 						Integer habitat_id = rs.getInt("habitat_id");
-						Date lastBath = Date.valueOf(rs.getString("lastBath"));
-						Date lastFed = Date.valueOf(rs.getString("lastFed"));
-						Date lastDrug = Date.valueOf(rs.getString("lastDrug"));
-
+						
+						Date lastBath = null;
+						if (rs.getString("lastBath") == null) {
+						} else {
+							String lastBathString = rs.getString("lastBath");
+							lastBath = Date.valueOf(lastBathString);
+						}
+						
+						Date lastFed = null;
+						if (rs.getString("lastFed") == null) {
+						} else {
+							String lastFedString = rs.getString("lastFed");
+							lastFed = Date.valueOf(lastFedString);
+						}
+						
+						Date lastDrug = null;
+						if (rs.getString("lastDrug") == null) {
+						} else {
+							String lastDrugString = rs.getString("lastDrug");
+							lastDrug = Date.valueOf(lastDrugString);
+						}
+						
 						Date deathDate = null;
 						if (rs.getString("deathDate") == null) {
 						} else {
@@ -202,6 +238,72 @@ public class VetSQL implements VetManager {
 
 				return animals;
 			}
+			
+			@Override
+			public Animal getAnimalById(int id) {
+				Animal animal = null;
+				
+				try {
+					String sql = "SELECT * FROM animals WHERE id = ?";
+					PreparedStatement prep = JDBCManager.c.prepareStatement(sql);
+					prep.setInt(1, id); 
+					ResultSet rs = prep.executeQuery();
+
+					int animalId = rs.getInt(1);
+					Date enterDate = Date.valueOf(rs.getString("enterDate"));
+					Integer habitat_id = rs.getInt("habitat_id");
+					
+					Date lastBath = null;
+					if (rs.getString("lastBath") == null) {
+					} else {
+						String lastBathString = rs.getString("lastBath");
+						lastBath = Date.valueOf(lastBathString);
+					}
+					
+					Date lastFed = null;
+					if (rs.getString("lastFed") == null) {
+					} else {
+						String lastFedString = rs.getString("lastFed");
+						lastFed = Date.valueOf(lastFedString);
+					}
+					
+					Date lastDrug = null;
+					if (rs.getString("lastDrug") == null) {
+					} else {
+						String lastDrugString = rs.getString("lastDrug");
+						lastDrug = Date.valueOf(lastDrugString);
+					}
+					
+					Date deathDate = null;
+					if (rs.getString("deathDate") == null) {
+					} else {
+						String deathDateString = rs.getString("deathDate");
+						deathDate = Date.valueOf(deathDateString);
+					}
+					
+					Date freedomDate = null;
+					if (rs.getString("freedomDate") == null) {
+					} else {
+						String freedomDateString = rs.getString("freedomDate");
+						freedomDate = Date.valueOf(freedomDateString);
+					}
+
+					int type_id = rs.getInt("type_id");
+					String name = rs.getString(10);
+
+					animal = new Animal(animalId, enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate,
+					freedomDate, type_id, name);
+
+					prep.close();
+					rs.close();
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				
+				return animal;
+			}
+			
 			
 		//c. firstDiagnosisSubMenu
 			
@@ -386,7 +488,7 @@ public class VetSQL implements VetManager {
 								try {
 								String sql = "UPDATE animals SET freedomDate=? WHERE id=?";
 								PreparedStatement s = JDBCManager.c.prepareStatement(sql);
-								s.setString(1, "" + newDate + "");
+								s.setString(1, newDate.toString());
 								s.setInt(2, getAnimalId(animal));
 								s.executeUpdate();
 								s.close();
@@ -653,8 +755,22 @@ public class VetSQL implements VetManager {
 						while (rs.next()) { 
 							int id = rs.getInt("id");
 							String hName = rs.getString("name");
-							Date lastCleaned = rs.getDate("lastCleaned");
-							Date waterTank = rs.getDate("waterTank");
+							
+							Date lastCleaned = null;
+							if (rs.getString("lastCleaned") == null) {
+							} else {
+								String lastCleanedString = rs.getString("lastCleaned");
+								lastCleaned = Date.valueOf(lastCleanedString);
+							}
+							
+							Date waterTank = null;
+							if (rs.getString("waterTank") == null) {
+							} else {
+								String waterTankString = rs.getString("waterTank");
+								waterTank = Date.valueOf(waterTankString);
+							}
+							
+						
 							Integer temperature = rs.getInt("temperature");
 							LightType light = LightType.valueOf(rs.getString("light").toUpperCase());
 
@@ -729,9 +845,27 @@ public class VetSQL implements VetManager {
 							int id = rs.getInt(1);
 							Date enterDate = Date.valueOf(rs.getString("enterDate"));
 							Integer habitat_id = rs.getInt("habitat_id");
-							Date lastBath = Date.valueOf(rs.getString("lastBath"));
-							Date lastFed = Date.valueOf(rs.getString("lastFed"));
-							Date lastDrug = Date.valueOf(rs.getString("lastDrug"));
+							
+							Date lastBath = null;
+							if (rs.getString("lastBath") == null) {
+							} else {
+								String lastBathString = rs.getString("lastBath");
+								lastBath = Date.valueOf(lastBathString);
+							}
+							
+							Date lastFed = null;
+							if (rs.getString("lastFed") == null) {
+							} else {
+								String lastFedString = rs.getString("lastFed");
+								lastFed = Date.valueOf(lastFedString);
+							}
+							
+							Date lastDrug = null;
+							if (rs.getString("lastDrug") == null) {
+							} else {
+								String lastDrugString = rs.getString("lastDrug");
+								lastDrug = Date.valueOf(lastDrugString);
+							}
 							
 							Date deathDate = null;
 							if (rs.getString("deathDate") == null) {
@@ -783,7 +917,7 @@ public class VetSQL implements VetManager {
 						try {
 							String sql1 = "UPDATE animals SET freedomDate=? WHERE id=?";
 							PreparedStatement s1 = JDBCManager.c.prepareStatement(sql1);
-							s1.setString(1, "" + newDate + "");
+							s1.setString(1, newDate.toString());
 							s1.setInt(2, animal.getId());
 							s1.executeUpdate();
 							s1.close();
@@ -812,7 +946,7 @@ public class VetSQL implements VetManager {
 						try {
 							String sql1 = "UPDATE animals SET deathDate=? WHERE id=?";
 							PreparedStatement s1 = JDBCManager.c.prepareStatement(sql1);
-							s1.setString(1, "" + newDate + "");
+							s1.setString(1, newDate.toString());
 							s1.setInt(2, animal.getId());
 							s1.executeUpdate();
 							s1.close();
@@ -835,6 +969,34 @@ public class VetSQL implements VetManager {
 							e.printStackTrace();
 						}
 
+					case 3: //still at zoo
+						try {
+							String sql1 = "UPDATE animals SET deathDate=? WHERE id=?";
+							PreparedStatement s1 = JDBCManager.c.prepareStatement(sql1);
+							s1.setString(1, "" + null + "");
+							s1.setInt(2, animal.getId());
+							s1.executeUpdate();
+							s1.close();
+
+							String sql2 = "UPDATE animals SET habitat_id = ? WHERE id=?";
+							PreparedStatement s2 = JDBCManager.c.prepareStatement(sql2);
+							s2.setInt(1, this.getHabitatIdByName("Wait Zone"));
+							s2.setInt(2, animal.getId());
+							s2.executeUpdate();
+							s2.close();
+							
+							String sql3 = "UPDATE animals SET freedomDate=? WHERE id=?";
+							PreparedStatement s3 = JDBCManager.c.prepareStatement(sql3);
+							s3.setString(1, null);
+							s3.setInt(2, animal.getId());
+							s3.executeUpdate();
+							s3.close();
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						
+						
 						break;
 					default:
 						// Exception?
