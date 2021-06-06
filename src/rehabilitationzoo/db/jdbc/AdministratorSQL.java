@@ -168,12 +168,11 @@ public class AdministratorSQL implements AdministratorManager{
 			String name = rs.getString("name");
 			
 			Animal unAnimal = new Animal(id,enterDate, habitat_id, lastBath, lastFed, lastDrug, deathDate, freedomDate, type_id, name);
-			contador++;
-			System.out.println(unAnimal);
+			
 			theAnimals.add(unAnimal);
 			//System.out.print("tam:"+theAnimals.size());
 		
-			//System.out.println(sql);
+			System.out.println(sql);
 			prep.close();
 			rs.close();
 			
