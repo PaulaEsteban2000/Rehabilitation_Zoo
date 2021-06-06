@@ -30,26 +30,14 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 			
 			VetManager vetMan = new VetSQL();	
 			List<String> habitatNames = vetMan.getAllHabitatsNames();
-
-
-			String name = "";
 					
 			if (habitatNames.size() >= 5) {
 				return;
-	
-		
 			} else {
-				
 				KeyboardInput.weAddHabitats();
 				KeyboardInput.weAddDrugTypes();
 				KeyboardInput.weAddAnimalTypes();
-		
-
-
 			}
-			//KeyboardInput.weAddHabitats();
-			//KeyboardInput.weAddDrugTypes();
-			//KeyboardInput.weAddAnimalTypes();
 		
 		} catch (SQLException sqlE) {
 			sqlE.printStackTrace();

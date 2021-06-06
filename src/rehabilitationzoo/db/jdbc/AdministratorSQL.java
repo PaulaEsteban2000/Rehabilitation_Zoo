@@ -124,9 +124,9 @@ public class AdministratorSQL implements AdministratorManager{
 		List<Animal> theAnimals = new ArrayList<Animal>();
 		int contador = 0;
 		try {	
-		String sql = "SELECT * FROM animals "; 			
-		PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
-		ResultSet rs = prep.executeQuery();
+			String sql = "SELECT * FROM animals "; 			
+			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
+			ResultSet rs = prep.executeQuery();
 		
 		while (rs.next()) { 
 			int id = rs.getInt("id");
