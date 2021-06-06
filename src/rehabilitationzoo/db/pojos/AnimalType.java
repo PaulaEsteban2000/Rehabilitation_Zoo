@@ -78,6 +78,9 @@ public class AnimalType implements Serializable {
 		return id;
 	}
 	
-
+	@Override
+	public String toString() {
+		return "AnimalType [id=" + id + ", type=" + type + ", feedingType=" + whatDoYouEat+ "]"; 
+	}
 	
 }

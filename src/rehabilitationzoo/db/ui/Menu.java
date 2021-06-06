@@ -259,17 +259,24 @@ public class Menu {
 					switch(manageOfAnimals) {
 						case 1://ADD ANIMAL (INSERT)  
 							System.out.print("\n"+"Which type of animal would you like to add to the zoo?"+"\n");
+							
+							List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
+							
+							for(int i=0; i<allAnimalTypes.size(); i++) {
+								System.out.println(allAnimalTypes.get(i).getType());
+							}
+							System.out.println("\n");
 							String readAnimal = Utils.readLine();
-								
 							ExceptionMethods.checkForExistingAnimal(readAnimal);
 							
+
 							int animalTypeId=0;
-							List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
 							for(int i=0; i<allAnimalTypes.size(); i++) {
-								System.out.println(KeyboardInput.adminMan.listAnimalTypes().get(i));								if(readAnimal.equals(allAnimalTypes.get(i).getType())) {
+								if(readAnimal.toLowerCase().equals(allAnimalTypes.get(i).getType().toLowerCase())) {
 									animalTypeId = allAnimalTypes.get(i).getId();
 								}
 							}
+
 									
 							System.out.println("\n"+"Put a name to the animal");
 							String animal = Utils.readLine();

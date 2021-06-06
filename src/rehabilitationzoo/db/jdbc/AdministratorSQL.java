@@ -46,7 +46,7 @@ public class AdministratorSQL implements AdministratorManager{
 			sql+= " VALUES (?,?,?,?,?,?,?,?,?)";
 			PreparedStatement pstmt = JDBCManager.c.prepareStatement(sql); 
 				
-			pstmt.setDate(1, animal.getEnterDate());
+			pstmt.setString(1, animal.getEnterDate().toString());
 			pstmt.setInt(2,unVet.getHabitatIdByName("Wait Zone"));
 			
 			
@@ -86,15 +86,10 @@ public class AdministratorSQL implements AdministratorManager{
 				pstmt.setString(7, null);
 			}
 			
-			//pstmt.setString(3, animal.getLastBath().toString());
-			//pstmt.setString(4, animal.getLastFed().toString());
-			//pstmt.setString(5, animal.getLastDrug().toString());
-			//pstmt.setString(6, animal.getDeathDate().toString());
-			//pstmt.setString(7, animal.getFreedomDate().toString());
 			pstmt.setInt(8, animal.getType_id());
 			pstmt.setString(9, animal.getName());
-		
-			pstmt.executeUpdate(sql);
+
+			pstmt.executeUpdate();
 			pstmt.close();
 			
 		} catch(Exception e) {
@@ -108,11 +103,11 @@ public class AdministratorSQL implements AdministratorManager{
 		try {
 			String sql = "UPDATE animals ";
 			PreparedStatement s = JDBCManager.c.prepareStatement(sql);
-			s.setDate(2, animal.getLastBath() );
-			s.setDate(3, animal.getLastFed() );
-			s.setDate(4,  animal.getLastDrug());
-			s.setDate(5,  animal.getDeathDate() );
-			s.setDate(6,  animal.getFreedomDate());
+			s.setString(2, animal.getLastBath().toString() );
+			s.setString(3, animal.getLastFed().toString() );
+			s.setString(4,  animal.getLastDrug().toString());
+			s.setString(5,  animal.getDeathDate().toString() );
+			s.setString(6,  animal.getFreedomDate().toString());
 			
 			//System.out.println(sql);
 			s.executeUpdate();
@@ -134,13 +129,40 @@ public class AdministratorSQL implements AdministratorManager{
 		
 		while (rs.next()) { 
 			int id = rs.getInt("id");
-			Date enterDate = rs.getDate("enterDate");
+			
+			Date enterDate = Date.valueOf(rs.getString("enterDate"));
 			Integer habitat_id = rs.getInt("habitat_id");
-			Date lastBath = rs.getDate("lastBath");
-			Date lastFed = rs.getDate("lastFed");
-			Date lastDrug = rs.getDate("lastDrug");
-			Date deathDate = rs.getDate("deathDate");
-			Date freedomDate = rs.getDate("freedomDate");
+			
+			Date lastBath = null;
+			if (rs.getString("lastBath") == null) {
+			} else {
+				String lastBathString = rs.getString("lastBath");
+				lastBath = Date.valueOf(lastBathString);
+			}
+			
+			Date lastFed = Date.valueOf(rs.getString("lastFed"));
+			
+			Date lastDrug = null;
+			if (rs.getString("lastDrug") == null) {
+			} else {
+				String lastDrugString = rs.getString("lastDrug");
+				lastDrug = Date.valueOf(lastDrugString);
+			}
+			
+			Date deathDate = null;
+			if (rs.getString("deathDate") == null) {
+			} else {
+				String deathDateString = rs.getString("deathDate");
+				deathDate = Date.valueOf(deathDateString);
+			}
+			
+			Date freedomDate = null;
+			if (rs.getString("freedomDate") == null) {
+			} else {
+				String freedomDateString = rs.getString("freedomDate");
+				freedomDate = Date.valueOf(freedomDateString);
+			}
+			
 			int type_id = rs.getInt("type_id");
 			String name = rs.getString("name");
 			
@@ -319,8 +341,21 @@ public class AdministratorSQL implements AdministratorManager{
 			PreparedStatement prep = JDBCManager.c.prepareStatement(sql);	
 				
 				prep.setString(1,habitat.getName());
-				prep.setDate(2,habitat.getLastCleaned( ));
-				prep.setDate(3,habitat.getWaterTank() );
+				
+				if (habitat.getLastCleaned( )!= null) {
+					prep.setString(2, habitat.getLastCleaned( ).toString());
+					
+				} else {
+					prep.setString(2, null);
+				}
+				
+				if (habitat.getLastCleaned( )!= null) {
+					prep.setString(3, habitat.getWaterTank( ).toString());
+					
+				} else {
+					prep.setString(3, null);
+				}
+				
 				prep.setInt(4,habitat.getTemperature());
 				prep.setString(5,light );
 					
@@ -394,7 +429,14 @@ public class AdministratorSQL implements AdministratorManager{
 			
 			prep.setString(1, aWorker.getName());
 			prep.setString(2, aWorker.getLastName() );
-			prep.setDate(3, aWorker.getHireDate() );
+			
+			if (aWorker.getHireDate( )!= null) {
+				prep.setString(3, aWorker.getHireDate().toString());
+				
+			} else {
+				prep.setString(3, null);
+			}
+			
 			prep.setFloat(4, aWorker.getSalary() );
 			prep.setString(5, stringWorker); //workerType
 			
@@ -447,7 +489,14 @@ public class AdministratorSQL implements AdministratorManager{
 			//System.out.print(id1+"\n");
 			String name1= rs.getString("name");
 			String lastname1 = rs.getString("lastName");
-			Date hireDate = rs.getDate("hireDate");
+			
+			Date hireDate = null;
+			if (rs.getString("hireDate") == null) {
+			} else {
+				String hireDateString = rs.getString("hireDate");
+				hireDate = Date.valueOf(hireDateString);
+			}
+			
 			Float salary = rs.getFloat("salary");
 			WorkerType job;
 			if (rs.getString("workerType").equalsIgnoreCase("Administrator") ){
@@ -490,7 +539,14 @@ public class AdministratorSQL implements AdministratorManager{
 				int id1 = rs.getInt("id");
 				String name1= rs.getString("name");
 				String lastname1 = rs.getString("lastName");
-				Date hireDate = rs.getDate("hireDate");
+
+				Date hireDate = null;
+				if (rs.getString("hireDate") == null) {
+				} else {
+					String hireDateString = rs.getString("hireDate");
+					hireDate = Date.valueOf(hireDateString);
+				}
+				
 				Float salary = rs.getFloat("salary");
 				WorkerType job;
 				if (rs.getString("workerType").equalsIgnoreCase("Administrator") ){
@@ -534,7 +590,14 @@ public class AdministratorSQL implements AdministratorManager{
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
 				String lastname = rs.getString("lastName");
-				Date hireDate = rs.getDate("hiredate");
+				
+				Date hireDate = null;
+				if (rs.getString("hireDate") == null) {
+				} else {
+					String hireDateString = rs.getString("hireDate");
+					hireDate = Date.valueOf(hireDateString);
+				}
+				
 				Float salary = rs.getFloat("salary");
 				WorkerType job;
 				if (rs.getString("workerType").equalsIgnoreCase("Administrator") ){

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Habitat name="Polar zone">
+<<<<<<< HEAD
+    <lastCleaned>2021-06-06</lastCleaned>
+    <waterTank>2021-06-06</waterTank>
+=======
 
     <lastCleaned>2021-06-03</lastCleaned>
     <waterTank>2021-06-03</waterTank>
 
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
     <temperature>-19</temperature>
     <light>LOW</light>
 </Habitat>
