@@ -37,6 +37,12 @@ public class JDBCManager implements rehabilitationzoo.db.ifaces.DBManager {
 				KeyboardInput.weAddHabitats();
 				KeyboardInput.weAddDrugTypes();
 				KeyboardInput.weAddAnimalTypes();
+<<<<<<< HEAD
+=======
+		
+
+
+>>>>>>> branch 'main' of https://github.com/PaulaEsteban2000/Rehabilitation_Zoo
 			}
 		
 		} catch (SQLException sqlE) {

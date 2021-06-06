@@ -24,7 +24,7 @@ public interface AdministratorManager {
 	
 		//ANIMALS
 		public void addAnimal(Animal animal) ;
-		public void listAnimals();
+		public List<Animal> listAnimals();
 		public void updateAnimal(Animal animal);
 		
 		

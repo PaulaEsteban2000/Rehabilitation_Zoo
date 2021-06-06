@@ -480,34 +480,6 @@ public class KeyboardInput {
 	}
 	
 	
-	/*public static boolean firingWorkers(Worker workerToDelete) {
-		
-      boolean deleted= false;
-		
-		List<Worker> allWorkersName = adminMan.getWorkersInfo();
-		
-		for(int i = 0; i<allWorkersName.size(); i++){
-			
-			 if(workerToDelete.equals(allWorkersName.get(i)) ) {
-				 
-				 adminMan.deleteThisWorker(workerToDelete.getName(),workerToDelete.getLastName());
-				 deleted=true;
-			 }
-		} 
-		return deleted;
-		
-	}*/
-
-	
-	
-	/*public static void listAllDrugTypes() {
-		adminMan.listDrugTypes(); //MIRAR EN EL MENU POR FAVOR
-	}
-	
-	public static void listAllDrugs() {
-		adminMan.listDrugs(); //MIRAR EN EL MENU POR FAVOR
-	}*/
-
 	public static void addDrugType(String drugName, float dosis) {
 		adminMan.addNewDrugType(drugName, dosis);	
 	}
@@ -541,7 +513,7 @@ public class KeyboardInput {
 		Habitat waitZone = new Habitat("Wait Zone",newDate, newDate, 25, LightType.HIGH );
 		
 		adminMan.addHabitat(northPole);
-		System.out.println(vetMan.getHabitatByName("Polar zone").toString());
+		//System.out.println(vetMan.getHabitatByName("Polar zone").toString());
 		adminMan.addHabitat(desert);
 		adminMan.addHabitat(sabana);
 		adminMan.addHabitat(jungle);
@@ -560,8 +532,8 @@ public class KeyboardInput {
 	
 	public static void weAddGroundType()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		
-		GroundType northPole = new GroundType("ice", 1);  
-		GroundType desert = new GroundType("sand", 2);
+		GroundType northPole = new GroundType(1,"ice");  
+		GroundType desert = new GroundType(2,"sand");
 		
 		
 		adminMan.addGroundType(northPole);
@@ -572,7 +544,7 @@ public class KeyboardInput {
 	
 	public static void weAddDrugTypes()throws SQLException, AdminExceptions { //THROW EXCEPTION
 		
-		Float half = (float) 0.5;
+		Float half =  (float) 0.5;
 		Float one = (float) 1.0;
 		
 		adminMan.addNewDrugType("Ointment", half);
