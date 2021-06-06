@@ -266,12 +266,12 @@ public class Menu {
 							int animalTypeId=0;
 							List <AnimalType>allAnimalTypes= KeyboardInput.adminMan.listAnimalTypes() ;
 							for(int i=0; i<allAnimalTypes.size(); i++) {
-								if(readAnimal.equals(allAnimalTypes.get(i).getType())) {
+								System.out.println(KeyboardInput.adminMan.listAnimalTypes().get(i));								if(readAnimal.equals(allAnimalTypes.get(i).getType())) {
 									animalTypeId = allAnimalTypes.get(i).getId();
 								}
 							}
 									
-							System.out.print("\n"+"Put a name to the animal");
+							System.out.println("\n"+"Put a name to the animal");
 							String animal = Utils.readLine();
 							LocalDate now1 = LocalDate.now();
 							Date today1 = Date.valueOf(now1); //lastfed + lastbathe

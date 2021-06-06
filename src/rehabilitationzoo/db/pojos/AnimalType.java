@@ -78,4 +78,6 @@ public class AnimalType implements Serializable {
 		return id;
 	}
 	
+
+	
 }
