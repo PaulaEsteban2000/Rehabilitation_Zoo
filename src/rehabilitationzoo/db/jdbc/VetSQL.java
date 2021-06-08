@@ -973,7 +973,7 @@ public class VetSQL implements VetManager {
 						try {
 							String sql1 = "UPDATE animals SET deathDate=? WHERE id=?";
 							PreparedStatement s1 = JDBCManager.c.prepareStatement(sql1);
-							s1.setString(1, "" + null + "");
+							s1.setString(1, null);
 							s1.setInt(2, animal.getId());
 							s1.executeUpdate();
 							s1.close();

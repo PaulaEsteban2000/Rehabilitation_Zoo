@@ -18,6 +18,7 @@ public class Worker implements Serializable {
 	private  Date hireDate;
 	private  Float salary;
 	private WorkerType type;
+	private byte [] photo;
 	
 	public static List<Animal> animals; //as there's its brother List on Animal class, this conforms a many-to-many relationship
 	
@@ -191,6 +192,14 @@ public class Worker implements Serializable {
 	public String toString() {
 		return "Worker [id=" + id + ", name=" + name + ", lastName=" + lastname +", hireDate=" + hireDate + ", salary=" + salary + ", type="
 				+ type + ", animals=" + animals + "]";
+	}
+
+	public byte [] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte [] photo) {
+		this.photo = photo;
 	}
 	
 }

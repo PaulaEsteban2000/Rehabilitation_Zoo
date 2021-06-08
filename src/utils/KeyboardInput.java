@@ -104,7 +104,8 @@ public class KeyboardInput {
 	//
 	//
 	public static void firstDiagnosisSubMenu(Animal animalToDiagnose) throws IOException {
-		int illnessChoice;
+		int illnessChoice = 0;
+		String prothesisChoice = "";
 		
 		do {
 			System.out.println("Once your diagnosis is completed, please choose if the animal has one of these illnesses or more:" + "\n"
@@ -119,7 +120,7 @@ public class KeyboardInput {
 				System.out.println("Are you sure this animal needs a prothesis?: " + "\n"
 						+ "a. Yes" + "\n"
 						+ "b. No, go back to illnesses menu." + "\n");
-				String prothesisChoice = Utils.readLine();
+				prothesisChoice = Utils.readLine();
 				
 				if (prothesisChoice.equals("a") ) {
 					
@@ -180,19 +181,22 @@ public class KeyboardInput {
 				break;
 				
 			case 3:
-				try {
-					System.out.println("Where will the animal you just diagnosed live?");
-					System.out.println("These are our current existing habitats: ");
-					List<String> habitatNames= vetMan.getAllHabitatsNames();
-					
+				if (prothesisChoice.equals("a")) {
+					try {
+						System.out.println("Where will the animal you just diagnosed live?");
+						System.out.println("These are our current existing habitats: ");
+						List<String> habitatNames= vetMan.getAllHabitatsNames();
+						
 						ExceptionMethods.checkForEmptyList(habitatNames);
+						
+						System.out.println(habitatNames);
+						System.out.println("Please type in the name of this habitat: ");
+						String habitatName = Utils.readLine();
+						vetMan.changeHabitat(habitatName, animalToDiagnose);
 					
-					System.out.println(habitatNames);
-					System.out.println("Please type in the name of this habitat: ");
-					String habitatName = Utils.readLine();
-					vetMan.changeHabitat(habitatName, animalToDiagnose);
-				} catch (VetExceptions ve) {
-					System.out.println(ve.toString());
+					} catch (VetExceptions ve) {
+						System.out.println(ve.toString());
+					}
 				}
 				
 				break;
@@ -387,7 +391,6 @@ public class KeyboardInput {
 		int stateOption = 0;
 		
 		Animal animalToCheck = KeyboardInput.askForAnimalFromHabitat(habitatToCheck);
-		//TODO should do something to not leave the habitat until all animals are checked
 		//attribute for habitat for lastChecked when done?
 		
 		do {

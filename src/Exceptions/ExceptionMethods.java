@@ -58,7 +58,6 @@ public class ExceptionMethods {
 			} 
 		}
 		
-		System.out.println("Booleano should be true: " + workerExist);
 		
 		if(workerExist == false) {
 			throw new AdminExceptions(AdminExceptions.AdminErrors.NULL);

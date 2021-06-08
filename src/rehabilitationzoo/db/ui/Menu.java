@@ -283,7 +283,6 @@ public class Menu {
 								String animal = Utils.readLine();
 								LocalDate now1 = LocalDate.now();
 								Date today1 = Date.valueOf(now1); //lastfed + lastbathe
-								System.out.println(today1);
 									    
 								Animal anAnimal = new Animal(today1, today1, today1, today1 , null, null,animalTypeId,animal);
 								KeyboardInput.adminMan.addAnimal(anAnimal);
@@ -676,46 +675,52 @@ public class Menu {
  	
 	private static void zooKeeperOption3() throws IOException, SQLException{
 		int zooKeeperChoice;
-		Integer habitatId;
- 		
-		do {
-			System.out.println("Please choose the habitat you are in: " + "\n");
-					Habitat habitatToSearch = KeyboardInput.askForHabitat();
+		Habitat habitatToSearch = null;
+		String choice = "";
+		
+		do {			
+			System.out.println("Please choose the habitat you are in. " + "\n");
+			habitatToSearch = KeyboardInput.askForHabitat();
 			
-			System.out.println("Please choose the action you want to complete: " + "\n"
-				+ "	1. Feed animals" + "\n"
-				+ "	2. Bathe animals" + "\n"
-				+ "	3. Drugs administration" + "\n"
-				+ "	4. Clean habitats" + "\n"
-				+ "	5. Fill up water tanks" + "\n"
-				+ "	6. Go back to users menu."+ "\n") ;
+			do {
+				System.out.println("Please choose the action you want to complete: " + "\n"
+					+ "	1. Feed animals" + "\n"
+					+ "	2. Bathe animals" + "\n"
+					+ "	3. Drugs administration" + "\n"
+					+ "	4. Clean habitats" + "\n"
+					+ "	5. Fill up water tanks" + "\n"
+					+ "	6. Go back to users menu."+ "\n") ;
+			
+					zooKeeperChoice = Utils.readInt();
+					
+				switch (zooKeeperChoice) {
+					case 1:
+					case 2: 
+					case 3:
+						KeyboardInput.AnimalSubMenu(habitatToSearch, zooKeeperChoice);
+						break;
+						
+					case 4: 
+					case 5: 
+						KeyboardInput.habitatSubMenu(habitatToSearch, zooKeeperChoice);
+						break;
+						
+					case 6:
+						break;
+						
+					default:  
+						System.out.println("Error, nonvalid input.");
+						break;
+				}
+				
+			} while(zooKeeperChoice != 6); 
+			
+			System.out.println("Would you like to eneter a new habitat? Or exit?");
+			System.out.println("a. Enter a habitat");
+			System.out.println("b. Exit");			
+			choice = Utils.readLine();
 		
-				zooKeeperChoice = Utils.readInt();
-			switch (zooKeeperChoice) {
-				case 1:
-				case 2: 
-				case 3:
-					KeyboardInput.AnimalSubMenu(habitatToSearch, zooKeeperChoice);
-					break;
-					
-					
-				case 4: 
-					//TODO
-					break;
-					
-				case 5: 
-					KeyboardInput.habitatSubMenu(habitatToSearch, zooKeeperChoice);
-					break;
-					
-				case 6:
-					break;
-				default:  
-					System.out.println("Error, nonvalid input.");
-					break;
-			}
-		}while(zooKeeperChoice != 6); 
-		
-		
+		} while (!choice.equals("b"));
 	}
 	
 
