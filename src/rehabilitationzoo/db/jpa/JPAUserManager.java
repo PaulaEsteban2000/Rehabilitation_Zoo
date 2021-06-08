@@ -70,9 +70,13 @@ public class JPAUserManager implements UserManager{
 	
 	@Override
 	public void updateEmail(String email, String old) {
-		Query q = em.createNativeQuery("UPDATE users SET email = ? WHERE email = ?", User.class);
-		q.setParameter(1, email);
-		q.setParameter(2, old);
+		Query sql = em.createNativeQuery("SELECT * FROM users WHERE email = ?", User.class);
+		sql.setParameter(1, old);
+		User user = (User) sql.getSingleResult();
+		
+		em.getTransaction().begin();
+		user.setEmail(email);
+		em.getTransaction().commit();
 	}
 
 	@Override
@@ -94,6 +98,12 @@ public class JPAUserManager implements UserManager{
 			return null;
 		}
 		return null;
+	}
+	
+	@Override
+	public List<User> viewAllUsers(){
+		Query sql = em.createNativeQuery("SELECT * FROM users", User.class);
+		return (List<User>) sql.getResultList();	
 	}
 
 }

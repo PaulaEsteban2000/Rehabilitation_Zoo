@@ -16,7 +16,6 @@ import Exceptions.VetExceptions;
 import rehabilitationzoo.db.ifaces.AdministratorManager;
 import rehabilitationzoo.db.ifaces.DBManager;
 import rehabilitationzoo.db.ifaces.UserManager;
-import rehabilitationzoo.db.jdbc.JDBCManager;
 import rehabilitationzoo.db.jpa.JPAUserManager;
 import rehabilitationzoo.db.pojos.Animal;
 import rehabilitationzoo.db.pojos.AnimalType;
@@ -367,7 +366,8 @@ public class Menu {
 							+	"2.Fire workers"+"\n"
 							+	"3.Modify worker's salary"+ "\n"
 							+	"4.Show all the workers that work in the zoo"+ "\n"
-			                +   "5.Go back"+ "\n");
+							+	"5.Show all users in the zoo"+ "\n"
+			                +   "6.Go back"+ "\n");
 								
 						manageOfWorkers= Utils.readInt();
 								
@@ -490,7 +490,14 @@ public class Menu {
 								
 								break;
 								
-							case 5: //GO BACK							
+							case 5: 
+								List<User> users = userMan.viewAllUsers();
+								for (int a = 0; a < users.size(); a++) {
+									System.out.println(users.get(a).getEmail());
+								}
+								break;
+							
+							case 6:
 								break;
 									 
 							default :	
@@ -498,7 +505,7 @@ public class Menu {
 								break;
 			                	
 						}
-					} while(manageOfWorkers!=5);
+					} while(manageOfWorkers!=6);
 				
 					break;
 	    

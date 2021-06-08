@@ -172,11 +172,12 @@ public class AdministratorSQL implements AdministratorManager{
 			theAnimals.add(unAnimal);
 			//System.out.print("tam:"+theAnimals.size());
 		
-			System.out.println(sql);
-			prep.close();
-			rs.close();
-			
 		}
+
+		prep.close();
+		rs.close();
+		
+		
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
